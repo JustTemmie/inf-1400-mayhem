@@ -13,10 +13,17 @@ class Entity3D(Entity):
 
     def __init__(self):
         super().__init__()
-        self.pos = 0
-
-        self.yaw = 0
-        self.pitch = 0
+        self.pos: Vec3 = Vec3(0, 0, 0) # x, y, z
+        # velocity and acceleration spheric coordinates
+        self.velocity: Vec3 = Vec3(0, 0, 0) # yaw, pitch, length
+        self.acceleration: Vec3 = Vec3(0, 0, 0) # yaw, pitch, length
+        
+        self.yaw: float = 0
+        self.pitch: float = 0
+        self.roll: float = 0
+        
+        self.roll_velocity: float = 0
+        self.roll_acceleration: float = 0
 
         self.model: pyglet.model.Scene
         
@@ -40,24 +47,20 @@ class Entity3D(Entity):
             Implement by extending class
         """
         pass
-
-
-    def tick(self, delta):
-        print("tick!")
     
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def draw(self):
-        rot_x = Mat4.from_rotation(self.time_elapsed, Vec3(1, 0, 0))
-        rot_y = Mat4.from_rotation(self.time_elapsed/2, Vec3(0, 1, 0))
-        rot_z = Mat4.from_rotation(self.time_elapsed/3, Vec3(0, 0, 1))
-        trans = Mat4.from_translation(Vec3(1.25, 0, 2))
+        rot_x = Mat4.from_rotation(self.pitch, Vec3(1, 0, 0))
+        rot_y = Mat4.from_rotation(self.yaw, Vec3(0, 1, 0))
+        rot_z = Mat4.from_rotation(self.roll, Vec3(0, 0, 1))
+        trans = Mat4.from_translation(Vec3(0, 0, 0))
         self.model.matrix = trans @ rot_x @ rot_y @ rot_z
 
-        rot_x = Mat4.from_rotation(self.time_elapsed, Vec3(1, 0, 0))
-        rot_y = Mat4.from_rotation(self.time_elapsed/3, Vec3(0, 1, 0))
-        rot_z = Mat4.from_rotation(self.time_elapsed/2, Vec3(0, 0, 1))
-        trans = Mat4.from_translation(Vec3(-1.75, 0, 0))
-        self.model.matrix = trans @ rot_x @ rot_y @ rot_z
+        # rot_x = Mat4.from_rotation(self.time_elapsed, Vec3(1, 0, 0))
+        # rot_y = Mat4.from_rotation(self.time_elapsed/3, Vec3(0, 1, 0))
+        # rot_z = Mat4.from_rotation(self.time_elapsed/2, Vec3(0, 0, 1))
+        # trans = Mat4.from_translation(Vec3(-1.75, 0, 0))
+        # self.model.matrix = trans @ rot_x @ rot_y @ rot_z
     
     @classmethod
     def get_all_3D_entities(self):

@@ -1,4 +1,5 @@
 import pyglet
+import typing
 
 class Component:
     def __init__(self):
@@ -11,6 +12,9 @@ class Component:
 class Entity:
     time_elapsed: float = 0
     all_entities: list["Entity"] = []
+
+    # list of lambdas to be called at the end of the tick
+    deferred_calls: typing.List[typing.Callable] = []
 
     def __init__(self):
         self.entity_ID: int
@@ -26,9 +30,21 @@ class Entity:
         pass
 
 
-    def tick(self, delta):
+    def process(self, delta):
+        """
+            Called every frame
+        """
         print("tick!")
     
+    def engine_process(self, delta):
+        """
+            Called every engine tick
+        """
+    
     @classmethod
-    def get_all_entities(self):
+    def get_all_entities(self) -> list["Entity"]:
         return self.all_entities
+
+    @classmethod
+    def call_deferred(self, call: callable) -> None:
+        self.deferred_calls.append(call)

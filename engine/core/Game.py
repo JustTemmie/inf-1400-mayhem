@@ -22,15 +22,26 @@ import typing
 import time
 import logging
 
-
 if typing.TYPE_CHECKING:
     from engine.core_ext.Entity import Entity
     from engine.core_ext.Entity3D import Entity3D
 
 
 screen_size = config.display_resolution
-game_window = pyglet.window.Window(screen_size.x, screen_size.y, resizable=True)
+game_window = pyglet.window.Window(
+    screen_size.x, screen_size.y,
+    resizable=True, visible=False,
+    caption="Mayhem (3D!!)", vsync=config.VSYNC)
+
+# rendering "batches"
 main_batch = pyglet.graphics.Batch()
+UI_batch = pyglet.graphics.Batch()
+
+@game_window.event
+def on_draw():
+    game_window.clear()
+    main_batch.draw()
+
 
 @game_window.event
 def on_resize(width, height):
@@ -39,20 +50,13 @@ def on_resize(width, height):
     game_window.projection = Mat4.perspective_projection(game_window.aspect_ratio, z_near=0.1, z_far=255)
     return pyglet.event.EVENT_HANDLED
 
-@game_window.event
-def on_draw():
-    game_window.clear()
-    main_batch.draw()
-
 class Game:
     def __init__(self):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
+        example_label = pyglet.text.Label(text="wooho!!", batch=self.get_render_batches().UI_batch)
 
-        example_label = pyglet.text.Label(text="wooho!!", batch=main_batch)
-
-        # pygame.display.set_caption("Mayhem (3D!!)")
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
@@ -62,17 +66,13 @@ class Game:
         self.entities: list[Entity] = []
         self.entities_3D: list[Entity3D] = []
 
-        # list of lambdas to be called at the end of the tick
-        self.deferred_calls: typing.List[typing.Callable] = []
-
-        # self.clock = pygame.time.Clock()
         self.frame_start_time = time.time()
 
 
         Utils.print_system_info()
-        pyglet.clock.schedule_interval(self.engine_tick, 1 / config.target_refresh_rate)
 
         game_window.view = Mat4.look_at(position=Vec3(0, 0, 5), target=Vec3(0, 0, 0), up=Vec3(0, 1, 0))
+        game_window.set_visible()
 
         self.init()
         
@@ -82,17 +82,52 @@ class Game:
         """
         pass
 
-    def tick(self, delta: float):
+    def user_process(self, delta: float):
         """
-            Implement by extending class
+            Called every frame, implement by extending class
+        """
+        pass
+    
+    def user_engine_process(self, delta: float):
+        """
+            Called every engine tick, implement by extending class
         """
         pass
 
-    def engine_tick(self, delta: float):
+    def process(self, delta: float):
+        """
+            Called every frame, not intended to be touched by the end user.
+        """
         Entity.time_elapsed = self.time_elapsed
+        
+        if self.frames_elapsed >= 3:
+            self.frame_times.append(delta)
+            if len(self.frame_times) > config.target_refresh_rate:
+                self.frame_times.pop(0)
+        
+            fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
+            logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+        
         for entity in self.entities:
-            entity.tick(delta)
+            entity.process(delta)
+        
+        # unsure if this is using pointers, might have to fix
+        processing_deferred_calls = Entity.deferred_calls
+        Entity.deferred_calls = []
+        for func in processing_deferred_calls:
+            func()
+        
+        self.frames_elapsed += 1
+        self.time_elapsed += delta
+
+    # do network in here please :3
+    def engine_process(self, delta: float):
+        """
+            Called every engine tick (30 tps), not intended to be touched by the end user.
+        """
+        for entity in self.entities:
+            entity.engine_process(delta)
         
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
@@ -101,21 +136,22 @@ class Game:
         # for entity in self.entities_3D:
         #     entity.tick(delta)
         
-        # process all deferred calls
-        processing_deferred_calls = self.deferred_calls
-        self.deferred_calls = []
-        for func in processing_deferred_calls:
-            func()
         
-        self.tick(delta)
-
-        self.frames_elapsed += 1
-        self.time_elapsed += delta
+        self.user_engine_process(delta)
+    
     
     def run(self):
+        """
+            Start the game!
+        """
+        pyglet.clock.schedule_interval(self.engine_process, 1 / config.target_physics_rate)
+        pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()
     
     @staticmethod
     def get_render_batches():
-        Result = namedtuple("RenderBatches", ["main_batch"])
-        return Result(main_batch)
+        """
+            Get a named tuple of all render batches
+        """
+        Result = namedtuple("RenderBatches", ["main_batch", "UI_batch"])
+        return Result(main_batch, UI_batch)

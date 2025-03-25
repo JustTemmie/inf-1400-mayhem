@@ -12,3 +12,5 @@ display_resolution = Vec2(1920, 1080)
 # canvas_resolution = Vector2(1920, 1080) maybe we won't have to use this for opengl shenanigans
 
 target_refresh_rate = 120
+target_physics_rate = 30
+VSYNC = False
