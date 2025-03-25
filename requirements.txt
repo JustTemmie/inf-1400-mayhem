@@ -1,10 +1,7 @@
-pygame # pygame, duh
+pyglet # replacement for pygame
 
 PyOpenGL # openGL support
 PyOpenGL_accelerate # C bindings for openGL, improves performance
-pywavefront # helps loading 3D models
 
-pyglet # used by pywavefront for it's "visualization module"
-py # used for rendering textures
-
+# PyGLM # matrix math, used to improve performance
 numpy # numpy, used to improve performance
