@@ -19,13 +19,11 @@ class Mayhem(Game):
         # Player().instantiate(self)
 
         self.mn = MayhemNetworking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
-        self.mn.start_listen()  # Creates a thread that listens to the server.
-        self.mn.send(b"1 1 1") # FIXME: Remove
+        if self.mn.connected:
+            self.mn.start_listen()  # Creates a thread that listens to the server.
+            self.mn.send(b"1 1 1") # FIXME: Remove
 
     def user_engine_process(self, delta):
-        # User input
-        # Do some physics stuff
-
         self._handle_network_input()
         pass
 

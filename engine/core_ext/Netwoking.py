@@ -12,17 +12,23 @@ class Networking(abc.ABC):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         self.s.connect((self.addr, self.port))
+
+        self.connected = True
+
         self.s.send(b"1 1 1")
 
         self.q = queue.Queue()
         self.lock = Lock()
 
     def send(self, data):
-        self.s.send(self.encode(data))
+        try:
+            self.s.send(self.encode(data))
+        except ConnectionRefusedError:
+            self.connected = False
+            print("No connection to server")
 
     @staticmethod
     def _listen(s: socket.socket, q: queue.Queue, lock: Lock):
-        print("test")
         while True:
             data = s.recv(1024)
 
@@ -31,7 +37,7 @@ class Networking(abc.ABC):
             lock.release()
 
     def start_listen(self):
-        thread = Thread(target=self._listen, args=(self.s, self.q, self.lock, ))
+        thread = Thread(target=self._listen, args=(self.s, self.q, self.lock,))
         thread.start()
 
     @abc.abstractmethod
