@@ -2,6 +2,7 @@ import socket
 import abc
 from threading import Thread, Lock
 import queue
+import time
 
 
 class Networking(abc.ABC):
@@ -28,16 +29,21 @@ class Networking(abc.ABC):
             print("No connection to server")
 
     @staticmethod
-    def _listen(s: socket.socket, q: queue.Queue, lock: Lock):
+    def _listen(self):
+        while not self.connected:
+            time.sleep(1)
         while True:
-            data = s.recv(1024)
+            try:
+                data = self.s.recv(1024)
 
-            lock.acquire()
-            q.put(data)
-            lock.release()
+                self.lock.acquire()
+                self.q.put(data)
+                self.lock.release()
+            except ConnectionRefusedError:
+                self.connected = False
 
     def start_listen(self):
-        thread = Thread(target=self._listen, args=(self.s, self.q, self.lock,))
+        thread = Thread(target=self._listen, args=(self,))
         thread.start()
 
     @abc.abstractmethod
