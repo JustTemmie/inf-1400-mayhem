@@ -30,7 +30,7 @@ class Player(Entity3D):
         self.roll = self.roll_velocity
 
     def user_instantiate(self, game: Game):
-        model_scene = pyglet.resource.scene("assets/models/axes.obj")
+        model_scene = pyglet.resource.scene("assets/models/test.obj")
 
         self.model = model_scene.create_models(batch=game.main_batch)[0]
 

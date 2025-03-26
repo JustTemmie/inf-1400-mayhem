@@ -18,7 +18,8 @@ target_physics_rate = 30
 VSYNC = False
 
 
-KEY_BINDS = {"pitch": [key.W, key.S],
-                "yaw": [key.Q, key.E],
-                "roll": [key.A, key.D],
-                "shoot": key.SPACE}
+KEY_BINDS = {"pitch": [key.S, key.W],
+             "yaw": [key.E, key.Q],
+             "roll": [key.A, key.D],
+             "thrust": key.LSHIFT,
+             "shoot": key.SPACE}
