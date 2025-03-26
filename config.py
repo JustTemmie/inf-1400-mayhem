@@ -1,4 +1,5 @@
 from pyglet.math import Vec2
+from pyglet.window import key
 
 SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
@@ -15,3 +16,9 @@ display_resolution = Vec2(1920, 1080)
 target_refresh_rate = 120
 target_physics_rate = 30
 VSYNC = False
+
+
+KEY_BINDS = {"pitch": [key.W, key.S],
+                "yaw": [key.Q, key.E],
+                "roll": [key.A, key.D],
+                "shoot": key.SPACE}

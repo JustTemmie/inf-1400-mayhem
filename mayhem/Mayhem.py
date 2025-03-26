@@ -12,11 +12,15 @@ from mayhem.entities.Player import Player
 from mayhem.MayhemNetworking import MayhemNetworking
 
 import pyglet
+import pyglet.window.key
 import config
 
 class Mayhem(Game):
     def init(self):
-        # Player().instantiate(self)
+        self.player = Player()
+        self.player.instantiate(self)
+        self.game_window.event("on_key_press")(self.player.on_key_press)
+        self.game_window.event("on_key_release")(self.player.on_key_release)
 
         self.mn = MayhemNetworking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
         if self.mn.connected:
@@ -24,6 +28,7 @@ class Mayhem(Game):
             self.mn.send(b"1 1 1") # FIXME: Remove
 
     def user_engine_process(self, delta):
+
         self._handle_network_input()
         pass
 
@@ -33,3 +38,5 @@ class Mayhem(Game):
             data = self.mn.decode(self.mn.q.get())
             # TODO: Handle each request from the server
         self.mn.lock.release()
+
+
