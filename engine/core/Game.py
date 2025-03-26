@@ -107,7 +107,7 @@ class Game:
         
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+            # logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
         
         for entity in self.entities:
             entity.process(delta)
@@ -121,7 +121,6 @@ class Game:
         self.frames_elapsed += 1
         self.time_elapsed += delta
 
-    # do network in here please :3
     def engine_process(self, delta: float):
         """
             Called every engine tick (30 tps), not intended to be touched by the end user.

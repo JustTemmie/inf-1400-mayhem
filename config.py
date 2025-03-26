@@ -1,6 +1,7 @@
 from pyglet.math import Vec2
 
 SERVER_ADDRESS: str = "example.com"
+SERVER_TEST_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
 LOG_DEBUG_EVENTS = False

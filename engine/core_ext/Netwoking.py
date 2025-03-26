@@ -1,6 +1,6 @@
 import socket
 import abc
-import threading
+from threading import Thread, Lock
 import queue
 
 
@@ -15,19 +15,23 @@ class Networking(abc.ABC):
         self.s.send(b"1 1 1")
 
         self.q = queue.Queue()
+        self.lock = Lock()
 
     def send(self, data):
         self.s.send(self.encode(data))
 
     @staticmethod
-    def _listen(self, s: socket.socket, q: queue.Queue):
+    def _listen(s: socket.socket, q: queue.Queue, lock: Lock):
+        print("test")
         while True:
-            data = self.decode(s.recv(1024))
-            print(data)
+            data = s.recv(1024)
+
+            lock.acquire()
             q.put(data)
+            lock.release()
 
     def start_listen(self):
-        thread = threading.Thread(target=self._listen, args=(self, self.s, self.q, ))
+        thread = Thread(target=self._listen, args=(self.s, self.q, self.lock, ))
         thread.start()
 
     @abc.abstractmethod
