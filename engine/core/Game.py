@@ -107,7 +107,7 @@ class Game:
             entity.engine_process(delta)
         
         for entity in Entity3D.all_3D_entities:
-            entity.handle_physics(delta, air_density=config.air_density, gravity=config.gravity)
+            entity.handle_physics(delta, air_density=config.air_friction, gravity=config.gravity)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
