@@ -7,17 +7,14 @@ if __name__ == "__main__":
 # from engine.core.Input import Input
 from engine.core.Utils import Utils
 from engine.core.Window import Window
+from engine.core_ext.Input import Input
 from engine.core_ext.Entity import Entity
 from engine.core_ext.Entity3D import Entity3D
 import engine.extras.logger
 
-
 import config
 
 from collections import namedtuple
-import pyglet.gl as gl
-from pyglet.math import Mat4, Vec3
-
 
 import pyglet
 import sys
@@ -31,8 +28,10 @@ class Game:
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
         
+        
         self.window = Window()
-        self.window.event("on_draw")(self.on_draw)        
+        self.window.event("on_draw")(self.on_draw)
+        self.window.push_handlers(Input.keyboard_keys)
 
         example_label = pyglet.text.Label(text="wooho!!", batch=self.UI_batch)
 
@@ -108,7 +107,7 @@ class Game:
             entity.engine_process(delta)
         
         for entity in Entity3D.all_3D_entities:
-            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
+            entity.handle_physics(delta, air_density=config.air_density, gravity=config.gravity)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)

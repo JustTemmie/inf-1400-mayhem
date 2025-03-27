@@ -21,6 +21,8 @@ class Entity:
         self.entity_ID: int
         self.components = Component()
         self.visible = True
+        
+        self.mass = 1 # kg
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
