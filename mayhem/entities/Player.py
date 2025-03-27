@@ -32,10 +32,12 @@ class Player(Entity3D):
         self.roll = self.roll_velocity
 
     def user_instantiate(self, game: Game):
-        model_scene = pyglet.resource.scene("assets/models/test.obj")
+        main_batch = game.get_render_batches().main_batch
 
-        self.model = model_scene.create_models(batch=game.main_batch)[0]
+        model_scene = pyglet.resource.scene("assets/models/axes.obj")
 
+        self.model = model_scene.create_models(batch=main_batch)[0]
+        
     def on_key_press(self, symbole, modifier):
         # Purely experimental
         if symbole == config.KEY_BINDS["yaw"][0]:
