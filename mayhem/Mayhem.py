@@ -5,7 +5,7 @@ if __name__ == "__main__":
     sys.path.append(".")
 
 from engine.core.Game import Game
-from engine.core_ext.Entity import Entity
+from engine.core.Entity import Entity
 from engine.core_ext.Netwoking import Networking
 
 from mayhem.entities.Player import Player

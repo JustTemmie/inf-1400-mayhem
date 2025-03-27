@@ -8,8 +8,8 @@ if __name__ == "__main__":
 from engine.core.Utils import Utils
 from engine.core.Window import Window
 from engine.core_ext.Input import Input
-from engine.core_ext.Entity import Entity
-from engine.core_ext.Entity3D import Entity3D
+from engine.core.Entity import Entity
+from engine.core.Entity3D import Entity3D
 import engine.extras.logger
 
 import config
@@ -107,7 +107,7 @@ class Game:
             entity.engine_process(delta)
         
         for entity in Entity3D.all_3D_entities:
-            entity.handle_physics(delta, air_density=config.air_friction, gravity=config.gravity)
+            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)

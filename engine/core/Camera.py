@@ -4,7 +4,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-from engine.core_ext.Entity3D import Entity3D
+from engine.core.Entity3D import Entity3D
 
 import config
 

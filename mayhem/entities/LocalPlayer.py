@@ -2,7 +2,7 @@ from engine.core.Game import Game
 from engine.core.Utils import Utils
 from engine.core_ext.Input import Input
 from engine.core_ext.Maths import Maths
-from engine.core_ext.Entity3D import Entity3D
+from engine.core.Entity3D import Entity3D
 
 from mayhem.entities.Player import Player
 

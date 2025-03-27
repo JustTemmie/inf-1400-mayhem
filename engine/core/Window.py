@@ -4,7 +4,7 @@ if __name__ == "__main__":
     import sys
     sys.path.append(".")
 
-from engine.core_ext.Camera import Camera
+from engine.core.Camera import Camera
 
 import config
 

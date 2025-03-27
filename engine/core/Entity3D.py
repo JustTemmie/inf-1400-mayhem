@@ -1,4 +1,4 @@
-from engine.core_ext.Entity import Entity
+from engine.core.Entity import Entity
 
 from pyglet.gl import glEnable, GL_DEPTH_TEST, GL_CULL_FACE
 from pyglet.math import Mat4, Vec3
