@@ -6,13 +6,15 @@ if __name__ == "__main__":
 
 # from engine.core.Input import Input
 from engine.core.Utils import Utils
+from engine.core.Window import Window
 from engine.core_ext.Entity import Entity
+from engine.core_ext.Entity3D import Entity3D
 import engine.extras.logger
 
 import config
 
 from collections import namedtuple
-from pyglet.gl import glEnable, GL_DEPTH_TEST, GL_CULL_FACE
+import pyglet.gl as gl
 from pyglet.math import Mat4, Vec3
 
 
@@ -22,48 +24,30 @@ import typing
 import time
 import logging
 
-if typing.TYPE_CHECKING:
-    from engine.core_ext.Entity import Entity
-    from engine.core_ext.Entity3D import Entity3D
-
-
 class Game:
     def __init__(self):
-        self.screen_size = config.display_resolution
-        self.game_window = pyglet.window.Window(
-            self.screen_size.x, self.screen_size.y,
-            resizable=True, visible=False,
-            caption="Mayhem (3D!!)", vsync=config.VSYNC)
-
         # rendering "batches"
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
-
-        self.game_window.event("on_draw")(self.on_draw)
-        self.game_window.event("on_resize")(self.on_resize)
-
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
+        
+        self.window = Window()
+        self.window.event("on_draw")(self.on_draw)        
 
         example_label = pyglet.text.Label(text="wooho!!", batch=self.UI_batch)
-
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
         self.frame_times: list[float] = []
 
         self.entity_ID = 0 # an increasing counter such that every entity has their own unique ID
-        self.entities: list[Entity] = []
-        self.entities_3D: list[Entity3D] = []
 
         self.frame_start_time = time.time()
 
         Utils.print_system_info()
 
-        self.game_window.view = Mat4.look_at(position=Vec3(0, 0, 5), target=Vec3(0, 0, 0), up=Vec3(0, 1, 0))
-        self.game_window.set_visible()
-
         self.init()
+        self.window.camera.instantiate(self)
+        self.window.set_visible()
 
     def init(self):
         """
@@ -88,7 +72,7 @@ class Game:
             Called every frame, not intended to be touched by the end user.
         """
         Entity.time_elapsed = self.time_elapsed
-
+        
         if self.frames_elapsed >= 3:
             self.frame_times.append(delta)
             if len(self.frame_times) > config.target_refresh_rate:
@@ -96,10 +80,15 @@ class Game:
 
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+            logging.info(f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
 
-        for entity in self.entities:
+        for entity in Entity.all_entities:
             entity.process(delta)
+            
+        
+        for entity in Entity.all_entities:
+            if entity.visible:
+                entity.draw()
 
         # unsure if this is using pointers, might have to fix
         processing_deferred_calls = Entity.deferred_calls
@@ -114,8 +103,11 @@ class Game:
         """
             Called every engine tick (30 tps), not intended to be touched by the end user.
         """
-        for entity in self.entities:
+        for entity in Entity.all_entities:
             entity.engine_process(delta)
+        
+        for entity in Entity3D.all_3D_entities:
+            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
@@ -128,15 +120,13 @@ class Game:
         self.user_engine_process(delta)
 
     def on_draw(self):
-        self.game_window.clear()
+        self.window.clear()
+        
+        self.window.camera.ProjectWorld()
+        
         self.main_batch.draw()
-
-    def on_resize(self, width, height):
-        self.game_window.viewport = (0, 0, width, height)
-
-        self.game_window.projection = Mat4.perspective_projection(self.game_window.aspect_ratio, z_near=0.1, z_far=255)
-        return pyglet.event.EVENT_HANDLED
-
+        self.UI_batch.draw()
+    
     def run(self):
         """
             Start the game!
@@ -144,10 +134,3 @@ class Game:
         pyglet.clock.schedule_interval(self.engine_process, 1 / config.target_physics_rate)
         pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()
-
-    def get_render_batches(self) -> namedtuple:
-        """
-            Get a named tuple of all render batches, Deprecated
-        """
-        Result = namedtuple("RenderBatches", ["main_batch", "UI_batch"])
-        return Result(self.main_batch, self.UI_batch)

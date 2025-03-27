@@ -3,13 +3,14 @@ from engine.core.Utils import Utils
 from engine.core.Maths import Maths
 from engine.core_ext.Entity3D import Entity3D
 
+import config
+
 from pyglet.math import Vec3
 
 import pyglet
-
 import typing
+import logging
 
-import config
 
 class Player(Entity3D):
     def user_init(self):
@@ -18,10 +19,12 @@ class Player(Entity3D):
     def process(self, delta):
         # print(f"frame tick!! {delta}")
         # self.roll += delta
-        self.draw()
+        pass
 
     def engine_process(self, delta):
-        print(f"engine tick!! {delta}")
+        logging.debug(f"player pos: {self.pos}")
+        
+        self.rotation_velocity = Vec3(1, 0.6, 0.3)
 
         # Purely experimental
         # self.velocity = Vec3(self.velocity.x + self.acceleration.x,
@@ -32,14 +35,10 @@ class Player(Entity3D):
         # self.pitch = self.velocity.y
         # self.roll = self.roll_velocity
         
-        self.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
-
     def user_instantiate(self, game: Game):
-        main_batch = game.get_render_batches().main_batch
-
         model_scene = pyglet.resource.scene(Utils.get_model_path("axes"))
 
-        self.model = model_scene.create_models(batch=main_batch)[0]
+        self.model = model_scene.create_models(batch=game.main_batch)[0]
 
     def on_key_press(self, symbole, modifier):
         return

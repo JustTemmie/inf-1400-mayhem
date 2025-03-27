@@ -1,5 +1,9 @@
 import pyglet
 import typing
+import abc
+
+if typing.TYPE_CHECKING:
+    from engine.core.Game import Game
 
 class Component:
     def __init__(self):
@@ -8,6 +12,7 @@ class Component:
 class Entity:
     time_elapsed: float = 0
     all_entities: list["Entity"] = []
+    
 
     # list of lambdas to be called at the end of the tick
     deferred_calls: typing.List[typing.Callable] = []
@@ -15,6 +20,7 @@ class Entity:
     def __init__(self):
         self.entity_ID: int
         self.components = Component()
+        self.visible = True
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
@@ -25,18 +31,37 @@ class Entity:
         """
         pass
 
-
     def process(self, delta):
         """
             Called every frame
         """
-        print("tick!")
-    
+
     def engine_process(self, delta):
         """
             Called every engine tick
         """
-    
+
+    def instantiate(self, game):
+        game: Game = game
+        
+        self.entity_ID = game.entity_ID
+        game.entity_ID += 1
+
+        self.all_entities.append(self)
+
+        self.user_instantiate(game)
+
+    def user_instantiate(self, game):
+        """
+            Implement by extending class
+        """
+        
+        game: Game = game
+
+    @abc.abstractmethod
+    def draw(self):
+        raise NotImplemented
+
     @classmethod
     def get_all_entities(self) -> list["Entity"]:
         return self.all_entities
