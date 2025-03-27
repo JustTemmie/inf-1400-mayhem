@@ -50,14 +50,17 @@ class Entity3D(Entity):
     
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def draw(self):
-        # note that Y is up
-        rot_z = Mat4.from_rotation(self.yaw, Vec3(0, 0, 1))
         rot_x = Mat4.from_rotation(self.pitch, Vec3(1, 0, 0))
-        rot_y = Mat4.from_rotation(self.roll, Vec3(0, 1, 0))
+        rot_y = Mat4.from_rotation(self.yaw, Vec3(0, 1, 0))
+        rot_z = Mat4.from_rotation(self.roll, Vec3(0, 0, 1))
+        trans = Mat4.from_translation(Vec3(0, 0, 0))
+        self.model.matrix = trans @ rot_x @ rot_y @ rot_z
 
-        trans = Mat4.from_translation(self.pos)
-        
-        self.model.matrix = trans @ rot_z @ rot_x @ rot_y
+        # rot_x = Mat4.from_rotation(self.time_elapsed, Vec3(1, 0, 0))
+        # rot_y = Mat4.from_rotation(self.time_elapsed/3, Vec3(0, 1, 0))
+        # rot_z = Mat4.from_rotation(self.time_elapsed/2, Vec3(0, 0, 1))
+        # trans = Mat4.from_translation(Vec3(-1.75, 0, 0))
+        # self.model.matrix = trans @ rot_x @ rot_y @ rot_z
     
     @classmethod
     def get_all_3D_entities(self):

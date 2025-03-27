@@ -26,10 +26,6 @@ class Utils:
                         'Renderer: ', info.renderer, '\n',
                         'OpenGL version supported: ', info.opengl])
         print(result)
-    
-    @staticmethod
-    def get_model_path(model: str):
-        return f"assets/models/{model}/{model}.obj"
 
 if __name__ == "__main__":
     Utils.print_system_info()
