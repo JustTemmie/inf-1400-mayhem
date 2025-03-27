@@ -145,10 +145,9 @@ class Game:
         pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()
 
-    @staticmethod
-    def get_render_batches():
+    def get_render_batches(self):
         """
             Get a named tuple of all render batches, Deprecated
         """
-        # Result = namedtuple("RenderBatches", ["main_batch", "UI_batch"])
-        # return Result(self.main_batch, UI_batch)
+        Result = namedtuple("RenderBatches", ["main_batch", "UI_batch"])
+        return Result(self.main_batch, self.UI_batch)

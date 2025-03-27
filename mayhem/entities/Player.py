@@ -16,7 +16,7 @@ class Player(Entity3D):
 
     def process(self, delta):
         # print(f"frame tick!! {delta}")
-        self.roll += delta
+        # self.roll += delta
         self.draw()
 
     def engine_process(self, delta):
@@ -34,7 +34,7 @@ class Player(Entity3D):
     def user_instantiate(self, game: Game):
         main_batch = game.get_render_batches().main_batch
 
-        model_scene = pyglet.resource.scene("assets/models/axes.obj")
+        model_scene = pyglet.resource.scene(Utils.get_model_path("axes"))
 
         self.model = model_scene.create_models(batch=main_batch)[0]
         
