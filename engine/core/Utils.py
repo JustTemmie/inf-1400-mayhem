@@ -4,7 +4,7 @@ import pyglet
 from collections import namedtuple
 
 
-class Utils:
+class Utils:    
     @staticmethod
     def get_system_info():
         """

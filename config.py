@@ -19,7 +19,7 @@ VSYNC = False
 
 
 KEY_BINDS = {"pitch": [key.S, key.W],
-             "yaw": [key.E, key.Q],
-             "roll": [key.A, key.D],
-             "thrust": key.LSHIFT,
-             "shoot": key.SPACE}
+            "yaw": [key.E, key.Q],
+            "roll": [key.A, key.D],
+            "thrust": key.LSHIFT,
+            "shoot": key.SPACE}
