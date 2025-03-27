@@ -16,14 +16,12 @@ class Networking(abc.ABC):
 
         self.connected = True
 
-        self.s.send(b"1 1 1")
-
         self.q = queue.Queue()
         self.lock = Lock()
 
     def send(self, data):
         try:
-            self.s.send(self.encode(data))
+            self.s.send(data.encode())
         except ConnectionRefusedError:
             self.connected = False
             print("No connection to server")
@@ -46,28 +44,3 @@ class Networking(abc.ABC):
         thread = Thread(target=self._listen, args=(self,))
         thread.start()
 
-    @abc.abstractmethod
-    def encode(self, data):
-        pass
-
-    @abc.abstractmethod
-    def decode(self, data):
-        pass
-
-
-class TestNetworking(Networking):
-    """Test class, do not use outside of this file"""
-
-    def encode(self, data: tuple):
-        out = ""
-        for i in data:
-            out += f" {i}"
-        return out[1:].encode()
-
-    def decode(self, data):
-        return tuple(data.decode().split(" "))
-
-
-if __name__ == "__main__":
-    n = TestNetworking(27827, "127.0.0.1")
-    n.start_listen()

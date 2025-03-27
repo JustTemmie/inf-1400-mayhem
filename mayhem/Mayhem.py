@@ -6,10 +6,16 @@ if __name__ == "__main__":
 
 from engine.core.Game import Game
 from engine.core_ext.Entity import Entity
+from engine.core_ext.Netwoking import Networking
 
 from mayhem.entities.Player import Player
 
-from mayhem.MayhemNetworking import MayhemNetworking
+from mayhem.Packet import Packet
+
+from mayhem.entities.LocalPlayer import LocalPlayer
+from mayhem.entities.RemotePlayer import RemotePlayer
+
+import typing
 
 import pyglet
 import pyglet.window.key
@@ -17,15 +23,17 @@ import config
 
 class Mayhem(Game):
     def init(self):
-        self.player = Player()
+        self.player = LocalPlayer()
         self.player.instantiate(self)
         self.game_window.event("on_key_press")(self.player.on_key_press)
         self.game_window.event("on_key_release")(self.player.on_key_release)
 
-        self.mn = MayhemNetworking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
-        if self.mn.connected:
-            self.mn.start_listen()  # Creates a thread that listens to the server.
-            self.mn.send(b"1 1 1") # FIXME: Remove
+        self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
+        if self.networking.connected:
+            self.networking.start_listen()  # Creates a thread that listens to the server.
+            self.networking.send(Packet()) # FIXME: Remove
+
+        self.other_players: typing.Dict[int, RemotePlayer] = {}
 
     def user_engine_process(self, delta):
 
@@ -33,10 +41,11 @@ class Mayhem(Game):
         pass
 
     def _handle_network_input(self):
-        self.mn.lock.acquire()  # Locks the queue so that two threads do not use it at the same time
-        while not self.mn.q.empty():
-            data = self.mn.decode(self.mn.q.get())
-            # TODO: Handle each request from the server
-        self.mn.lock.release()
+        self.networking.lock.acquire()  # Locks the queue so that two threads do not use it at the same time
+        while not self.networking.q.empty():
+            data = self.networking.q.get()
+            packet = Packet.decode(data)
+
+        self.networking.lock.release()
 
 

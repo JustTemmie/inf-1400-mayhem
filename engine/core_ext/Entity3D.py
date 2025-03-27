@@ -19,6 +19,7 @@ class Entity3D(Entity):
         
         self.rotation: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.rotation_velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
+        self.rotation_acceleration: Vec3 = Vec3(0, 0, 0) # x, y, z
         
         self.model: pyglet.model.Scene
         

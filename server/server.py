@@ -39,25 +39,30 @@ class Server:
 
         while True:
             data, addr = self.serverSocket.recvfrom(1024)
-            decoded_data = tuple(data.decode().split(" "))
+            decoded_data = list(data.decode().split(" "))
+            print(decoded_data)
             """
             How the data is formated (Porbably under 1 KB):
 
-            0, 1, 2     --- client pos (x, y, z)
-            3, 4, 5     --- client yaw, pitch, roll
-            4, 5, 6     --- client velocity in spheric cordinates (yaw, pitch, speed)
-            7           --- client roll speed
-            8, 9, 10    --- client acceleration in spheric cordinates (yaw, pitch, speed)
-            11          --- client roll acceleration
+            0, 1        --- player/server ids (from, to)
 
-            12, 13, 14  --- new bullet pos (x, y, z) (If zero, no new bullet)
-            15, 16, 17  --- new bullet yaw, pitch, roll
-            18, 19, 20  --- new bullet velocity in spheric cordinates (yaw, pitch, speed)
-            21          --- new bullet roll speed (This will be zero for every bullet)
-            22, 23, 24  --- new bullet acceleration in spheric cordinates (yaw, pitch, speed) (This will be zero for every bullet)
-            25          --- new bullet roll acceleration(This wil be zero for every bullet)
+            2, 3, 4     --- client pos (x, y, z)
+            5, 6, 7     --- client velocity (x, y, z)
+            8, 9, 10    --- client acceleration (x, y, z)
 
-            26          --- Killed by player id (if zero not killed)
+            11, 12, 13  --- client rotation (x, y, z)
+            14, 15, 16  --- client rotation speed (x, y, z)
+            17, 18, 19  --- client rotation acceleration (x, y, z)
+
+            20, 21, 22  --- new bullet pos (x, y, z) (If zero, no new bullet)
+            23, 24, 25  --- new bullet speed (x, y, z)
+            26, 27, 28  --- new bullet acceleration (x, y, z)
+
+            29, 30, 31  --- new bullet rotation (x, y, z)
+            32, 33, 34  --- new bullet rotation speed (x, y, z)
+            35, 36, 37  --- new bullet rotation acceleration (x, y, z)
+
+            38          --- Killed by player id (if zero not killed)
             """
 
             if addr not in self.clients:
@@ -71,8 +76,9 @@ class Server:
                 self.clients[addr] = new_player
 
             for client in self.clients.values():
-                header = (self.clients[addr].id, client.id)
-                packet = header+decoded_data
+                packet = decoded_data
+                packet[0] = self.clients[addr].id
+                packet[1] = client.id
 
                 if client != self.clients[addr]:
                     self.serverSocket.sendto(self.encode(packet), client.addr)
