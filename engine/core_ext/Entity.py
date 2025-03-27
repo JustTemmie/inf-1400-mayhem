@@ -3,11 +3,7 @@ import typing
 
 class Component:
     def __init__(self):
-        self.prey = False
-        self.flock_with_prey = False
-
-        self.hunter = False
-        self.obstacle = False
+        pass
 
 class Entity:
     time_elapsed: float = 0

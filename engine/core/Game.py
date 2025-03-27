@@ -96,7 +96,7 @@ class Game:
 
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            # logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+            logging.info(f"fps: {round(fps, 1)}, entities: {len(self.entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
 
         for entity in self.entities:
             entity.process(delta)
@@ -145,7 +145,7 @@ class Game:
         pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()
 
-    def get_render_batches(self):
+    def get_render_batches(self) -> namedtuple:
         """
             Get a named tuple of all render batches, Deprecated
         """

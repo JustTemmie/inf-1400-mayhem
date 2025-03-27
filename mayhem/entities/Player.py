@@ -21,16 +21,18 @@ class Player(Entity3D):
         self.draw()
 
     def engine_process(self, delta):
-        #print(f"engine tick!! {delta}")
+        print(f"engine tick!! {delta}")
 
         # Purely experimental
-        self.velocity = Vec3(self.velocity.x + self.acceleration.x,
-                            self.velocity.y + self.acceleration.y,
-                            self.velocity.z + self.acceleration.z)
-        self.roll_velocity = self.roll_velocity + self.roll_acceleration
-        self.yaw = self.velocity.x
-        self.pitch = self.velocity.y
-        self.roll = self.roll_velocity
+        # self.velocity = Vec3(self.velocity.x + self.acceleration.x,
+        #                     self.velocity.y + self.acceleration.y,
+        #                     self.velocity.z + self.acceleration.z)
+        # self.roll_velocity = self.roll_velocity + self.roll_acceleration
+        # self.yaw = self.velocity.x
+        # self.pitch = self.velocity.y
+        # self.roll = self.roll_velocity
+        
+        self.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
     def user_instantiate(self, game: Game):
         main_batch = game.get_render_batches().main_batch
@@ -40,6 +42,7 @@ class Player(Entity3D):
         self.model = model_scene.create_models(batch=main_batch)[0]
 
     def on_key_press(self, symbole, modifier):
+        return
         # Purely experimental
         if symbole == config.KEY_BINDS["yaw"][0]:
             print("Yaw +")
@@ -71,6 +74,7 @@ class Player(Entity3D):
             print("Shoot")
 
     def on_key_release(self, symbole, modifier):
+        return
         # Purely experimental
         if symbole == config.KEY_BINDS["yaw"][0]:
             print("Yaw +")

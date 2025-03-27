@@ -14,17 +14,12 @@ class Entity3D(Entity):
     def __init__(self):
         super().__init__()
         self.pos: Vec3 = Vec3(0, 0, 0) # x, y, z
-        # velocity and acceleration spheric coordinates
-        self.velocity: Vec3 = Vec3(0, 0, 0) # yaw, pitch, length
-        self.acceleration: Vec3 = Vec3(0, 0, 0) # yaw, pitch, length
+        self.velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
+        self.acceleration: Vec3 = Vec3(0, 0, 0) # x, y, z
         
-        self.yaw: float = 0
-        self.pitch: float = 0
-        self.roll: float = 0
+        self.rotation: Vec3 = Vec3(0, 0, 0) # x, y, z
+        self.rotation_velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
         
-        self.roll_velocity: float = 0
-        self.roll_acceleration: float = 0
-
         self.model: pyglet.model.Scene
         
         self.user_init()
@@ -51,13 +46,22 @@ class Entity3D(Entity):
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def draw(self):
         # note that Y is up
-        rot_z = Mat4.from_rotation(self.yaw, Vec3(0, 0, 1))
-        rot_x = Mat4.from_rotation(self.pitch, Vec3(1, 0, 0))
-        rot_y = Mat4.from_rotation(self.roll, Vec3(0, 1, 0))
+        rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
+        rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 1, 0))
+        rot_z = Mat4.from_rotation(self.rotation.z, Vec3(0, 0, 1))
 
         trans = Mat4.from_translation(self.pos)
         
         self.model.matrix = trans @ rot_z @ rot_x @ rot_y
+    
+    def handle_physics(self, delta: float, air_friction: float = 0, gravity: Vec3 = Vec3(0, 0, 0)):
+        self.acceleration *= (1 - air_friction)
+        self.velocity += (self.acceleration + gravity) * delta
+        self.pos += self.velocity * delta
+        
+        self.rotation_velocity *= (1 - air_friction)
+        self.rotation += self.rotation_velocity * delta
+
     
     @classmethod
     def get_all_3D_entities(self):
