@@ -53,7 +53,6 @@ class Server:
         while True:
             data, addr = self.serverSocket.recvfrom(1024)
             decoded_data = list(data.decode().split(" "))
-            print(decoded_data)
             """
             How the data is formated (Porbably under 1 KB):
 
