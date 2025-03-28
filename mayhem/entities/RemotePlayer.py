@@ -27,5 +27,13 @@ class RemotePlayer(Player):
         # self.pitch = self.velocity.y
         # self.roll = self.roll_velocity
 
-    def update_pos(self, packet: typing.Tuple[float]):
-        pass
+    def update_pos(self, packet: typing.NamedTuple):
+        self.pos = packet.packet.player_pos
+        self.velocity = packet.packet.player_velocity
+        self.acceleration = packet.packet.player_acceleration
+        self.rotation = packet.packet.player_rotation
+        self.rotation_velocity = packet.packet.player_rotation_velocity
+        self.rotation_acceleration = packet.packet.player_rotation_acceleration
+
+        # TODO: maybe do something when died?
+        # Or maybe that is its own function

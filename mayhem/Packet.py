@@ -55,20 +55,20 @@ class Packet:
             raise TypeError("Bad packet:(")
         # Please read README in server
         packet = Packet(
-                decoded_data[0], decoded_data[1],
-                Vec3(decoded_data[2], decoded_data[3], decoded_data[4]),
-                Vec3(decoded_data[5], decoded_data[6], decoded_data[7]),
-                Vec3(decoded_data[8], decoded_data[9], decoded_data[10]),
-                Vec3(decoded_data[11], decoded_data[12], decoded_data[13]),
-                Vec3(decoded_data[14], decoded_data[15], decoded_data[16]),
-                Vec3(decoded_data[17], decoded_data[18], decoded_data[19]),
-                Vec3(decoded_data[20], decoded_data[21], decoded_data[22]),
-                Vec3(decoded_data[23], decoded_data[24], decoded_data[25]),
-                Vec3(decoded_data[26], decoded_data[27], decoded_data[28]),
-                Vec3(decoded_data[29], decoded_data[30], decoded_data[31]),
-                Vec3(decoded_data[32], decoded_data[33], decoded_data[34]),
-                Vec3(decoded_data[35], decoded_data[36], decoded_data[37]),
-                decoded_data[38]
+                int(decoded_data[0]), int(decoded_data[1]),
+                Vec3(float(decoded_data[2]), float(decoded_data[3]), float(decoded_data[4])),
+                Vec3(float(decoded_data[5]), float(decoded_data[6]), float(decoded_data[7])),
+                Vec3(float(decoded_data[8]), float(decoded_data[9]), float(decoded_data[10])),
+                Vec3(float(decoded_data[11]), float(decoded_data[12]), float(decoded_data[13])),
+                Vec3(float(decoded_data[14]), float(decoded_data[15]), float(decoded_data[16])),
+                Vec3(float(decoded_data[17]), float(decoded_data[18]), float(decoded_data[19])),
+                Vec3(float(decoded_data[20]), float(decoded_data[21]), float(decoded_data[22])),
+                Vec3(float(decoded_data[23]), float(decoded_data[24]), float(decoded_data[25])),
+                Vec3(float(decoded_data[26]), float(decoded_data[27]), float(decoded_data[28])),
+                Vec3(float(decoded_data[29]), float(decoded_data[30]), float(decoded_data[31])),
+                Vec3(float(decoded_data[32]), float(decoded_data[33]), float(decoded_data[34])),
+                Vec3(float(decoded_data[35]), float(decoded_data[36]), float(decoded_data[37])),
+                int(decoded_data[38])
                 )
         return packet
 

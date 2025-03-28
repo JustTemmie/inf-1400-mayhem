@@ -28,12 +28,12 @@ class Mayhem(Game):
         self.player.pos = pyglet.math.Vec3(5, 0, 0)
         self.player.instantiate(self)
 
-        self.spawn_test_objects()
-        
+        #self.spawn_test_objects()
+
         self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
             self.networking.start_listen()  # Creates a thread that listens to the server.
-            self.networking.send(Packet()) # FIXME: Remove
+            self.networking.send(Packet.player_to_packet(self.player))
 
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
@@ -41,24 +41,34 @@ class Mayhem(Game):
         player = Player()
         player.pos = pyglet.math.Vec3(-5, 0, 0)
         player.instantiate(self)
-        
+
         player = Player()
         player.pos = pyglet.math.Vec3(-5, 0, 15)
         player.instantiate(self)
-        
+
         ExampleObject().instantiate(self)
 
     def user_engine_process(self, delta):
 
         self._handle_network_input()
+        self._send_update()
         pass
+
+    def _send_update(self):
+        if self.networking.connected:
+            self.networking.send(Packet.player_to_packet(self.player))
 
     def _handle_network_input(self):
         self.networking.lock.acquire()  # Locks the queue so that two threads do not use it at the same time
         while not self.networking.q.empty():
             data = self.networking.q.get()
             packet = Packet.decode(data)
+            if self.player.id == 0:
+                self.player.id = packet.packet.to_id
+            if packet.packet.from_id not in self.other_players:
+                self.other_players[packet.packet.from_id] = RemotePlayer()
+                self.other_players[packet.packet.from_id].instantiate(self)
+
+            self.other_players[packet.packet.from_id].update_pos(packet)
 
         self.networking.lock.release()
-
-

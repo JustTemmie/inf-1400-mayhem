@@ -21,10 +21,10 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
-        
+
         input_vector = Vec2(
             keys[key.A] - keys[key.D],
             keys[key.W] - keys[key.S]
         )
-        
+
         self.acceleration = Vec3(input_vector.x, input_vector.y, 0)
