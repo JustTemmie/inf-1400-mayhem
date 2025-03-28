@@ -1,5 +1,17 @@
+"""
+The server sided code
+@author: Benjamin
+"""
+
+# adds the project root to the path, this is to allow importing other files in an easier manner
+# if you know a better way of doing this, please tell me!
+
+if __name__ == "__main__":
+    import sys
+    sys.path.append(".")
+
 import socket
-from player import Player
+from server.player import Player
 
 
 class Server:
@@ -36,6 +48,7 @@ class Server:
         """
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.serverSocket.bind(("", 27827))
+        print("Server started on port:", 27827)
 
         while True:
             data, addr = self.serverSocket.recvfrom(1024)
