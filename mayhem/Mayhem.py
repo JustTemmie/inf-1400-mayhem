@@ -28,7 +28,7 @@ class Mayhem(Game):
         self.player.pos = pyglet.math.Vec3(5, 0, 0)
         self.player.instantiate(self)
 
-        #self.spawn_test_objects()
+        self.spawn_test_objects()
 
         self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:

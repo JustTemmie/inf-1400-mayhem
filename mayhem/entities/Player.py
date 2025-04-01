@@ -24,9 +24,7 @@ class Player(Entity3D):
         # self.roll += delta
         pass
 
-    def engine_process(self, delta):
-        logging.debug(f"player pos: {self.pos}")
-        
+    def engine_process(self, delta):        
         self.rotation_velocity = Vec3(1, 0.6, 0.3)
 
     def user_instantiate(self, game: Game):

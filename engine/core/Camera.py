@@ -8,7 +8,7 @@ from engine.core.Entity3D import Entity3D
 
 import config
 
-from pyglet.gl import glEnable, glDisable, GL_DEPTH_TEST, GL_CULL_FACE
+from pyglet.gl import *
 from pyglet.math import Mat4, Vec3
 
 import pyglet
@@ -19,11 +19,16 @@ if typing.TYPE_CHECKING:
     from engine.core.Window import Window
 
 class Camera(Entity3D):
+    active_camera = None
+
     def __init__(self, window: pyglet.window):
         super().__init__()
         
         self.window: Window = window
         self.visible = False
+        self.target: Vec3 = Vec3(0, 0, 0)
+
+        Camera.active_camera = self
         
         self.pos = Vec3(0, 0, 20)
         
@@ -42,7 +47,7 @@ class Camera(Entity3D):
     def ProjectWorld(self):
         glEnable(GL_DEPTH_TEST)
         self.window.projection = self.window.model_view
-        self.window.view = Mat4.look_at(position=self.pos, target=Vec3(0, 0, 0), up=Vec3(0, 1, 0))
+        self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 1, 0))
 
     def ProjectHud(self):
         """

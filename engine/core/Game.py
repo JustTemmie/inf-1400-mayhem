@@ -121,7 +121,7 @@ class Game:
 
     def on_draw(self):
         self.window.clear()
-        
+
         self.window.camera.ProjectWorld()
         
         self.main_batch.draw()

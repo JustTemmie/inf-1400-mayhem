@@ -2,14 +2,15 @@ from pyglet.math import Vec2, Vec3
 from pyglet.window import key
 
 import logging
-
+from collections import namedtuple
 
 SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
-air_friction = 0 # float from 0 to 1, where 1 is 100%
+air_friction = 0.1 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
 gravity = Vec3(0, 0, 0) # earth's gravity would be Vec3(0, -9.8, 0)
+thrust_force: float = 1000
 
 LOG_LEVEL = logging.WARN
 
@@ -20,13 +21,15 @@ display_resolution = Vec2(1920, 1080)
 # canvas_resolution = Vector2(1920, 1080) maybe we won't have to use this for opengl shenanigans
 
 target_refresh_rate = 60
-target_physics_rate = 30
+target_physics_rate = 60
 FOV = 80
 VSYNC = False
 
 
-KEY_BINDS = {"pitch": [key.S, key.W],
-            "yaw": [key.E, key.Q],
-            "roll": [key.A, key.D],
-            "thrust": key.LSHIFT,
-            "shoot": key.SPACE}
+key_binds = namedtuple("keybinds", ["pitch", "yaw", "roll", "thrust", "shoot"])
+KEY_BINDS = key_binds(
+    [key.W, key.R], # pitch
+    [key.A, key.S], # yaw
+    [key.Q, key.F], # roll
+    key.LSHIFT, # thrust
+    key.SPACE)  # shoot
