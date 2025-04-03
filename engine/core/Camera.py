@@ -37,10 +37,10 @@ class Camera(Entity3D):
     
     def engine_process(self, delta):
         logging.debug(f"camera pos: {self.pos}")
+        logging.debug(f"camera rotation: {self.rotation}")
         # self.pos += Vec3(3, 0, 0) * delta
         # self.pos += Vec3(0, 0, 4) * delta
         # self.rotation += Vec3(10, 0, 0) * delta
-        print(f"camera rotation: {self.rotation}")
         
         
 

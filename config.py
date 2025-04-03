@@ -8,7 +8,7 @@ SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
-air_friction = 0.1 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
+air_friction = 0.04 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
 gravity = Vec3(0, 0, 0) # earth's gravity would be Vec3(0, -9.8, 0)
 thrust_force: float = 1000
 

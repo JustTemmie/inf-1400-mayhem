@@ -39,8 +39,8 @@ class LocalPlayer(Player):
 
         movement = Vec3(movement_vertical, 0, movement_horizontal)
         
-        self.acceleration = movement * 1200 * delta
-        self.rotation_acceleration = Vec3(0, 0, roll_direction * 40) * 60 * delta
+        self.acceleration = movement * config.thrust_force * delta
+        self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * 60 * delta
         # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
         
 
