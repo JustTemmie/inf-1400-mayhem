@@ -1,7 +1,7 @@
 from engine.core.Entity import Entity
 
 from pyglet.gl import glEnable, GL_DEPTH_TEST, GL_CULL_FACE
-from pyglet.math import Mat4, Vec3
+from pyglet.math import Mat4, Vec3, Quaternion
 
 import pyglet
 import typing
@@ -71,18 +71,23 @@ class Entity3D(Entity):
 
     def get_forward_vector(self) -> Vec3:
         """
-        Computes the forward direction vector in world space.
+            Computes the forward direction vector in world space.
         """
-        forward_x = math.sin(self.rotation.y) * math.cos(self.rotation.x)
-        forward_y = math.sin(self.rotation.x)
-        forward_z = math.cos(self.rotation.y) * math.cos(self.rotation.x)
+        
+        forward_x = math.cos(self.rotation.x) * math.sin(self.rotation.y)
+        forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y)
+        forward_z = -math.sin(self.rotation.x)
 
-        return Vec3(forward_z, forward_x, forward_y).normalize()
+        return Vec3(forward_x, forward_y, forward_z).normalize()
     
     def look_at(self, pos: Vec3):
         """
             Make the entity turn to look at the given position.
+            Not implemented.
         """
+        
+        # i actually don't think we need this function, the camera already has this biult in
+        
         look_towards: Vec3 = self.pos - pos
         # uhh, math here i guess
 

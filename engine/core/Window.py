@@ -65,3 +65,4 @@ class Window(pyglet.window.Window):
         self.ui_view = Mat4.orthogonal_projection(0, width, height, 0, z_near = 0.01, z_far = 400)
 
         return pyglet.event.EVENT_HANDLED
+    

@@ -26,10 +26,10 @@ FOV = 80
 VSYNC = False
 
 
-key_binds = namedtuple("keybinds", ["pitch", "yaw", "roll", "thrust", "shoot"])
+key_binds = namedtuple("keybinds", ["vertical", "horizontal", "roll", "thrust", "shoot"])
 KEY_BINDS = key_binds(
-    [key.W, key.R], # pitch
-    [key.A, key.S], # yaw
+    [key.W, key.R], # vertical
+    [key.A, key.S], # horizontal
     [key.Q, key.F], # roll
     key.LSHIFT, # thrust
     key.SPACE)  # shoot

@@ -31,6 +31,7 @@ class Game:
         
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
+        self.window.event("on_mouse_motion")(Input.on_mouse_motion)
         self.window.push_handlers(Input.keyboard_keys)
 
         example_label = pyglet.text.Label(text="wooho!!", batch=self.UI_batch)

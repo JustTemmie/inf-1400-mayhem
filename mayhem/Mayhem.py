@@ -30,12 +30,12 @@ class Mayhem(Game):
 
         self.spawn_test_objects()
 
-        self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
-        if self.networking.connected:
-            self.networking.start_listen()  # Creates a thread that listens to the server.
-            self.networking.send(Packet.player_to_packet(self.player))
+        # self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
+        # if self.networking.connected:
+        #     self.networking.start_listen()  # Creates a thread that listens to the server.
+        #     self.networking.send(Packet.player_to_packet(self.player))
 
-        self.other_players: typing.Dict[int, RemotePlayer] = {}
+        # self.other_players: typing.Dict[int, RemotePlayer] = {}
 
     def spawn_test_objects(self):
         player = Player()
@@ -50,8 +50,8 @@ class Mayhem(Game):
 
     def user_engine_process(self, delta):
 
-        self._handle_network_input()
-        self._send_update()
+        # self._handle_network_input()
+        # self._send_update()
         pass
 
     def _send_update(self):
