@@ -9,30 +9,34 @@ from engine.core.Camera import Camera
 import config
 
 from pyglet.gl import *
-from pyglet.math import Mat4, Vec3
+from pyglet.math import Mat4, Vec3, Vec2
 
 import pyglet
 
 # a lot of this code is from https://stackoverflow.com/q/72074133
 class Window(pyglet.window.Window):
+    size: Vec2 = config.display_resolution
+
     def __init__(self):
         gl_config = Config(sample_buffers=1, samples=4, depth_size=16, double_buffer=True)
         
-        screen_size = config.display_resolution
+
         super().__init__(
-            screen_size.x, screen_size.y,
+            Window.size.x, Window.size.y,
             resizable=True, visible=False,
             config=gl_config, vsync=config.VSYNC,
             caption="Mayhem (3D!!)")
 
-        self.camera = Camera(self)
-        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov=self.camera.FOV)
-        self.ui_view = Mat4.orthogonal_projection(0, screen_size.x, screen_size.y, 0, z_near = 0.01, z_far = 400)
+        # init the camera
+        Camera(self)
+        
+        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov = Camera.active_camera.FOV)
+        self.ui_view = Mat4.orthogonal_projection(0, Window.size.x, Window.size.y, 0, z_near = 0.01, z_far = 400)
                 
-        self.event("on_resize")(self.on_resize)
+        self.event("on_resize")(self._on_resize)
         
         
-    def init_gl(self, width, height):
+    def _init_gl(self, width, height):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         # glEnable(GL_LIGHTING)
@@ -54,14 +58,16 @@ class Window(pyglet.window.Window):
 
         glViewport(0, 0, width, height)
 
-    def on_resize(self, width, height):
+    def _on_resize(self, width, height):
         self.screen.width = width
-        self.screen.width = height
+        self.screen.height = height
+
+        Window.size = Vec2(width, height)
         
-        self.init_gl(width, height)
+        self._init_gl(width, height)
         self.projection = self.ui_view
         
-        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov=self.camera.FOV)
+        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov = Camera.active_camera.FOV)
         self.ui_view = Mat4.orthogonal_projection(0, width, height, 0, z_near = 0.01, z_far = 400)
 
         return pyglet.event.EVENT_HANDLED

@@ -1,6 +1,7 @@
 from engine.core.Game import Game
 from engine.core.Camera import Camera
 from engine.core.Utils import Utils
+from engine.core.Window import Window
 from engine.core_ext.Input import Input
 from engine.core_ext.Maths import Maths
 
@@ -30,14 +31,18 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
-        mouse = Input.mouse
+        normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
+
+        forward_vector = self.get_forward_vector()
 
         movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
         movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
         
         roll_direction = keys[config.KEY_BINDS.roll[1]] - keys[config.KEY_BINDS.roll[0]]
 
-        movement = Vec3(movement_vertical, 0, movement_horizontal)
+        mouse_desired_movement = (self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y)
+        movement = Vec3(-movement_horizontal, 0, movement_vertical) + mouse_desired_movement
+        print(f"mouse: {Input.mouse} - screen: {Window.size} - value: {normalized_mouse_position}")
         
         self.acceleration = movement * config.thrust_force * delta
         self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * 60 * delta
@@ -45,9 +50,7 @@ class LocalPlayer(Player):
         
 
         if keys[config.KEY_BINDS.thrust]:
-            forward = self.get_forward_vector()
-
-            self.acceleration += forward * config.thrust_force * delta
+            self.acceleration += forward_vector * config.thrust_force * delta
     
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
@@ -55,5 +58,5 @@ class LocalPlayer(Player):
         if forward.length == 0:
             return
         
-        Camera.active_camera.pos = forward * -10 + self.pos + Vec3(4, 0, 0) # this does *NOT* work if the camera is rotated, uh oh
+        Camera.active_camera.pos = forward * -10 + self.pos + Vec3(0, 0, 4) # this does *NOT* work if the camera is rotated, uh oh
         Camera.active_camera.target = forward * 20 + self.pos

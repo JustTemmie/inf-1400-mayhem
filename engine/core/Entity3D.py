@@ -32,7 +32,7 @@ class Entity3D(Entity):
 
     def instantiate(self, game):
         super().instantiate(game)
-        self.all_3D_entities.append(self)
+        Entity3D.all_3D_entities.append(self)
     
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def draw(self):
@@ -68,12 +68,33 @@ class Entity3D(Entity):
 
         # print(self.rotation)
         # self.rotation = (self.rotation + math.pi) % (math.pi * 2) - math.pi
+    
+    # i do NOT feel like doing math as i'm writing this
+    # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
+    def get_up_vector(self) -> Vec3:
+        """
+            Computes the up direction vector in world space, considering roll.
+        """
+        # Compute the up vector using pitch (rotation.x), yaw (rotation.y), and roll (rotation.z)
+        up_x = -math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
+        up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
+        up_z = math.cos(self.rotation.z) * math.cos(self.rotation.x)
+        return Vec3(up_x, up_y, up_z).normalize()
+
+    def get_right_vector(self) -> Vec3:
+        """
+            Computes the right direction vector in world space, considering roll.
+        """
+        right_x = math.cos(self.rotation.z) * math.cos(self.rotation.y) - math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
+        right_y = math.cos(self.rotation.z) * math.sin(self.rotation.y) + math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
+        right_z = -math.sin(self.rotation.z) * math.cos(self.rotation.x)
+
+        return Vec3(right_x, right_y, right_z).normalize()
 
     def get_forward_vector(self) -> Vec3:
         """
             Computes the forward direction vector in world space.
         """
-        
         forward_x = math.cos(self.rotation.x) * math.sin(self.rotation.y)
         forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y)
         forward_z = -math.sin(self.rotation.x)

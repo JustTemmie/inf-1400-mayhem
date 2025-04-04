@@ -16,6 +16,8 @@ from mayhem.Packet import Packet
 from mayhem.entities.LocalPlayer import LocalPlayer
 from mayhem.entities.RemotePlayer import RemotePlayer
 
+from pyglet.math import Vec3
+
 import typing
 
 import pyglet
@@ -39,14 +41,19 @@ class Mayhem(Game):
 
     def spawn_test_objects(self):
         player = Player()
-        player.pos = pyglet.math.Vec3(-5, 0, 0)
+        player.pos = Vec3(-5, 0, 0)
         player.instantiate(self)
 
         player = Player()
-        player.pos = pyglet.math.Vec3(-5, 0, 15)
+        player.pos = Vec3(-5, 0, 15)
         player.instantiate(self)
 
         ExampleObject().instantiate(self)
+
+        for i in range(100):
+            object = ExampleObject()
+            object.pos = Vec3(0, 0, i-50)
+            object.instantiate(self)
 
     def user_engine_process(self, delta):
 

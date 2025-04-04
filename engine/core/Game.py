@@ -6,6 +6,7 @@ if __name__ == "__main__":
 
 # from engine.core.Input import Input
 from engine.core.Utils import Utils
+from engine.core.Camera import Camera
 from engine.core.Window import Window
 from engine.core_ext.Input import Input
 from engine.core.Entity import Entity
@@ -27,8 +28,7 @@ class Game:
         # rendering "batches"
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
-        
-        
+
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
@@ -47,7 +47,7 @@ class Game:
         Utils.print_system_info()
 
         self.init()
-        self.window.camera.instantiate(self)
+        Camera.active_camera.instantiate(self)
         self.window.set_visible()
 
     def init(self):
@@ -123,7 +123,7 @@ class Game:
     def on_draw(self):
         self.window.clear()
 
-        self.window.camera.ProjectWorld()
+        Camera.active_camera.ProjectWorld()
         
         self.main_batch.draw()
         self.UI_batch.draw()

@@ -49,7 +49,7 @@ class Entity:
         self.entity_ID = game.entity_ID
         game.entity_ID += 1
 
-        self.all_entities.append(self)
+        Entity.all_entities.append(self)
 
         self.user_instantiate(game)
 
