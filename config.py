@@ -23,7 +23,7 @@ display_resolution = Vec2(1920, 1080)
 target_refresh_rate = 60
 target_physics_rate = 60
 FOV = 80
-mouse_movement = False
+mouse_movement = False # WIP
 virtual_joystick_deadzone = 0.05 # percentage from 0 to 1
 VSYNC = False
 

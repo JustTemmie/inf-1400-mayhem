@@ -27,8 +27,9 @@ class Entity2D(Entity):
         self.user_init()
 
     def instantiate(self, game):
-        super().instantiate(game)
+        self.render_batch = game.UI_batch
         Entity2D.all_2D_entities.append(self)
+        super().instantiate(game)
     
     def handle_physics(self, delta: float, air_friction: float, gravity: Vec2):
         """
