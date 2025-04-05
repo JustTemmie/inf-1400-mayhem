@@ -30,11 +30,12 @@ class Window(pyglet.window.Window):
         # init the camera
         Camera(self)
         
-        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov = Camera.active_camera.FOV)
-        self.ui_view = Mat4.orthogonal_projection(0, Window.size.x, Window.size.y, 0, z_near = 0.01, z_far = 400)
+        self.model_view: Mat4 
+        self.ui_view: Mat4
+        self.update_views()
                 
         self.event("on_resize")(self._on_resize)
-        
+    
         
     def _init_gl(self, width, height):
         glEnable(GL_DEPTH_TEST)
@@ -58,6 +59,10 @@ class Window(pyglet.window.Window):
 
         glViewport(0, 0, width, height)
 
+    def update_views(self):
+        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov = Camera.active_camera.FOV)
+        self.ui_view = Mat4.orthogonal_projection(0, Window.size.x, 0, Window.size.y, z_near = 0, z_far = 2555)
+
     def _on_resize(self, width, height):
         self.screen.width = width
         self.screen.height = height
@@ -67,8 +72,7 @@ class Window(pyglet.window.Window):
         self._init_gl(width, height)
         self.projection = self.ui_view
         
-        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far = 400, fov = Camera.active_camera.FOV)
-        self.ui_view = Mat4.orthogonal_projection(0, width, height, 0, z_near = 0.01, z_far = 400)
+        self.update_views()
 
         return pyglet.event.EVENT_HANDLED
     

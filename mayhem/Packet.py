@@ -1,6 +1,6 @@
 from engine.core_ext.Netwoking import Networking
 
-from mayhem.entities.Player import Player
+from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
 
 from pyglet.math import Vec3

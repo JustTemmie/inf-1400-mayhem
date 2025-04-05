@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 class Entity3D(Entity):
     all_3D_entities: list["Entity3D"] = []
 
-
     def __init__(self):
         super().__init__()
         self.pos: Vec3 = Vec3(0, 0, 0) # x, y, z
@@ -35,7 +34,7 @@ class Entity3D(Entity):
         Entity3D.all_3D_entities.append(self)
     
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
-    def draw(self):
+    def prepare_draw(self, delta):
         if not self.model:
             logging.warning(f"{self} does not have a set model, ignoring")
             return

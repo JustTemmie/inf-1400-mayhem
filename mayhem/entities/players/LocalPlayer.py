@@ -5,7 +5,7 @@ from engine.core.Window import Window
 from engine.core_ext.Input import Input
 from engine.core_ext.Maths import Maths
 
-from mayhem.entities.Player import Player
+from mayhem.entities.players.Player import Player
 
 import config
 
@@ -31,7 +31,13 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
+
+
         normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
+
+        # this treats it as a square, but close enough for now
+        if normalized_mouse_position.x < config.virtual_joystick_deadzone and normalized_mouse_position.y < config.virtual_joystick_deadzone or not config.mouse_movement:
+            normalized_mouse_position = Vec2(0, 0)
 
         forward_vector = self.get_forward_vector()
 
@@ -42,12 +48,11 @@ class LocalPlayer(Player):
 
         mouse_desired_movement = (self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y)
         movement = Vec3(-movement_horizontal, 0, movement_vertical) + mouse_desired_movement
-        print(f"mouse: {Input.mouse} - screen: {Window.size} - value: {normalized_mouse_position}")
+        logging.debug(f"mouse: {Input.mouse} - screen: {Window.size} - value: {normalized_mouse_position}")
         
         self.acceleration = movement * config.thrust_force * delta
         self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * 60 * delta
         # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
-        
 
         if keys[config.KEY_BINDS.thrust]:
             self.acceleration += forward_vector * config.thrust_force * delta

@@ -8,13 +8,14 @@ from engine.core.Game import Game
 from engine.core.Entity import Entity
 from engine.core_ext.Netwoking import Networking
 
-from mayhem.entities.Player import Player
+from mayhem.entities.players.Player import Player
 from mayhem.entities.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
 
-from mayhem.entities.LocalPlayer import LocalPlayer
-from mayhem.entities.RemotePlayer import RemotePlayer
+from mayhem.entities.players.LocalPlayer import LocalPlayer
+from mayhem.entities.players.RemotePlayer import RemotePlayer
+from mayhem.entities2D.HUD.movement_reticle import MovementReticle
 
 from pyglet.math import Vec3
 
@@ -31,6 +32,7 @@ class Mayhem(Game):
         self.player.instantiate(self)
 
         self.spawn_test_objects()
+        self.spawn_hud()
 
         self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
@@ -39,6 +41,10 @@ class Mayhem(Game):
 
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
+    def spawn_hud(self):
+        movement_reticle = MovementReticle()
+        movement_reticle.instantiate(self)
+    
     def spawn_test_objects(self):
         player = Player()
         player.pos = Vec3(-5, 0, 0)

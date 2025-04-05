@@ -50,9 +50,6 @@ class Camera(Entity3D):
         self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 1, 0))
 
     def ProjectHud(self):
-        """
-            currently unused, may require further testing
-        """
         glDisable(GL_DEPTH_TEST)
         self.window.projection = self.window.ui_view
-        self.window.view = Mat4.from_translation(Vec3(0, 0, self.UI_size))
+        self.window.view = Mat4()

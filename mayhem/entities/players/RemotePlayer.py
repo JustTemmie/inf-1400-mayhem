@@ -3,7 +3,7 @@ from engine.core.Utils import Utils
 from engine.core_ext.Maths import Maths
 from engine.core.Entity3D import Entity3D
 
-from mayhem.entities.Player import Player
+from mayhem.entities.players.Player import Player
 
 from pyglet.math import Vec3
 

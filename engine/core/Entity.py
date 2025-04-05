@@ -12,7 +12,6 @@ class Component:
 class Entity:
     time_elapsed: float = 0
     all_entities: list["Entity"] = []
-    
 
     # list of lambdas to be called at the end of the tick
     deferred_calls: typing.List[typing.Callable] = []
@@ -61,7 +60,7 @@ class Entity:
         game: Game = game
 
     @abc.abstractmethod
-    def draw(self):
+    def prepare_draw(self, delta):
         raise NotImplemented
 
     @classmethod

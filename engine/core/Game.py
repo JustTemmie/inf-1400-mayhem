@@ -10,6 +10,7 @@ from engine.core.Camera import Camera
 from engine.core.Window import Window
 from engine.core_ext.Input import Input
 from engine.core.Entity import Entity
+from engine.core.Entity2D import Entity2D
 from engine.core.Entity3D import Entity3D
 import engine.extras.logger
 
@@ -29,12 +30,11 @@ class Game:
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
 
+
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
         self.window.push_handlers(Input.keyboard_keys)
-
-        example_label = pyglet.text.Label(text="wooho!!", batch=self.UI_batch)
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
@@ -49,6 +49,7 @@ class Game:
         self.init()
         Camera.active_camera.instantiate(self)
         self.window.set_visible()
+        self.test_label = pyglet.text.Label(text="test text!!", batch=self.UI_batch)
 
     def init(self):
         """
@@ -85,11 +86,10 @@ class Game:
 
         for entity in Entity.all_entities:
             entity.process(delta)
-            
         
         for entity in Entity.all_entities:
             if entity.visible:
-                entity.draw()
+                entity.prepare_draw(delta)
 
         # unsure if this is using pointers, might have to fix
         processing_deferred_calls = Entity.deferred_calls
@@ -107,6 +107,9 @@ class Game:
         for entity in Entity.all_entities:
             entity.engine_process(delta)
         
+        for entity in Entity2D.all_2D_entities:
+            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
+
         for entity in Entity3D.all_3D_entities:
             entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
@@ -124,8 +127,9 @@ class Game:
         self.window.clear()
 
         Camera.active_camera.ProjectWorld()
-        
         self.main_batch.draw()
+
+        Camera.active_camera.ProjectHud()
         self.UI_batch.draw()
     
     def run(self):
