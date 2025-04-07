@@ -41,3 +41,6 @@ KEY_BINDS = key_binds(
     [key.Q, key.F], # roll
     key.LSHIFT, # thrust
     key.SPACE)  # shoot
+
+
+SHOOTING_INTERVAL = 0.2

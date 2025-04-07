@@ -6,6 +6,7 @@ from engine.core_ext.Input import Input
 from engine.core_ext.Maths import Maths
 
 from mayhem.entities.players.Player import Player
+from mayhem.entities.Bullet import Bullet
 
 import config
 
@@ -15,6 +16,7 @@ from pyglet.window import key
 import pyglet
 import logging
 import math
+import time
 
 
 class LocalPlayer(Player):
@@ -23,11 +25,15 @@ class LocalPlayer(Player):
         self.update_camera_position(delta)
 
         logging.debug(f"player pos: {self.pos}")
-    
+
     def user_instantiate(self, game: Game):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
 
         self.model = model_scene.create_models(batch=game.main_batch)[0]
+
+        self.last_shoot_time = 0
+
+        self.newest_bullet: Bullet = None
 
     def handle_input(self, delta):
         self.handle_keys(delta)
@@ -58,6 +64,10 @@ class LocalPlayer(Player):
 
         if keys[config.KEY_BINDS.thrust]:
             self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
+
+        if keys[config.KEY_BINDS.shoot] and -1*(self.last_shoot_time - time.time()) > config.SHOOTING_INTERVAL:
+            self.shoot()
+            self.last_shoot_time = time.time()
     
     def handle_mouse(self, delta):
         normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
@@ -78,13 +88,22 @@ class LocalPlayer(Player):
         )
 
         self.rotation_acceleration = mouse_rotation 
-    
+
+    def shoot(self):
+        b = Bullet()
+        b.owner = self.id
+        b.pos = self.pos
+        b.rotation = self.rotation
+        b.velocity = self.get_forward_vector()*10
+        b.instantiate(self.game)
+
+        self.newest_bullet = b
+
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
 
         if forward.length == 0:
             return
-        
-        Camera.active_camera.pos = forward * -8 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
-        # Camera.active_camera.pos = self.pos # this does *NOT* work if the camera is rotated, uh oh
+
+        Camera.active_camera.pos = forward * -10 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
         Camera.active_camera.target = forward * 20 + self.pos

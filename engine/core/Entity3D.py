@@ -11,6 +11,7 @@ import logging
 if typing.TYPE_CHECKING:
     from engine.core.Game import Game
 
+
 class Entity3D(Entity):
     all_3D_entities: list["Entity3D"] = []
 
@@ -19,26 +20,26 @@ class Entity3D(Entity):
         self.pos: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.acceleration: Vec3 = Vec3(0, 0, 0) # x, y, z
-        
+
         # euler angles
         self.rotation: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.rotation_velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.rotation_acceleration: Vec3 = Vec3(0, 0, 0) # x, y, z
-        
+
         self.model: pyglet.model.Scene
-        
+
         self.user_init()
 
     def instantiate(self, game):
         Entity3D.all_3D_entities.append(self)
         super().instantiate(game)
-    
+
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def prepare_draw(self, delta):
         if not self.model:
             logging.warning(f"{self} does not have a set model, ignoring")
             return
-        
+
         # note that Z is up
         rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
         rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 0, 1))
@@ -47,7 +48,7 @@ class Entity3D(Entity):
         trans = Mat4.from_translation(self.pos)
 
         self.model.matrix = trans @ rot_y @ rot_x @ rot_z
-    
+
     def handle_physics(self, delta: float, air_friction: float, gravity: Vec3):
         """
             Handles physics, called within the engine, not meant to be interacted with by the user.
