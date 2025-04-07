@@ -12,5 +12,6 @@ class Bullet(Entity3D):
         self.model = model_scene.create_models(batch=game.main_batch)[0]
 
         self.mass = 0.01
+        self.ignore_friction = True
 
         self.owner = 0
