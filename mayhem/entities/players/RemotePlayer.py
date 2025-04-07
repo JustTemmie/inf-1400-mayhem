@@ -16,7 +16,8 @@ import config
 
 class RemotePlayer(Player):
     def engine_process(self, delta):
-        print(f"engine tick!! {delta}")
+        pass
+        # print(f"engine tick!! {delta}")
 
         # Purely experimental
         # self.velocity = Vec3(self.velocity.x + self.acceleration.x,

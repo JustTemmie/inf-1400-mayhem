@@ -16,6 +16,7 @@ from mayhem.Packet import Packet
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 from mayhem.entities.players.RemotePlayer import RemotePlayer
 from mayhem.entities2D.HUD.movement_reticle import MovementReticle
+from mayhem.entities.Bullet import Bullet
 
 from pyglet.math import Vec3
 
@@ -69,10 +70,15 @@ class Mayhem(Game):
 
     def _send_update(self):
         if self.networking.connected:
-            self.networking.send(Packet.player_to_packet(self.player))
+            bullet = self.player.newest_bullet
+            if not bullet:
+                self.networking.send(Packet.player_to_packet(self.player))
+            else:
+                self.networking.send(Packet.player_to_packet(self.player, bullet))
+                self.player.newest_bullet = None
 
     def _handle_network_input(self):
-        self.networking.lock.acquire()  # Locks the queue so that two threads do not use it at the same time
+        self.networking.lock.acquire()  # Locks the queue so that two threads can not use it at the same time
         while not self.networking.q.empty():
             data = self.networking.q.get()
             packet = Packet.decode(data)
@@ -83,5 +89,15 @@ class Mayhem(Game):
                 self.other_players[packet.packet.from_id].instantiate(self)
 
             self.other_players[packet.packet.from_id].update_pos(packet)
+
+            if packet.packet.bullet_pos != Vec3(0, 0, 0):
+                b = Bullet()
+                b.pos = packet.packet.bullet_pos
+                b.velocity = packet.packet.bullet_velocity
+                b.acceleration = packet.packet.bullet_acceleration
+                b.rotation = packet.packet.bullet_rotation
+                b.rotation_velocity = packet.packet.bullet_rotation_velocity
+                b.rotation_acceleration = packet.packet.bullet_rotation_acceleration
+                b.instantiate(self)
 
         self.networking.lock.release()

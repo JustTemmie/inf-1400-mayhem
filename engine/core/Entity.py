@@ -43,10 +43,10 @@ class Entity:
         """
 
     def instantiate(self, game):
-        game: Game = game
+        self.game: Game = game
         
         self.entity_ID = game.entity_ID
-        game.entity_ID += 1
+        self.game.entity_ID += 1
 
         Entity.all_entities.append(self)
 

@@ -30,8 +30,11 @@ VSYNC = False
 
 key_binds = namedtuple("keybinds", ["vertical", "horizontal", "roll", "thrust", "shoot"])
 KEY_BINDS = key_binds(
-    [key.W, key.R], # vertical
-    [key.A, key.S], # horizontal
-    [key.Q, key.F], # roll
+    [key.W, key.S], # vertical
+    [key.A, key.D], # horizontal
+    [key.Q, key.E], # roll
     key.LSHIFT, # thrust
     key.SPACE)  # shoot
+
+
+SHOOTING_INTERVAL = 0.2

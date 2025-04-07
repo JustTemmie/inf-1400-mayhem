@@ -6,6 +6,7 @@ from engine.core_ext.Input import Input
 from engine.core_ext.Maths import Maths
 
 from mayhem.entities.players.Player import Player
+from mayhem.entities.Bullet import Bullet
 
 import config
 
@@ -15,6 +16,7 @@ from pyglet.window import key
 import pyglet
 import logging
 import math
+import time
 
 
 class LocalPlayer(Player):
@@ -23,11 +25,15 @@ class LocalPlayer(Player):
         self.update_camera_position(delta)
 
         logging.debug(f"player pos: {self.pos}")
-    
+
     def user_instantiate(self, game: Game):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
-        
+
         self.model = model_scene.create_models(batch=game.main_batch)[0]
+
+        self.last_shoot_time = 0
+
+        self.newest_bullet: Bullet = None
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
@@ -43,25 +49,40 @@ class LocalPlayer(Player):
 
         movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
         movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
-        
+
         roll_direction = keys[config.KEY_BINDS.roll[1]] - keys[config.KEY_BINDS.roll[0]]
 
         mouse_desired_movement = (self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y)
         movement = Vec3(-movement_horizontal, 0, movement_vertical) + mouse_desired_movement
         logging.debug(f"mouse: {Input.mouse} - screen: {Window.size} - value: {normalized_mouse_position}")
-        
+
         self.acceleration = movement * config.thrust_force * delta
         self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * 60 * delta
         # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
 
         if keys[config.KEY_BINDS.thrust]:
             self.acceleration += forward_vector * config.thrust_force * delta
-    
+
+        if keys[config.KEY_BINDS.shoot] and\
+                -1*(self.last_shoot_time - time.time()) > config.SHOOTING_INTERVAL:
+            self.shoot()
+            self.last_shoot_time = time.time()
+
+    def shoot(self):
+        b = Bullet()
+        b.owner = self.id
+        b.pos = self.pos
+        b.rotation = self.rotation
+        b.velocity = self.get_forward_vector()*10
+        b.instantiate(self.game)
+
+        self.newest_bullet = b
+
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
 
         if forward.length == 0:
             return
-        
+
         Camera.active_camera.pos = forward * -10 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
         Camera.active_camera.target = forward * 20 + self.pos
