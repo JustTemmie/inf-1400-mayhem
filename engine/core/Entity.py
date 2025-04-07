@@ -10,7 +10,10 @@ class Component:
         pass
 
 class Entity:
+    # these two really shouldn't be stored in here, but i can't think of a better place to store them
+    game_object: "Game"
     time_elapsed: float = 0
+
     all_entities: list["Entity"] = []
 
     # list of lambdas to be called at the end of the tick
@@ -43,22 +46,19 @@ class Entity:
             Called every engine tick.
         """
 
-    def instantiate(self, game):
-        self.game: Game = game
-        
-        self.entity_ID = game.entity_ID
-        self.game.entity_ID += 1
+    def instantiate(self):
+        self.entity_ID = Entity.game_object.entity_ID
+        Entity.game_object.entity_ID += 1
 
         Entity.all_entities.append(self)
 
-        self.user_instantiate(game)
+        self.user_instantiate()
 
-    def user_instantiate(self, game):
+    def user_instantiate(self):
         """
             Implement by extending class.
         """
-        
-        game: Game = game
+        pass
 
     @abc.abstractmethod
     def prepare_draw(self, delta):

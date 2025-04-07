@@ -20,20 +20,23 @@ import time
 
 
 class LocalPlayer(Player):
+    def user_init(self):
+        self.last_shoot_time = 0
+
+        self.newest_bullet: Bullet = None
+        return super().user_init()
+    
     def engine_process(self, delta):
         self.handle_input(delta)
         self.update_camera_position(delta)
 
         logging.debug(f"player pos: {self.pos}")
+    
 
-    def user_instantiate(self, game: Game):
+    def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
 
-        self.model = model_scene.create_models(batch=game.main_batch)[0]
-
-        self.last_shoot_time = 0
-
-        self.newest_bullet: Bullet = None
+        self.model = model_scene.create_models(batch=Player.game_object.main_batch)[0]
 
     def handle_input(self, delta):
         self.handle_keys(delta)
@@ -90,14 +93,14 @@ class LocalPlayer(Player):
         self.rotation_acceleration = mouse_rotation 
 
     def shoot(self):
-        b = Bullet()
-        b.owner = self.id
-        b.pos = self.pos
-        b.rotation = self.rotation
-        b.velocity = self.get_forward_vector()*10
-        b.instantiate(self.game)
+        bullet = Bullet()
+        bullet.owner = self.player_id
+        bullet.pos = self.pos
+        bullet.rotation = self.rotation
+        bullet.velocity = self.get_forward_vector()*10
+        bullet.instantiate()
 
-        self.newest_bullet = b
+        self.newest_bullet = bullet
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

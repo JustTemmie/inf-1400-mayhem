@@ -30,9 +30,9 @@ class Entity3D(Entity):
 
         self.user_init()
 
-    def instantiate(self, game):
+    def instantiate(self):
         Entity3D.all_3D_entities.append(self)
-        super().instantiate(game)
+        super().instantiate()
 
     # https://github.com/pyglet/pyglet/blob/fb1b992e31d712da43409e2910d2f07ea7e1177f/examples/model/model.py
     def prepare_draw(self, delta):

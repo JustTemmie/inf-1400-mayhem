@@ -30,7 +30,6 @@ class Game:
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
 
-
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
@@ -46,8 +45,11 @@ class Game:
 
         Utils.print_system_info()
 
+        Entity.game_object = self
         self.init()
-        Camera.active_camera.instantiate(self)
+
+        Camera.active_camera.instantiate()
+        
         self.window.set_visible()
         self.test_label = pyglet.text.Label(text="test text!!", batch=self.UI_batch)
 

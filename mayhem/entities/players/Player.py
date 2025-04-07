@@ -15,7 +15,7 @@ import logging
 class Player(Entity3D):
     def user_init(self):
         print("new ship!")
-        self.id = 0
+        self.player_id = 0
         
         self.mass = 200 # kg
 
@@ -27,7 +27,7 @@ class Player(Entity3D):
     def engine_process(self, delta):        
         self.rotation_velocity = Vec3(1, 0.6, 0.3)
 
-    def user_instantiate(self, game: Game):
+    def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("axes"))
 
-        self.model = model_scene.create_models(batch=game.main_batch)[0]
+        self.model = model_scene.create_models(batch=Entity3D.game_object.main_batch)[0]

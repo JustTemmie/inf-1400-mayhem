@@ -6,7 +6,7 @@ import pyglet
 
 
 class ExampleObject(Entity3D):
-    def user_instantiate(self, game: Game):
+    def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
 
-        self.model = model_scene.create_models(batch=game.main_batch)[0]
+        self.model = model_scene.create_models(batch=Entity3D.game_object.main_batch)[0]

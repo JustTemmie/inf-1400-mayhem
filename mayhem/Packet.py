@@ -75,7 +75,7 @@ class Packet:
     @classmethod
     def player_to_packet(self, p: Player, b: Bullet = Bullet(), killed_by=0) -> tuple:
         packet = Packet(
-            p.id, 0,
+            p.player_id, 0,
             p.pos, p.velocity, p.acceleration,
             p.rotation, p.rotation_velocity, p.rotation_acceleration,
             b.pos, b.velocity, b.acceleration,

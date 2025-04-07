@@ -1,8 +1,9 @@
 from pyglet.math import Vec2, Vec3
 from pyglet.window import key
+from collections import namedtuple
 
 import logging
-from collections import namedtuple
+import os
 
 SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
@@ -14,6 +15,8 @@ gravity = Vec3(0, 0, 0) # earth's gravity would be Vec3(0, -9.8, 0)
 rear_thrust_force: float = 3000
 side_thrust_force: float = 800
 roll_thrust_force: float = 30
+
+SHOOTING_INTERVAL = 0.2
 
 LOG_LEVEL = logging.WARN
 
@@ -33,14 +36,22 @@ virtual_joystick_deadzone: float = 0.1 # percentage from 0 to 1
 
 
 key_binds = namedtuple("keybinds", ["vertical", "horizontal", "pitch", "yaw", "roll", "thrust", "shoot"])
-KEY_BINDS = key_binds(
-    [key.W, key.R], # vertical
-    [key.A, key.S], # horizontal
+
+if os.getenv("LAYOUT") == "us(colemak)":
+    KEY_BINDS = key_binds(
+        [key.W, key.R], # vertical
+        [key.A, key.S], # horizontal
+        [key.LEFT, key.RIGHT], # pitch
+        [key.UP, key.DOWN], # yaw
+        [key.Q, key.F], # roll
+        key.LSHIFT, # thrust
+        key.SPACE)  # shoot
+else: # assume qwerty
+    KEY_BINDS = key_binds(
+    [key.W, key.S], # vertical
+    [key.A, key.D], # horizontal
     [key.LEFT, key.RIGHT], # pitch
     [key.UP, key.DOWN], # yaw
-    [key.Q, key.F], # roll
+    [key.Q, key.E], # roll
     key.LSHIFT, # thrust
     key.SPACE)  # shoot
-
-
-SHOOTING_INTERVAL = 0.2

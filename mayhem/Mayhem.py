@@ -30,7 +30,7 @@ class Mayhem(Game):
     def init(self):
         self.player = LocalPlayer()
         self.player.pos = pyglet.math.Vec3(5, 0, 0)
-        self.player.instantiate(self)
+        self.player.instantiate()
 
         self.spawn_test_objects()
         self.spawn_hud()
@@ -44,23 +44,23 @@ class Mayhem(Game):
 
     def spawn_hud(self):
         movement_reticle = MovementReticle()
-        movement_reticle.instantiate(self)
+        movement_reticle.instantiate()
     
     def spawn_test_objects(self):
         player = Player()
         player.pos = Vec3(-5, 0, 0)
-        player.instantiate(self)
+        player.instantiate()
 
         player = Player()
         player.pos = Vec3(-5, 0, 15)
-        player.instantiate(self)
+        player.instantiate()
 
-        ExampleObject().instantiate(self)
+        ExampleObject().instantiate()
 
         for i in range(100):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i-50)
-            object.instantiate(self)
+            object.instantiate()
 
     def user_engine_process(self, delta):
 
@@ -86,7 +86,7 @@ class Mayhem(Game):
                 self.player.id = packet.packet.to_id
             if packet.packet.from_id not in self.other_players:
                 self.other_players[packet.packet.from_id] = RemotePlayer()
-                self.other_players[packet.packet.from_id].instantiate(self)
+                self.other_players[packet.packet.from_id].instantiate()
 
             self.other_players[packet.packet.from_id].update_pos(packet)
 
@@ -98,6 +98,6 @@ class Mayhem(Game):
                 b.rotation = packet.packet.bullet_rotation
                 b.rotation_velocity = packet.packet.bullet_rotation_velocity
                 b.rotation_acceleration = packet.packet.bullet_rotation_acceleration
-                b.instantiate(self)
+                b.instantiate()
 
         self.networking.lock.release()

@@ -13,10 +13,10 @@ import logging
 
 
 class MovementReticle(Entity2D):
-    def user_init(self):
-        self.id = 0
+    # def user_init(self):
+    #     self.id = 0
 
-    def user_instantiate(self, game):
+    def user_instantiate(self):
         if config.mouse_movement:
             radius = Window.size.y * config.virtual_joystick_deadzone / 2
 
