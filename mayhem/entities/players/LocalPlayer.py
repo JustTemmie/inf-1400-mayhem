@@ -26,36 +26,58 @@ class LocalPlayer(Player):
     
     def user_instantiate(self, game: Game):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
-        
+
         self.model = model_scene.create_models(batch=game.main_batch)[0]
 
     def handle_input(self, delta):
+        self.handle_keys(delta)
+        # self.handle_mouse(delta)
+
+        # self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * config.roll_thrust_force * delta
+        # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
+
+    def handle_keys(self, delta):
         keys = Input.keyboard_keys
-
-
-        normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
-
-        # this treats it as a square, but close enough for now
-        if abs(normalized_mouse_position.x) < config.virtual_joystick_deadzone and abs(normalized_mouse_position.y) < config.virtual_joystick_deadzone or not config.mouse_movement:
-            normalized_mouse_position = Vec2(0, 0)
-
-        forward_vector = self.get_forward_vector()
 
         movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
         movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
         
+        pitch_direction = keys[config.KEY_BINDS.pitch[0] - keys[config.KEY_BINDS.pitch[1]]]
+        yaw_direction = keys[config.KEY_BINDS.yaw[0] - keys[config.KEY_BINDS.yaw[1]]]
         roll_direction = keys[config.KEY_BINDS.roll[1]] - keys[config.KEY_BINDS.roll[0]]
 
-        mouse_desired_movement = (self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y)
-        movement = Vec3(-movement_horizontal, 0, movement_vertical) + mouse_desired_movement
-        logging.debug(f"mouse: {Input.mouse} - screen: {Window.size} - value: {normalized_mouse_position}")
-        
-        self.acceleration = movement * config.thrust_force * delta
-        self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * 60 * delta
-        # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
+        movement = self.get_right_vector() * -movement_horizontal + self.get_up_vector() * movement_vertical
+        self.acceleration = movement * config.side_thrust_force * delta
+
+        self.rotation_acceleration = Vec3(
+            pitch_direction,
+            roll_direction,
+            yaw_direction,
+        ) * config.roll_thrust_force * delta
+
 
         if keys[config.KEY_BINDS.thrust]:
-            self.acceleration += forward_vector * config.thrust_force * delta
+            self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
+    
+    def handle_mouse(self, delta):
+        normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
+
+        # this treats it as a square, but close enough for now
+        print(normalized_mouse_position)
+        if (abs(normalized_mouse_position.x) < config.virtual_joystick_deadzone and abs(normalized_mouse_position.y) < config.virtual_joystick_deadzone) or not config.mouse_movement:
+            normalized_mouse_position = Vec2(0, 0)
+
+        normalized_mouse_position * config.roll_thrust_force
+
+        # mouse_rotation = self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y
+
+        mouse_rotation = Vec3(
+            normalized_mouse_position.y,
+            0,
+            normalized_mouse_position.x,
+        )
+
+        self.rotation_acceleration = mouse_rotation 
     
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
@@ -63,5 +85,6 @@ class LocalPlayer(Player):
         if forward.length == 0:
             return
         
-        Camera.active_camera.pos = forward * -10 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
+        Camera.active_camera.pos = forward * -8 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
+        # Camera.active_camera.pos = self.pos # this does *NOT* work if the camera is rotated, uh oh
         Camera.active_camera.target = forward * 20 + self.pos

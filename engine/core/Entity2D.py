@@ -27,6 +27,8 @@ class Entity2D(Entity):
         self.user_init()
 
     def instantiate(self, game):
+        game: Game = game # type hint
+
         self.render_batch = game.UI_batch
         Entity2D.all_2D_entities.append(self)
         super().instantiate(game)

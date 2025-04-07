@@ -21,25 +21,26 @@ class Entity:
         self.components = Component()
         self.visible = True
         
-        self.mass = 1 # kg
+        self.mass = 1 # kg, affects the objects interaction with gravity
+        self.ignore_friction: bool = False
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
     
     def user_init(self):
         """
-            Implement by extending class
+            Implement by extending class.
         """
         pass
 
     def process(self, delta):
         """
-            Called every frame
+            Called every frame.
         """
 
     def engine_process(self, delta):
         """
-            Called every engine tick
+            Called every engine tick.
         """
 
     def instantiate(self, game):
@@ -54,19 +55,22 @@ class Entity:
 
     def user_instantiate(self, game):
         """
-            Implement by extending class
+            Implement by extending class.
         """
         
         game: Game = game
 
     @abc.abstractmethod
     def prepare_draw(self, delta):
+        """
+            Implement by extending class.
+            This function is called by the engine right before the entity is to be rendered.
+        """
         raise NotImplemented
 
     @classmethod
-    def get_all_entities(self) -> list["Entity"]:
-        return self.all_entities
-
-    @classmethod
     def call_deferred(self, call: callable) -> None:
+        """
+            Deferred calls are called at the end of the frame.
+        """
         self.deferred_calls.append(call)

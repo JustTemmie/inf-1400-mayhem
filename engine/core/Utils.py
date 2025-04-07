@@ -6,7 +6,7 @@ from collections import namedtuple
 
 class Utils:    
     @staticmethod
-    def get_system_info():
+    def get_system_info() -> namedtuple:
         """
             Get a named tuple of various system info
         """
@@ -17,7 +17,7 @@ class Utils:
         return Result(vendor, renderer, opengl)
 
     @staticmethod
-    def print_system_info():
+    def print_system_info() -> None:
         """
             Print relevant system info
         """
@@ -28,7 +28,7 @@ class Utils:
         print(result)
     
     @staticmethod
-    def get_model_path(model: str):
+    def get_model_path(model: str) -> str:
         return f"assets/models/{model}/{model}.obj"
 
 if __name__ == "__main__":

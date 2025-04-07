@@ -8,9 +8,12 @@ SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
-air_friction = 0.04 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
+air_friction = 0.035 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
 gravity = Vec3(0, 0, 0) # earth's gravity would be Vec3(0, -9.8, 0)
-thrust_force: float = 1000
+
+rear_thrust_force: float = 3000
+side_thrust_force: float = 800
+roll_thrust_force: float = 30
 
 LOG_LEVEL = logging.WARN
 
@@ -20,18 +23,21 @@ LOG_LEVEL = logging.WARN
 display_resolution = Vec2(1920, 1080)
 # canvas_resolution = Vector2(1920, 1080) maybe we won't have to use this for opengl shenanigans
 
-target_refresh_rate = 60
-target_physics_rate = 60
-FOV = 80
-mouse_movement = False # WIP
-virtual_joystick_deadzone = 0.05 # percentage from 0 to 1
-VSYNC = False
+target_refresh_rate: int = 60
+target_physics_rate: int = 60
+FOV: float = 80
+VSYNC: bool = False
+
+mouse_movement: bool = False # WIP
+virtual_joystick_deadzone: float = 0.1 # percentage from 0 to 1
 
 
-key_binds = namedtuple("keybinds", ["vertical", "horizontal", "roll", "thrust", "shoot"])
+key_binds = namedtuple("keybinds", ["vertical", "horizontal", "pitch", "yaw", "roll", "thrust", "shoot"])
 KEY_BINDS = key_binds(
     [key.W, key.R], # vertical
     [key.A, key.S], # horizontal
+    [key.LEFT, key.RIGHT], # pitch
+    [key.UP, key.DOWN], # yaw
     [key.Q, key.F], # roll
     key.LSHIFT, # thrust
     key.SPACE)  # shoot

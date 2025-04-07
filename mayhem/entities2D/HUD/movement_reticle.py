@@ -18,7 +18,7 @@ class MovementReticle(Entity2D):
 
     def user_instantiate(self, game):
         if config.mouse_movement:
-            radius = Window.size.y * config.virtual_joystick_deadzone
+            radius = Window.size.y * config.virtual_joystick_deadzone / 2
 
             self.middle_circle = pyglet.shapes.Circle(
                 x = Window.size.x / 2 - radius * 2, y = Window.size.y / 2 - radius * 2,

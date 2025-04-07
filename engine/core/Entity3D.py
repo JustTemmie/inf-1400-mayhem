@@ -50,15 +50,17 @@ class Entity3D(Entity):
     
     def handle_physics(self, delta: float, air_friction: float, gravity: Vec3):
         """
-            Handles physics, called within the engine, not meant to be interacted with by the user
+            Handles physics, called within the engine, not meant to be interacted with by the user.
         """        
-        self.acceleration += gravity
+        self.acceleration += gravity / self.mass
         self.velocity += self.acceleration * delta
-        self.velocity *= (1 - air_friction)
+        if not self.ignore_friction:
+            self.velocity *= (1 - air_friction)
         self.pos += self.velocity * delta
 
         self.rotation_velocity += self.rotation_acceleration * delta
-        self.rotation_velocity *= (1 - air_friction)
+        if not self.ignore_friction:
+            self.rotation_velocity *= (1 - air_friction)
         self.rotation += self.rotation_velocity * delta
 
         # we don't actually want to keep acceleration
@@ -66,13 +68,13 @@ class Entity3D(Entity):
         self.rotation_acceleration = Vec3(0, 0, 0) 
 
         # print(self.rotation)
-        # self.rotation = (self.rotation + math.pi) % (math.pi * 2) - math.pi
+        self.rotation = self.rotation % (math.pi * 2)
     
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
     def get_up_vector(self) -> Vec3:
         """
-            Computes the up direction vector in world space, considering roll.
+            Computes the upwards pointing vector from the entity.
         """
         # Compute the up vector using pitch (rotation.x), yaw (rotation.y), and roll (rotation.z)
         up_x = math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
@@ -82,7 +84,7 @@ class Entity3D(Entity):
 
     def get_right_vector(self) -> Vec3:
         """
-            Computes the right direction vector in world space, considering roll.
+            Computes the right pointing vector from the entity.
         """
         right_x = math.cos(self.rotation.z) * math.cos(self.rotation.y) - math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
         right_y = math.cos(self.rotation.z) * math.sin(self.rotation.y) + math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
@@ -92,13 +94,13 @@ class Entity3D(Entity):
 
     def get_forward_vector(self) -> Vec3:
         """
-            Computes the forward direction vector in world space.
+            Computes the forward pointing vector from the entity.
         """
-        forward_x = math.cos(self.rotation.x) * math.sin(self.rotation.y)
-        forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y)
-        forward_z = -math.sin(self.rotation.x)
-
-        return Vec3(forward_x, forward_y, forward_z).normalize()
+        forward_x = math.cos(self.rotation.x) * math.sin(self.rotation.y) * math.cos(self.rotation.z) + math.sin(self.rotation.x) * math.sin(self.rotation.z)
+        forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y) * math.cos(self.rotation.z) - math.sin(self.rotation.x) * math.sin(self.rotation.y) * math.sin(self.rotation.z)
+        forward_z = -math.cos(self.rotation.x) * math.sin(self.rotation.z) + math.sin(self.rotation.x) * math.cos(self.rotation.z)
+        
+        return Vec3(forward_x, forward_y, forward_z)
     
     def look_at(self, pos: Vec3):
         """
@@ -110,8 +112,3 @@ class Entity3D(Entity):
         
         look_towards: Vec3 = self.pos - pos
         # uhh, math here i guess
-
-    
-    @classmethod
-    def get_all_3D_entities(self):
-        return self.all_3D_entities
