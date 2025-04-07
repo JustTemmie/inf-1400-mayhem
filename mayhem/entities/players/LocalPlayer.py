@@ -36,7 +36,7 @@ class LocalPlayer(Player):
         normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2 ) / (Window.size / 2) # generates a value between -1 and 1 for both axes
 
         # this treats it as a square, but close enough for now
-        if normalized_mouse_position.x < config.virtual_joystick_deadzone and normalized_mouse_position.y < config.virtual_joystick_deadzone or not config.mouse_movement:
+        if abs(normalized_mouse_position.x) < config.virtual_joystick_deadzone and abs(normalized_mouse_position.y) < config.virtual_joystick_deadzone or not config.mouse_movement:
             normalized_mouse_position = Vec2(0, 0)
 
         forward_vector = self.get_forward_vector()
@@ -63,5 +63,5 @@ class LocalPlayer(Player):
         if forward.length == 0:
             return
         
-        Camera.active_camera.pos = forward * -10 + self.pos + Vec3(0, 0, 4) # this does *NOT* work if the camera is rotated, uh oh
+        Camera.active_camera.pos = forward * -10 + self.pos + self.get_up_vector() * 8 # this does *NOT* work if the camera is rotated, uh oh
         Camera.active_camera.target = forward * 20 + self.pos

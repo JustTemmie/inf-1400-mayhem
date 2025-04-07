@@ -75,7 +75,7 @@ class Entity3D(Entity):
             Computes the up direction vector in world space, considering roll.
         """
         # Compute the up vector using pitch (rotation.x), yaw (rotation.y), and roll (rotation.z)
-        up_x = -math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
+        up_x = math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
         up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
         up_z = math.cos(self.rotation.z) * math.cos(self.rotation.x)
         return Vec3(up_x, up_y, up_z).normalize()
