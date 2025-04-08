@@ -4,32 +4,42 @@ import pyglet
 from collections import namedtuple
 
 
-class Utils:    
+class Utils:
     @staticmethod
     def get_system_info() -> namedtuple:
         """
-            Get a named tuple of various system info
+        Get a named tuple of various system info
         """
         vendor = pyglet.gl.gl_info.get_vendor()
         renderer = pyglet.gl.gl_info.get_renderer()
         opengl = pyglet.gl.gl_info.get_version_string()
-        Result = namedtuple('SystemInfo', ['vendor', 'renderer', 'opengl'])
+        Result = namedtuple("SystemInfo", ["vendor", "renderer", "opengl"])
         return Result(vendor, renderer, opengl)
 
     @staticmethod
     def print_system_info() -> None:
         """
-            Print relevant system info
+        Print relevant system info
         """
         info = Utils.get_system_info()
-        result = ''.join(['Vendor: ', info.vendor, '\n',
-                        'Renderer: ', info.renderer, '\n',
-                        'OpenGL version supported: ', info.opengl])
+        result = "".join(
+            [
+                "Vendor: ",
+                info.vendor,
+                "\n",
+                "Renderer: ",
+                info.renderer,
+                "\n",
+                "OpenGL version supported: ",
+                info.opengl,
+            ]
+        )
         print(result)
-    
+
     @staticmethod
     def get_model_path(model: str) -> str:
         return f"assets/models/{model}/{model}.obj"
+
 
 if __name__ == "__main__":
     Utils.print_system_info()

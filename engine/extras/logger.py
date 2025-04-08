@@ -8,7 +8,7 @@ log_level = logging.INFO
 
 # if args.debug or LOG_DEBUG_EVENTS:
 log_level = config.LOG_LEVEL
-    
+
 
 logging.basicConfig(level=log_level, format="%(levelname)s - %(message)s")
 

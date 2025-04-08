@@ -8,6 +8,7 @@ The server sided code
 
 if __name__ == "__main__":
     import sys
+
     sys.path.append(".")
 
 import socket
@@ -81,7 +82,7 @@ class Server:
                 if len(self.player_ids) == 0:
                     new_player_id = 1
                 else:
-                    new_player_id = self.player_ids[-1]+1
+                    new_player_id = self.player_ids[-1] + 1
 
                 self.player_ids.append(new_player_id)
                 new_player = Player(addr, new_player_id)

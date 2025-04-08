@@ -43,4 +43,3 @@ class Networking(abc.ABC):
     def start_listen(self):
         thread = Thread(target=self._listen, args=(self,))
         thread.start()
-

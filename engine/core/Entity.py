@@ -5,9 +5,11 @@ import abc
 if typing.TYPE_CHECKING:
     from engine.core.Game import Game
 
+
 class Component:
     def __init__(self):
         pass
+
 
 class Entity:
     # these two really shouldn't be stored in here, but i can't think of a better place to store them
@@ -23,29 +25,29 @@ class Entity:
         self.entity_ID: int
         self.components = Component()
         self.visible = True
-        
-        self.mass = 1 # kg, affects the objects interaction with physics
-        self.area = 1 # m^2, affects the objects interaction with air
+
+        self.mass = 1  # kg, affects the objects interaction with physics
+        self.area = 1  # m^2, affects the objects interaction with air
         self.drag_coeficient = 3.05
         self.ignore_friction: bool = False
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
-    
+
     def user_init(self):
         """
-            Implement by extending class.
+        Implement by extending class.
         """
         pass
 
     def process(self, delta):
         """
-            Called every frame.
+        Called every frame.
         """
 
     def engine_process(self, delta):
         """
-            Called every engine tick.
+        Called every engine tick.
         """
 
     def instantiate(self):
@@ -58,21 +60,21 @@ class Entity:
 
     def user_instantiate(self):
         """
-            Implement by extending class.
+        Implement by extending class.
         """
         pass
 
     @abc.abstractmethod
     def prepare_draw(self, delta):
         """
-            Implement by extending class.
-            This function is called by the engine right before the entity is to be rendered.
+        Implement by extending class.
+        This function is called by the engine right before the entity is to be rendered.
         """
         raise NotImplemented
 
     @classmethod
     def call_deferred(self, call: callable) -> None:
         """
-            Deferred calls are called at the end of the frame.
+        Deferred calls are called at the end of the frame.
         """
         self.deferred_calls.append(call)
