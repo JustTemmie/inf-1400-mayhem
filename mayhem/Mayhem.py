@@ -2,6 +2,7 @@
 # if you know a better way of doing this, please tell me!
 if __name__ == "__main__":
     import sys
+
     sys.path.append(".")
 
 from engine.core.Game import Game
@@ -26,6 +27,7 @@ import pyglet
 import pyglet.window.key
 import config
 
+
 class Mayhem(Game):
     def init(self):
         self.player = LocalPlayer()
@@ -35,7 +37,9 @@ class Mayhem(Game):
         self.spawn_test_objects()
         self.spawn_hud()
 
-        self.networking = Networking(config.SERVER_PORT, config.SERVER_TEST_ADDRESS) # FIXME: Should be changed later. Port and address should be a user input
+        self.networking = Networking(
+            config.SERVER_PORT, config.SERVER_TEST_ADDRESS
+        )  # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
             self.networking.start_listen()  # Creates a thread that listens to the server.
             self.networking.send(Packet.player_to_packet(self.player))
@@ -45,7 +49,7 @@ class Mayhem(Game):
     def spawn_hud(self):
         movement_reticle = MovementReticle()
         movement_reticle.instantiate()
-    
+
     def spawn_test_objects(self):
         player = Player()
         player.pos = Vec3(-5, 0, 0)
@@ -59,7 +63,7 @@ class Mayhem(Game):
 
         for i in range(100):
             object = ExampleObject()
-            object.pos = Vec3(0, 0, i-50)
+            object.pos = Vec3(0, 0, i - 50)
             object.instantiate()
 
     def user_engine_process(self, delta):

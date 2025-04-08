@@ -11,7 +11,7 @@ class Bullet(Entity3D):
         self.ignore_friction = True
 
         self.owner = 0
-    
+
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
 

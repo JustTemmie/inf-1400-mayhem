@@ -21,11 +21,13 @@ class MovementReticle(Entity2D):
             radius = Window.size.y * config.virtual_joystick_deadzone / 2
 
             self.middle_circle = pyglet.shapes.Circle(
-                x = Window.size.x / 2 - radius * 2, y = Window.size.y / 2 - radius * 2,
-                radius = radius, color=(255, 80, 80, 55),
-                batch = self.render_batch,
+                x=Window.size.x / 2 - radius * 2,
+                y=Window.size.y / 2 - radius * 2,
+                radius=radius,
+                color=(255, 80, 80, 55),
+                batch=self.render_batch,
             )
-    
+
     def prepare_draw(self, delta):
         pass
         # self.middle_circle.draw()

@@ -16,15 +16,15 @@ class Player(Entity3D):
     def user_init(self):
         print("new ship!")
         self.player_id = 0
-        
-        self.mass = 200 # kg
+
+        self.mass = 200  # kg
 
     def process(self, delta):
         # print(f"frame tick!! {delta}")
         # self.roll += delta
         pass
 
-    def engine_process(self, delta):        
+    def engine_process(self, delta):
         self.rotation_velocity = Vec3(1, 0.6, 0.3)
 
     def user_instantiate(self):
