@@ -53,10 +53,19 @@ class Entity3D(Entity):
         """
             Handles physics, called within the engine, not meant to be interacted with by the user.
         """        
-        self.acceleration += gravity / self.mass
-        self.velocity += self.acceleration * delta
         if not self.ignore_friction:
-            self.velocity *= (1 - air_friction)
+            air_density = 1.225  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
+            drag_without_speed = (1/2)*self.drag_coeficient*air_density*self.area
+
+            # Using abs to keep the the correct sign
+            drag = Vec3(drag_without_speed*self.velocity.x*abs(self.velocity.x),
+                        drag_without_speed*self.velocity.y*abs(self.velocity.y),
+                        drag_without_speed*self.velocity.z*abs(self.velocity.z))
+
+            self.acceleration += (gravity - drag)/self.mass
+        else:
+            self.acceleration += gravity/self.mass
+        self.velocity += self.acceleration * delta
         self.pos += self.velocity * delta
 
         self.rotation_velocity += self.rotation_acceleration * delta
@@ -65,8 +74,8 @@ class Entity3D(Entity):
         self.rotation += self.rotation_velocity * delta
 
         # we don't actually want to keep acceleration
-        self.acceleration = Vec3(0, 0, 0) 
-        self.rotation_acceleration = Vec3(0, 0, 0) 
+        self.acceleration = Vec3(0, 0, 0)
+        self.rotation_acceleration = Vec3(0, 0, 0)
 
         # print(self.rotation)
         self.rotation = self.rotation % (math.pi * 2)

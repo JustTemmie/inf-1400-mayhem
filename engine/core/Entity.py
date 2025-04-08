@@ -24,7 +24,9 @@ class Entity:
         self.components = Component()
         self.visible = True
         
-        self.mass = 1 # kg, affects the objects interaction with gravity
+        self.mass = 1 # kg, affects the objects interaction with physics
+        self.area = 1 # m^2, affects the objects interaction with air
+        self.drag_coeficient = 3.05
         self.ignore_friction: bool = False
 
         # entities that should also be cleared when this entity is cleared

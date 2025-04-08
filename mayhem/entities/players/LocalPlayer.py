@@ -97,7 +97,7 @@ class LocalPlayer(Player):
         bullet.owner = self.player_id
         bullet.pos = self.pos
         bullet.rotation = self.rotation
-        bullet.velocity = self.get_forward_vector()*10
+        bullet.velocity = self.get_forward_vector()*30
         bullet.instantiate()
 
         self.newest_bullet = bullet
