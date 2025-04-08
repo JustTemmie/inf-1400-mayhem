@@ -29,6 +29,7 @@ class LocalPlayer(Player):
     def engine_process(self, delta):
         self.handle_input(delta)
         self.update_camera_position(delta)
+        self.check_for_collision()
 
         logging.debug(f"player pos: {self.pos}")
     

@@ -26,6 +26,8 @@ class Entity3D(Entity):
         self.rotation_velocity: Vec3 = Vec3(0, 0, 0) # x, y, z
         self.rotation_acceleration: Vec3 = Vec3(0, 0, 0) # x, y, z
 
+        self.colliable = True
+
         self.model: pyglet.model.Scene
 
         self.user_init()
@@ -79,7 +81,11 @@ class Entity3D(Entity):
 
         # print(self.rotation)
         self.rotation = self.rotation % (math.pi * 2)
-    
+
+    def check_for_collision(self):
+        for entity in Entity3D.all_3D_entities:
+            pass
+
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
     def get_up_vector(self) -> Vec3:
