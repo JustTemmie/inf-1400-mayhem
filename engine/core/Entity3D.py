@@ -56,7 +56,7 @@ class Entity3D(Entity):
             Handles physics, called within the engine, not meant to be interacted with by the user.
         """        
         if not self.ignore_friction:
-            air_density = 1.225  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
+            air_density = 0  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
             drag_without_speed = (1/2)*self.drag_coeficient*air_density*self.area
 
             # Using abs to keep the the correct sign

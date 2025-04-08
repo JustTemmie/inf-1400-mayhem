@@ -32,6 +32,7 @@ class LocalPlayer(Player):
         self.check_for_collision()
 
         logging.debug(f"player pos: {self.pos}")
+        print(f"player pos: {self.pos}")
     
 
     def user_instantiate(self):
@@ -58,6 +59,17 @@ class LocalPlayer(Player):
 
         movement = self.get_right_vector() * -movement_horizontal + self.get_up_vector() * movement_vertical
         self.acceleration = movement * config.side_thrust_force * delta
+        
+        brake_force = Vec3(0, 0, 0)
+        if movement_vertical == 0:
+            brake_force -= self.get_up_vector()*self.velocity.normalize()  # times some brake_force
+        if movement_horizontal == 0:
+            brake_force -= self.get_right_vector()*self.velocity.normalize()
+
+        # Need to add something to prevent it from rocking
+
+        print(f"Break force: {brake_force}")
+        self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
 
         self.rotation_acceleration = Vec3(
             pitch_direction,
