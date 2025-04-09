@@ -86,8 +86,8 @@ class Mayhem(Game):
         while not self.networking.q.empty():
             data = self.networking.q.get()
             packet = Packet.decode(data)
-            if self.player.id == 0:
-                self.player.id = packet.packet.to_id
+            if self.player.player_id == 0:
+                self.player.player_id = packet.packet.to_id
             if packet.packet.from_id not in self.other_players:
                 self.other_players[packet.packet.from_id] = RemotePlayer()
                 self.other_players[packet.packet.from_id].instantiate()

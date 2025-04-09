@@ -90,8 +90,8 @@ class Server:
 
             for client in self.clients.values():
                 packet = decoded_data
-                packet[0] = self.clients[addr].id
-                packet[1] = client.id
+                packet[0] = self.clients[addr].player_id
+                packet[1] = client.player_id
 
                 if client != self.clients[addr]:
                     self.serverSocket.sendto(self.encode(packet), client.addr)
