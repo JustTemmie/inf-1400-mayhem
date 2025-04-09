@@ -23,7 +23,7 @@ class LocalPlayer(Player):
     def user_init(self):
         self.last_shoot_time = 0
 
-        self.newest_bullet: Bullet = None
+        self.new_bullet = 0
         return super().user_init()
 
     def engine_process(self, delta):
@@ -79,7 +79,7 @@ class LocalPlayer(Player):
         # Need to add something to prevent it from rocking
 
         print(f"Break force: {brake_force}")
-        self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
+        #self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
 
         self.rotation_acceleration = (
             Vec3(
@@ -136,7 +136,7 @@ class LocalPlayer(Player):
         bullet.velocity = self.get_forward_vector() * 30
         bullet.instantiate()
 
-        self.newest_bullet = bullet
+        self.new_bullet = 1
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

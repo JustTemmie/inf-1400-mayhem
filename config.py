@@ -20,6 +20,8 @@ SHOOTING_INTERVAL = 0.2
 
 LOG_LEVEL = logging.WARN
 
+BULLET_SPEED = 30
+
 # display resolution has 0 effect on the simulation or rendering, and is just used to set the window size
 # canvas resolution is used by the camera for rendering, but will change the simulation if AUTO_GENERATE_BOUNDRY_CORNERS is set to true
 # display_resolution = Vector2(1920, 1080)

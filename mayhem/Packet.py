@@ -21,12 +21,7 @@ class Packet:
         player_rotation=Vec3(0, 0, 0),
         player_rotation_velocity=Vec3(0, 0, 0),
         player_rotation_acceleration=Vec3(0, 0, 0),
-        bullet_pos=Vec3(0, 0, 0),
-        bullet_velocity=Vec3(0, 0, 0),
-        bullet_acceleration=Vec3(0, 0, 0),
-        bullet_rotation=Vec3(0, 0, 0),
-        bullet_rotation_velocity=Vec3(0, 0, 0),
-        bullet_rotation_acceleration=Vec3(0, 0, 0),
+        new_bullet=0,
         killed_by=0,
     ):
 
@@ -41,13 +36,8 @@ class Packet:
                 "player_rotation",
                 "player_rotation_velocity",
                 "player_rotation_acceleration",
-                "bullet_pos",
-                "bullet_velocity",
-                "bullet_acceleration",
-                "bullet_rotation",
-                "bullet_rotation_velocity",
-                "bullet_rotation_acceleration",
-                "killed_by",
+                "new_bullet",
+                "killed_by"
             ],
         )
 
@@ -60,13 +50,8 @@ class Packet:
             player_rotation,
             player_rotation_velocity,
             player_rotation_acceleration,
-            bullet_pos,
-            bullet_velocity,
-            bullet_acceleration,
-            bullet_rotation,
-            bullet_rotation_velocity,
-            bullet_rotation_acceleration,
-            killed_by,
+            new_bullet,
+            killed_by
         )
 
     def encode(self) -> bytes:
@@ -86,7 +71,7 @@ class Packet:
     @classmethod
     def decode(self, data: bytes) -> "Packet":
         decoded_data = data.decode().split(" ")
-        if len(decoded_data) != 39:
+        if len(decoded_data) != 22:
             raise TypeError("Bad packet:(")
         # Please read README in server
         packet = Packet(
@@ -116,42 +101,13 @@ class Packet:
                 float(decoded_data[18]),
                 float(decoded_data[19]),
             ),
-            Vec3(
-                float(decoded_data[20]),
-                float(decoded_data[21]),
-                float(decoded_data[22]),
-            ),
-            Vec3(
-                float(decoded_data[23]),
-                float(decoded_data[24]),
-                float(decoded_data[25]),
-            ),
-            Vec3(
-                float(decoded_data[26]),
-                float(decoded_data[27]),
-                float(decoded_data[28]),
-            ),
-            Vec3(
-                float(decoded_data[29]),
-                float(decoded_data[30]),
-                float(decoded_data[31]),
-            ),
-            Vec3(
-                float(decoded_data[32]),
-                float(decoded_data[33]),
-                float(decoded_data[34]),
-            ),
-            Vec3(
-                float(decoded_data[35]),
-                float(decoded_data[36]),
-                float(decoded_data[37]),
-            ),
-            int(decoded_data[38]),
+            int(decoded_data[20]),
+            int(decoded_data[21]),
         )
         return packet
 
     @classmethod
-    def player_to_packet(self, p: Player, b: Bullet = Bullet(), killed_by=0) -> tuple:
+    def player_to_packet(self, p: Player, new_bullet=0, killed_by=0) -> tuple:
         packet = Packet(
             p.player_id,
             0,
@@ -161,13 +117,8 @@ class Packet:
             p.rotation,
             p.rotation_velocity,
             p.rotation_acceleration,
-            b.pos,
-            b.velocity,
-            b.acceleration,
-            b.rotation,
-            b.rotation_velocity,
-            b.rotation_acceleration,
-            killed_by,
+            new_bullet,
+            killed_by
         )
 
         return packet

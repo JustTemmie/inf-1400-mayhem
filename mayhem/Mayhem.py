@@ -74,12 +74,8 @@ class Mayhem(Game):
 
     def _send_update(self):
         if self.networking.connected:
-            bullet = self.player.newest_bullet
-            if not bullet:
-                self.networking.send(Packet.player_to_packet(self.player))
-            else:
-                self.networking.send(Packet.player_to_packet(self.player, bullet))
-                self.player.newest_bullet = None
+            self.networking.send(Packet.player_to_packet(self.player, self.player.new_bullet))
+            self.player.new_bullet = 0
 
     def _handle_network_input(self):
         self.networking.lock.acquire()  # Locks the queue so that two threads can not use it at the same time
@@ -94,14 +90,12 @@ class Mayhem(Game):
 
             self.other_players[packet.packet.from_id].update_pos(packet)
 
-            if packet.packet.bullet_pos != Vec3(0, 0, 0):
+            if packet.packet.new_bullet:
                 b = Bullet()
-                b.pos = packet.packet.bullet_pos
-                b.velocity = packet.packet.bullet_velocity
-                b.acceleration = packet.packet.bullet_acceleration
-                b.rotation = packet.packet.bullet_rotation
-                b.rotation_velocity = packet.packet.bullet_rotation_velocity
-                b.rotation_acceleration = packet.packet.bullet_rotation_acceleration
+                b.owner = packet.packet.from_id
+                b.pos = packet.packet.player_pos
+                b.velocity = packet.packet.player_rotation
+                b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
                 b.instantiate()
 
         self.networking.lock.release()
