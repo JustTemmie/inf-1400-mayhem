@@ -21,9 +21,11 @@ import time
 
 class LocalPlayer(Player):
     def user_init(self):
-        self.last_shoot_time = 0
+        self.visible = False
 
+        self.last_shoot_time = 0
         self.new_bullet = 0
+
         return super().user_init()
 
     def engine_process(self, delta):
@@ -32,7 +34,6 @@ class LocalPlayer(Player):
         self.check_for_collision()
 
         logging.debug(f"player pos: {self.pos}")
-        print(f"player pos: {self.pos}")
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
@@ -41,7 +42,8 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         self.handle_keys(delta)
-        # self.handle_mouse(delta)
+        self.handle_mouse(delta)
+
 
         # self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * config.roll_thrust_force * delta
         # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
@@ -49,16 +51,10 @@ class LocalPlayer(Player):
     def handle_keys(self, delta):
         keys = Input.keyboard_keys
 
-        movement_vertical = (
-            keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
-        )
-        movement_horizontal = (
-            keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
-        )
+        movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
+        movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
 
-        pitch_direction = keys[
-            config.KEY_BINDS.pitch[0] - keys[config.KEY_BINDS.pitch[1]]
-        ]
+        pitch_direction = keys[config.KEY_BINDS.pitch[0]] - keys[config.KEY_BINDS.pitch[1]]
         yaw_direction = keys[config.KEY_BINDS.yaw[0] - keys[config.KEY_BINDS.yaw[1]]]
         roll_direction = keys[config.KEY_BINDS.roll[1]] - keys[config.KEY_BINDS.roll[0]]
 
@@ -78,23 +74,18 @@ class LocalPlayer(Player):
 
         # Need to add something to prevent it from rocking
 
-        print(f"Break force: {brake_force}")
+        # print(f"Break force: {brake_force}")
         #self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
 
-        self.rotation_acceleration = (
-            Vec3(
+        self.rotation_acceleration = Vec3(
                 pitch_direction,
-                roll_direction,
                 yaw_direction,
-            )
-            * config.roll_thrust_force
-            * delta
-        )
-
+                roll_direction,
+            ) * config.roll_thrust_force
+    
+        
         if keys[config.KEY_BINDS.thrust]:
-            self.acceleration += (
-                self.get_forward_vector() * config.rear_thrust_force * delta
-            )
+            self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
 
         if (
             keys[config.KEY_BINDS.shoot]
@@ -104,29 +95,28 @@ class LocalPlayer(Player):
             self.last_shoot_time = time.time()
 
     def handle_mouse(self, delta):
-        normalized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (
-            Window.size / 2
-        )  # generates a value between -1 and 1 for both axes
+        standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)  # generates a value between -1 and 1 for both axes
 
         # this treats it as a square, but close enough for now
-        print(normalized_mouse_position)
-        if (
-            abs(normalized_mouse_position.x) < config.virtual_joystick_deadzone
-            and abs(normalized_mouse_position.y) < config.virtual_joystick_deadzone
-        ) or not config.mouse_movement:
-            normalized_mouse_position = Vec2(0, 0)
+        logging.info(f"mouse_pos: {standardized_mouse_position}")
+        if abs(standardized_mouse_position.x) < config.virtual_joystick_deadzone and abs(standardized_mouse_position.y) < config.virtual_joystick_deadzone \
+                or not config.mouse_movement:
+            return
 
-        normalized_mouse_position * config.roll_thrust_force
-
+        magnitude = max(1, standardized_mouse_position.length())
+        normalized_mouse_position = standardized_mouse_position / magnitude
         # mouse_rotation = self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y
 
         mouse_rotation = Vec3(
             normalized_mouse_position.y,
-            0,
             normalized_mouse_position.x,
+            0,
         )
 
-        self.rotation_acceleration = mouse_rotation
+        print("hi", mouse_rotation, normalized_mouse_position.x** 2 + normalized_mouse_position.y ** 2)
+
+        self.rotation_acceleration = self.rotation_acceleration + mouse_rotation * config.side_thrust_force
+        # self.rotation_acceleration = mouse_rotation
 
     def shoot(self):
         bullet = Bullet()
@@ -142,9 +132,8 @@ class LocalPlayer(Player):
         forward = self.get_forward_vector()
 
         if forward.length == 0:
-            return
+            logging.warning("player does not have a valid forward vector, skipping camera positioning update")
 
-        Camera.active_camera.pos = (
-            forward * -10 + self.pos + self.get_up_vector() * 8
-        )  # this does *NOT* work if the camera is rotated, uh oh
-        Camera.active_camera.target = forward * 20 + self.pos
+        Camera.active_camera.pos = self.pos # this does *NOT* work if the camera is rotated, uh oh
+        Camera.active_camera.target = self.pos + forward
+        # Camera.active_camera.rotation = self.rotation

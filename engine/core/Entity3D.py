@@ -49,7 +49,7 @@ class Entity3D(Entity):
 
         trans = Mat4.from_translation(self.pos)
 
-        self.model.matrix = trans @ rot_y @ rot_x @ rot_z
+        self.model.matrix = trans @ (rot_z @ rot_y @ rot_x)
 
     def handle_physics(self, delta: float, air_friction: float, gravity: Vec3):
         """
@@ -84,7 +84,7 @@ class Entity3D(Entity):
         self.rotation_acceleration = Vec3(0, 0, 0)
 
         # print(self.rotation)
-        self.rotation = self.rotation % (math.pi * 2)
+        self.rotation = ((self.rotation + math.pi) % (math.pi * 2)) - math.pi
 
     def check_for_collision(self):
         for entity in Entity3D.all_3D_entities:

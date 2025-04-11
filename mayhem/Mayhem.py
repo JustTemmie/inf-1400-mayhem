@@ -31,7 +31,7 @@ import config
 class Mayhem(Game):
     def init(self):
         self.player = LocalPlayer()
-        self.player.pos = pyglet.math.Vec3(5, 0, 0)
+        self.player.pos = pyglet.math.Vec3(2, -10, 0)
         self.player.instantiate()
 
         self.spawn_test_objects()

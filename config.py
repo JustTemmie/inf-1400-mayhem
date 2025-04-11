@@ -9,16 +9,16 @@ SERVER_ADDRESS: str = "example.com"
 SERVER_TEST_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
-air_friction = 0.035 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
+air_friction = 0.95 # float from 0 to 1, where 1 is 100%, really shouldn't ever be set above 10%
 gravity = Vec3(0, 0, 0) # earth's gravity would be Vec3(0, -9.8, 0)
 
-rear_thrust_force: float = 3000
-side_thrust_force: float = 800
-roll_thrust_force: float = 30
+rear_thrust_force: float = 100
+side_thrust_force: float = 1400
+roll_thrust_force: float = 800
 
 SHOOTING_INTERVAL = 0.2
 
-LOG_LEVEL = logging.WARN
+LOG_LEVEL = logging.INFO
 
 BULLET_SPEED = 30
 
@@ -33,7 +33,7 @@ target_physics_rate: int = 60
 FOV: float = 80
 VSYNC: bool = False
 
-mouse_movement: bool = False # WIP
+mouse_movement: bool = True # WIP
 virtual_joystick_deadzone: float = 0.1 # percentage from 0 to 1
 
 
@@ -41,19 +41,20 @@ key_binds = namedtuple("keybinds", ["vertical", "horizontal", "pitch", "yaw", "r
 
 if os.getenv("LAYOUT") == "us(colemak)":
     KEY_BINDS = key_binds(
-        [key.W, key.R], # vertical
-        [key.A, key.S], # horizontal
-        [key.LEFT, key.RIGHT], # pitch
-        [key.UP, key.DOWN], # yaw
-        [key.Q, key.F], # roll
-        key.LSHIFT, # thrust
-        key.SPACE)  # shoot
+                [key.W, key.R], # vertical
+                [key.A, key.S], # horizontal
+                [key.LEFT, key.RIGHT], # pitch
+                [key.UP, key.DOWN], # yaw
+                [key.Q, key.F], # roll
+                key.LSHIFT, # thrust
+                key.SPACE)  # shoot
+
 else: # assume qwerty
     KEY_BINDS = key_binds(
-    [key.W, key.S], # vertical
-    [key.A, key.D], # horizontal
-    [key.LEFT, key.RIGHT], # pitch
-    [key.UP, key.DOWN], # yaw
-    [key.Q, key.E], # roll
-    key.LSHIFT, # thrust
-    key.SPACE)  # shoot
+                [key.W, key.S], # vertical
+                [key.A, key.D], # horizontal
+                [key.LEFT, key.RIGHT], # pitch
+                [key.UP, key.DOWN], # yaw
+                [key.Q, key.E], # roll
+                key.LSHIFT, # thrust
+                key.SPACE)  # shoot
