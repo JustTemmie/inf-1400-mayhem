@@ -22,7 +22,7 @@ import time
 
 class LocalPlayer(Player):
     def user_init(self):
-        self.visible = False
+        self.visible = True
 
         self.last_shoot_time = 0
         self.new_bullet = 0
@@ -34,7 +34,7 @@ class LocalPlayer(Player):
         self.update_camera_position(delta)
         self.check_for_collision()
 
-        logging.debug(f"player pos: {self.pos}")
+        logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
@@ -89,6 +89,6 @@ class LocalPlayer(Player):
         if forward.length == 0:
             logging.warning("player does not have a valid forward vector, skipping camera positioning update")
 
-        Camera.active_camera.pos = self.pos# this does *NOT* work if the camera is rotated, uh oh
+        Camera.active_camera.pos = self.pos
         Camera.active_camera.target = self.pos + forward
-        # Camera.active_camera.rotation = self.rotation
+        Camera.active_camera.rotation = self.rotation

@@ -13,6 +13,7 @@ from pyglet.math import Mat4, Vec3
 import pyglet
 import typing
 import logging
+import math
 
 if typing.TYPE_CHECKING:
     from engine.core.Window import Window
@@ -36,24 +37,18 @@ class Camera(Entity3D):
         self.FOV: float = config.FOV
 
     def engine_process(self, delta):
-        logging.debug(f"camera pos: {self.pos}")
-        logging.debug(f"camera rotation: {self.rotation}")
-        # self.pos += Vec3(3, 0, 0) * delta
-        # self.pos += Vec3(0, 0, 4) * delta
-        # self.rotation += Vec3(10, 0, 0) * delta
+        logging.debug(f"camera pos: {self.pos}, camera rotation: {self.rotation}")
 
     def ProjectWorld(self):
         glEnable(GL_DEPTH_TEST)
         self.window.projection = self.window.model_view
-        self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, 1))
-
-        # rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
-        # rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 1, 0))
-        # rot_z = Mat4.from_rotation(self.rotation.z, Vec3(0, 0, 1))
-
-        # trans = Mat4.from_translation(self.pos)
-
-        # self.window.view = trans @ rot_x @ rot_y @ rot_z
+        
+        # loosely, flip the camera upside down if the player is upside down
+        # if this isn't done you get a kind of screen wrapping in first person, very disorienting 
+        if self.rotation.x < math.pi / 2:
+            self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, 1))
+        else:
+            self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, -1))
 
     def ProjectHud(self):
         glDisable(GL_DEPTH_TEST)
