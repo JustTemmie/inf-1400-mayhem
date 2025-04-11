@@ -6,7 +6,7 @@ import logging
 import os
 
 """
-    client settings, these may be different from user to user
+    Client settings, these may be different from user to user
 """
 mouse_movement: bool = True
 mouse_virtual_joystick_deadzone: float = 0.1 # percentage from 0 to 1

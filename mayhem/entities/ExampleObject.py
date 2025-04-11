@@ -1,4 +1,8 @@
-from engine.core.Game import Game
+"""
+The minimum required to create a 3D object.
+Authors: JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Utils import Utils
 from engine.core.Entity3D import Entity3D
 

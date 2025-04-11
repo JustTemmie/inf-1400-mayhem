@@ -1,3 +1,8 @@
+"""
+< write some stuff >
+Authors: BAaboe (i'll replace names at handin)
+"""
+
 from engine.core.Entity3D import Entity3D
 from engine.core.Game import Game
 from engine.core.Utils import Utils

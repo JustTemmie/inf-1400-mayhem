@@ -1,9 +1,14 @@
+"""
+< i have no idea what you did, write some stuff >
+Authors: BAaboe (i'll replace names at handin)
+"""
+
 import socket
 import abc
 from threading import Thread, Lock
 import queue
 import time
-
+import logging
 
 class Networking(abc.ABC):
     def __init__(self, port: int, addr: str):
@@ -24,7 +29,7 @@ class Networking(abc.ABC):
             self.s.send(data.encode())
         except ConnectionRefusedError:
             self.connected = False
-            print("No connection to server")
+            logging.warning("No connection to server")
 
     @staticmethod
     def _listen(self):

@@ -1,6 +1,10 @@
+"""
+( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Game import Game
 from engine.core.Utils import Utils
-from engine.core_ext.Maths import Maths
 from engine.core.Entity3D import Entity3D
 
 import config
@@ -14,7 +18,7 @@ import logging
 
 class Player(Entity3D):
     def user_init(self):
-        print("new ship!")
+        logging.info("new ship!")
         self.player_id = 0
 
         self.mass = 200  # kg
@@ -23,7 +27,6 @@ class Player(Entity3D):
         self.ignore_friction: bool = False
 
     def process(self, delta):
-        # print(f"frame tick!! {delta}")
         # self.roll += delta
         pass
 

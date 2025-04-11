@@ -1,6 +1,10 @@
+"""
+< write some stuff idk >
+Authors: BAaboe (i'll replace names at handin)
+"""
+
 from engine.core.Game import Game
 from engine.core.Utils import Utils
-from engine.core_ext.Maths import Maths
 from engine.core.Entity3D import Entity3D
 
 from mayhem.entities.players.Player import Player
@@ -17,7 +21,6 @@ import config
 class RemotePlayer(Player):
     def engine_process(self, delta):
         pass
-        # print(f"engine tick!! {delta}")
 
         # Purely experimental
         # self.velocity = Vec3(self.velocity.x + self.acceleration.x,

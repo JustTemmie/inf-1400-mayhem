@@ -1,3 +1,8 @@
+"""
+< write some stuff >
+Authors: BAaboe (i'll replace names at handin)
+"""
+
 from engine.core_ext.Netwoking import Networking
 
 from mayhem.entities.players.Player import Player

@@ -1,4 +1,8 @@
-import pyglet
+"""
+Blueprint for information shared between 2d and 3d entities ( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
+
 import typing
 import abc
 

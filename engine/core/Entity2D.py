@@ -1,13 +1,11 @@
+"""
+2d entities ( write more later )
+Authors: JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Entity import Entity
 
 from pyglet.math import Vec2
-
-import typing
-import abc
-
-if typing.TYPE_CHECKING:
-    from engine.core.Game import Game
-
 
 class Entity2D(Entity):
     all_2D_entities: list["Entity2D"] = []

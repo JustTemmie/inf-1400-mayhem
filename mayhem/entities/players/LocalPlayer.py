@@ -1,9 +1,13 @@
+"""
+( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Game import Game
 from engine.core.Camera import Camera
 from engine.core.Utils import Utils
 from engine.core.Window import Window
-from engine.core_ext.Input import Input
-from engine.core_ext.Maths import Maths
+from engine.core.Input import Input
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet

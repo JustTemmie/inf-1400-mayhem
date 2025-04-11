@@ -1,30 +1,24 @@
-# adds the project root to the path, this is to allow importing other files in an easier manner
-# if you know a better way of doing this, please tell me!
-if __name__ == "__main__":
-    import sys
+"""
+Main module. ( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
 
-    sys.path.append(".")
-
-# from engine.core.Input import Input
+# core modules are simply defined as what is imported by this file
 from engine.core.Utils import Utils
 from engine.core.Camera import Camera
 from engine.core.Window import Window
-from engine.core_ext.Input import Input
+from engine.core.Input import Input
 from engine.core.Entity import Entity
 from engine.core.Entity2D import Entity2D
 from engine.core.Entity3D import Entity3D
-import engine.extras.logger
 
 import config
 
 from collections import namedtuple
 
 import pyglet
-import sys
-import typing
 import time
 import logging
-
 
 class Game:
     def __init__(self):

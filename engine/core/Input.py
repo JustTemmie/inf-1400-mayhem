@@ -1,10 +1,14 @@
+"""
+This module just assists in input handling
+Authors: JustTemmie (i'll replace names at handin)
+"""
+
 from collections import namedtuple
 from pyglet.math import Vec2
 
 import pyglet
 
 mousePosTuple = namedtuple("mouse", ["x", "y"])
-
 
 class Input:
     keyboard_keys = pyglet.window.key.KeyStateHandler()

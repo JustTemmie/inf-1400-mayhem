@@ -1,16 +1,16 @@
+"""
+entity. ( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Entity import Entity
 
-from pyglet.gl import glEnable, GL_DEPTH_TEST, GL_CULL_FACE
-from pyglet.math import Mat4, Vec3, Quaternion
+from pyglet.math import Mat4, Vec3
 
 import pyglet
 import typing
 import math
 import logging
-
-if typing.TYPE_CHECKING:
-    from engine.core.Game import Game
-
 
 class Entity3D(Entity):
     all_3D_entities: list["Entity3D"] = []
@@ -82,7 +82,6 @@ class Entity3D(Entity):
         self.acceleration = Vec3(0, 0, 0)
         self.rotation_acceleration = Vec3(0, 0, 0)
 
-        # print(self.rotation)
         self.rotation = ((self.rotation + math.pi) % (math.pi * 2)) - math.pi
 
     def check_for_collision(self):

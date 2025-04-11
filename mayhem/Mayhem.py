@@ -1,13 +1,11 @@
-# adds the project root to the path, this is to allow importing other files in an easier manner
-# if you know a better way of doing this, please tell me!
-if __name__ == "__main__":
-    import sys
-
-    sys.path.append(".")
+"""
+( write more later )
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
+"""
 
 from engine.core.Game import Game
-from engine.core.Entity import Entity
 from engine.core_ext.Netwoking import Networking
+import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.ExampleObject import ExampleObject
@@ -16,15 +14,14 @@ from mayhem.Packet import Packet
 
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 from mayhem.entities.players.RemotePlayer import RemotePlayer
-from mayhem.entities2D.HUD.movement_reticle import MovementReticle
 from mayhem.entities.Bullet import Bullet
+from mayhem.entities2D.HUD.movement_reticle import MovementReticle
 
 from pyglet.math import Vec3
 
 import typing
 
 import pyglet
-import pyglet.window.key
 import config
 
 

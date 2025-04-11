@@ -1,9 +1,7 @@
-# adds the project root to the path, this is to allow importing other files in an easier manner
-# if you know a better way of doing this, please tell me!
-if __name__ == "__main__":
-    import sys
-
-    sys.path.append(".")
+"""
+The Camera module contains functions to aid in rendering
+Authors: JustTemmie (i'll replace names at handin)
+"""
 
 from engine.core.Entity3D import Entity3D
 
@@ -48,7 +46,6 @@ class Camera(Entity3D):
         glEnable(GL_DEPTH_TEST)
         self.window.projection = self.window.model_view
         self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, 1))
-        print(self.pos, self.target)
 
         # rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
         # rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 1, 0))

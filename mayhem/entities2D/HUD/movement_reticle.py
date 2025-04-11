@@ -1,21 +1,18 @@
-from engine.core.Game import Game
+"""
+Very simple entity that just draws the "deadzone" for the digital analogue stick.
+Authors: JustTemmie (i'll replace names at handin)
+"""
+
 from engine.core.Window import Window
 from engine.core.Entity2D import Entity2D
-from engine.core.Utils import Utils
 
 import config
 
-from pyglet.math import Vec3
 
 import pyglet
-import typing
-import logging
 
 
 class MovementReticle(Entity2D):
-    # def user_init(self):
-    #     self.id = 0
-
     def user_instantiate(self):
         if config.mouse_movement:
             radius = Window.size.y * config.mouse_virtual_joystick_deadzone / 2
@@ -27,7 +24,3 @@ class MovementReticle(Entity2D):
                 color=(255, 80, 80, 55),
                 batch=self.render_batch,
             )
-
-    def prepare_draw(self, delta):
-        pass
-        # self.middle_circle.draw()

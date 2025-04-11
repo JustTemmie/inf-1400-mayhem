@@ -1,21 +1,18 @@
-# adds the project root to the path, this is to allow importing other files in an easier manner
-# if you know a better way of doing this, please tell me!
-if __name__ == "__main__":
-    import sys
-
-    sys.path.append(".")
+"""
+The Camera module contains functions to aid in rendering
+Based heavily on this stackoverflow post: https://stackoverflow.com/q/72074133
+Authors: JustTemmie (i'll replace names at handin)
+"""
 
 from engine.core.Camera import Camera
 
 import config
 
 from pyglet.gl import *
-from pyglet.math import Mat4, Vec3, Vec2
+from pyglet.math import Mat4, Vec2
 
 import pyglet
 
-
-# a lot of this code is from https://stackoverflow.com/q/72074133
 class Window(pyglet.window.Window):
     size: Vec2 = config.display_resolution
 
@@ -46,18 +43,6 @@ class Window(pyglet.window.Window):
     def _init_gl(self, width, height):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
-        # glEnable(GL_LIGHTING)
-
-        # glLightfv(GL_LIGHT0, GL_SPECULAR, (GLfloat*4)(.5,.5,1,1))
-        # glLightfv(GL_LIGHT0, GL_DIFFUSE,  (GLfloat*4)(1,1,1,1))
-        # glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat*4)(1, 0, .5, 0))
-        # glEnable(GL_LIGHT0)
-
-        # glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
-
-        # glEnable(GL_TEXTURE_2D)
-        # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-        # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
         # sky colour :3
         pyglet.gl.glClearColor(0.6, 0.75, 0.92, 1.0)
