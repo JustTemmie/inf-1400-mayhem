@@ -32,7 +32,7 @@ class LocalPlayer(Player):
         self.check_for_collision()
 
         logging.debug(f"player pos: {self.pos}")
-        print(f"player pos: {self.pos}")
+        print(f"player velocity: {self.velocity}")
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
@@ -78,7 +78,7 @@ class LocalPlayer(Player):
 
         # Need to add something to prevent it from rocking
 
-        print(f"Break force: {brake_force}")
+        # print(f"Break force: {brake_force}")
         #self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
 
         self.rotation_acceleration = (
@@ -98,7 +98,7 @@ class LocalPlayer(Player):
 
         if (
             keys[config.KEY_BINDS.shoot]
-            and -1 * (self.last_shoot_time - time.time()) > config.SHOOTING_INTERVAL
+            and (time.time() - self.last_shoot_time) > config.SHOOTING_INTERVAL
         ):
             self.shoot()
             self.last_shoot_time = time.time()

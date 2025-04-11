@@ -18,6 +18,9 @@ class Player(Entity3D):
         self.player_id = 0
 
         self.mass = 200  # kg
+        self.area = 1  # m^2, affects the objects interaction with air
+        self.drag_coeficient = 1.225
+        self.ignore_friction: bool = False
 
     def process(self, delta):
         # print(f"frame tick!! {delta}")

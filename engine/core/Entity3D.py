@@ -55,8 +55,9 @@ class Entity3D(Entity):
         """
         Handles physics, called within the engine, not meant to be interacted with by the user.
         """
+        drag = Vec3(0, 0, 0)
         if not self.ignore_friction:
-            air_density = 0  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
+            air_density = 1  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
             drag_without_speed = (
                 (1 / 2) * self.drag_coeficient * air_density * self.area
             )
@@ -68,10 +69,8 @@ class Entity3D(Entity):
                 drag_without_speed * self.velocity.z * abs(self.velocity.z),
             )
 
-            self.acceleration += (gravity - drag) / self.mass
-        else:
-            self.acceleration += gravity / self.mass
-        self.velocity += self.acceleration * delta
+        self.acceleration += gravity / self.mass
+        self.velocity += self.acceleration * delta - drag/self.mass  # Drag is allready multiplied with delta, because of the speed.
         self.pos += self.velocity * delta
 
         self.rotation_velocity += self.rotation_acceleration * delta

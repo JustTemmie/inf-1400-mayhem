@@ -28,8 +28,8 @@ class Entity:
 
         self.mass = 1  # kg, affects the objects interaction with physics
         self.area = 1  # m^2, affects the objects interaction with air
-        self.drag_coeficient = 3.05
-        self.ignore_friction: bool = False
+        self.drag_coeficient = 1
+        self.ignore_friction: bool = True
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []

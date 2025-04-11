@@ -3,6 +3,8 @@ from engine.core_ext.Netwoking import Networking
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
 
+import logging
+
 from pyglet.math import Vec3
 
 import typing
@@ -71,39 +73,41 @@ class Packet:
     @classmethod
     def decode(self, data: bytes) -> "Packet":
         decoded_data = data.decode().split(" ")
-        if len(decoded_data) != 22:
-            raise TypeError("Bad packet:(")
         # Please read README in server
-        packet = Packet(
-            int(decoded_data[0]),
-            int(decoded_data[1]),
-            Vec3(
-                float(decoded_data[2]), float(decoded_data[3]), float(decoded_data[4])
-            ),
-            Vec3(
-                float(decoded_data[5]), float(decoded_data[6]), float(decoded_data[7])
-            ),
-            Vec3(
-                float(decoded_data[8]), float(decoded_data[9]), float(decoded_data[10])
-            ),
-            Vec3(
-                float(decoded_data[11]),
-                float(decoded_data[12]),
-                float(decoded_data[13]),
-            ),
-            Vec3(
-                float(decoded_data[14]),
-                float(decoded_data[15]),
-                float(decoded_data[16]),
-            ),
-            Vec3(
-                float(decoded_data[17]),
-                float(decoded_data[18]),
-                float(decoded_data[19]),
-            ),
-            int(decoded_data[20]),
-            int(decoded_data[21]),
-        )
+        try:
+            packet = Packet(
+                int(decoded_data[0]),
+                int(decoded_data[1]),
+                Vec3(
+                    float(decoded_data[2]), float(decoded_data[3]), float(decoded_data[4])
+                ),
+                Vec3(
+                    float(decoded_data[5]), float(decoded_data[6]), float(decoded_data[7])
+                ),
+                Vec3(
+                    float(decoded_data[8]), float(decoded_data[9]), float(decoded_data[10])
+                ),
+                Vec3(
+                    float(decoded_data[11]),
+                    float(decoded_data[12]),
+                    float(decoded_data[13]),
+                ),
+                Vec3(
+                    float(decoded_data[14]),
+                    float(decoded_data[15]),
+                    float(decoded_data[16]),
+                ),
+                Vec3(
+                    float(decoded_data[17]),
+                    float(decoded_data[18]),
+                    float(decoded_data[19]),
+                ),
+                int(decoded_data[20]),
+                int(decoded_data[21]),
+            )
+        except:
+            logging.error("Bad packet :(")
+            return None
         return packet
 
     @classmethod
