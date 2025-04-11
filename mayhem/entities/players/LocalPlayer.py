@@ -41,82 +41,36 @@ class LocalPlayer(Player):
         self.model = model_scene.create_models(batch=Player.game_object.main_batch)[0]
 
     def handle_input(self, delta):
-        self.handle_keys(delta)
-        self.handle_mouse(delta)
-
-
-        # self.rotation_acceleration = Vec3(0, 0, roll_direction * 8) * config.roll_thrust_force * delta
-        # self.rotation_acceleration = Vec3(pitch_direction, yaw_direction, roll_direction) * delta * 314
-
-    def handle_keys(self, delta):
         keys = Input.keyboard_keys
-
-        movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
-        movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
-
-        pitch_direction = keys[config.KEY_BINDS.pitch[0]] - keys[config.KEY_BINDS.pitch[1]]
-        yaw_direction = keys[config.KEY_BINDS.yaw[0] - keys[config.KEY_BINDS.yaw[1]]]
-        roll_direction = keys[config.KEY_BINDS.roll[1]] - keys[config.KEY_BINDS.roll[0]]
-
-        movement = (
-            self.get_right_vector() * -movement_horizontal
-            + self.get_up_vector() * movement_vertical
-        )
-        self.acceleration = movement * config.side_thrust_force * delta
-
-        brake_force = Vec3(0, 0, 0)
-        if movement_vertical == 0:
-            brake_force -= (
-                self.get_up_vector() * self.velocity.normalize()
-            )  # times some brake_force
-        if movement_horizontal == 0:
-            brake_force -= self.get_right_vector() * self.velocity.normalize()
-
-        # Need to add something to prevent it from rocking
-
-        # print(f"Break force: {brake_force}")
-        #self.acceleration += brake_force * config.side_thrust_force * 1.5 * delta
-
-        self.rotation_acceleration = Vec3(
-                pitch_direction,
-                yaw_direction,
-                roll_direction,
-            ) * config.roll_thrust_force
-    
-        
-        if keys[config.KEY_BINDS.thrust]:
-            self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
-
-        if (
-            keys[config.KEY_BINDS.shoot]
-            and (time.time() - self.last_shoot_time) > config.SHOOTING_INTERVAL
-        ):
-            self.shoot()
-            self.last_shoot_time = time.time()
-
-    def handle_mouse(self, delta):
         standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)  # generates a value between -1 and 1 for both axes
+        logging.debug(f"mouse_pos: {standardized_mouse_position}")
 
-        # this treats it as a square, but close enough for now
-        logging.info(f"mouse_pos: {standardized_mouse_position}")
-        if abs(standardized_mouse_position.x) < config.virtual_joystick_deadzone and abs(standardized_mouse_position.y) < config.virtual_joystick_deadzone \
-                or not config.mouse_movement:
-            return
+        if ((abs(standardized_mouse_position.x) < config.mouse_virtual_joystick_deadzone
+        and abs(standardized_mouse_position.y) < config.mouse_virtual_joystick_deadzone)
+        or not config.mouse_movement):
+            standardized_mouse_position = Vec2(0, 0)
 
         magnitude = max(1, standardized_mouse_position.length())
         normalized_mouse_position = standardized_mouse_position / magnitude
-        # mouse_rotation = self.get_right_vector() * normalized_mouse_position.x + self.get_up_vector() * normalized_mouse_position.y
 
-        mouse_rotation = Vec3(
-            normalized_mouse_position.y,
-            normalized_mouse_position.x,
+        key_movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
+        key_movement_horizontal = keys[config.KEY_BINDS.horizontal[1]] - keys[config.KEY_BINDS.horizontal[0]]
+
+        self.rotation_acceleration = Vec3(
+            normalized_mouse_position.y + key_movement_vertical,
+            normalized_mouse_position.x + key_movement_horizontal,
             0,
-        )
+        ) * config.rotation_thrust_force * delta
+        
 
-        print("hi", mouse_rotation, normalized_mouse_position.x** 2 + normalized_mouse_position.y ** 2)
+        if keys[config.KEY_BINDS.thrust]:
+            self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
 
-        self.rotation_acceleration = self.rotation_acceleration + mouse_rotation * config.side_thrust_force
-        # self.rotation_acceleration = mouse_rotation
+        if (keys[config.KEY_BINDS.shoot]
+        and (time.time() - self.last_shoot_time) > config.SHOOTING_INTERVAL):
+            self.shoot()
+            self.last_shoot_time = time.time()
+
 
     def shoot(self):
         bullet = Bullet()
