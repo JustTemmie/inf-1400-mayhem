@@ -95,25 +95,18 @@ class Entity3D(Entity):
         Computes the upwards pointing vector from the entity.
         """
         # Compute the up vector using pitch (rotation.x), yaw (rotation.y), and roll (rotation.z)
-        up_x = math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(
-            self.rotation.z
-        ) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
-        up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(
-            self.rotation.z
-        ) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
+        up_x = -math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
+        up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
         up_z = math.cos(self.rotation.z) * math.cos(self.rotation.x)
+
         return Vec3(up_x, up_y, up_z).normalize()
 
     def get_right_vector(self) -> Vec3:
         """
         Computes the right pointing vector from the entity.
         """
-        right_x = math.cos(self.rotation.z) * math.cos(self.rotation.y) - math.sin(
-            self.rotation.z
-        ) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
-        right_y = math.cos(self.rotation.z) * math.sin(self.rotation.y) + math.sin(
-            self.rotation.z
-        ) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
+        right_x = math.cos(self.rotation.z) * math.cos(self.rotation.y) + math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
+        right_y = math.cos(self.rotation.z) * math.sin(self.rotation.y) - math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
         right_z = -math.sin(self.rotation.z) * math.cos(self.rotation.x)
 
         return Vec3(right_x, right_y, right_z).normalize()
@@ -122,17 +115,9 @@ class Entity3D(Entity):
         """
         Computes the forward pointing vector from the entity.
         """
-        forward_x = math.cos(self.rotation.x) * math.sin(self.rotation.y) * math.cos(
-            self.rotation.z
-        ) + math.sin(self.rotation.x) * math.sin(self.rotation.z)
-        forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y) * math.cos(
-            self.rotation.z
-        ) - math.sin(self.rotation.x) * math.sin(self.rotation.y) * math.sin(
-            self.rotation.z
-        )
-        forward_z = -math.cos(self.rotation.x) * math.sin(self.rotation.z) + math.sin(
-            self.rotation.x
-        ) * math.cos(self.rotation.z)
+        forward_x = -math.cos(self.rotation.x) * math.sin(self.rotation.y) * math.cos(self.rotation.z) + math.sin(self.rotation.x) * math.sin(self.rotation.z)
+        forward_y = math.cos(self.rotation.x) * math.cos(self.rotation.y) * math.cos(self.rotation.z) - math.sin(self.rotation.x) * math.sin(self.rotation.y) * math.sin(self.rotation.z)
+        forward_z = -math.cos(self.rotation.x) * math.sin(self.rotation.z) + math.sin(self.rotation.x) * math.cos(self.rotation.z)
 
         return Vec3(forward_x, forward_y, forward_z)
 
