@@ -22,12 +22,9 @@ class Window(pyglet.window.Window):
         )
 
         super().__init__(
-            Window.size.x,
-            Window.size.y,
-            resizable=True,
-            visible=False,
-            config=gl_config,
-            vsync=config.VSYNC,
+            Window.size.x, Window.size.y,
+            resizable=True, visible=False,
+            config=gl_config, vsync=config.VSYNC,
             caption="Mayhem (3D!!)",
         )
 

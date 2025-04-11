@@ -29,6 +29,9 @@ class Entity2D(Entity):
         self.render_batch = Entity.game_object.UI_batch
         Entity2D.all_2D_entities.append(self)
         super().instantiate()
+    
+    def prepare_draw(self, delta):
+        pass
 
     def handle_physics(self, delta: float, air_friction: float, gravity: Vec2):
         """
