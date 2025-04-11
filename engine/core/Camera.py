@@ -47,9 +47,16 @@ class Camera(Entity3D):
     def ProjectWorld(self):
         glEnable(GL_DEPTH_TEST)
         self.window.projection = self.window.model_view
-        self.window.view = Mat4.look_at(
-            position=self.pos, target=self.target, up=Vec3(0, 1, 0)
-        )
+        self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, 1))
+        print(self.pos, self.target)
+
+        # rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
+        # rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 1, 0))
+        # rot_z = Mat4.from_rotation(self.rotation.z, Vec3(0, 0, 1))
+
+        # trans = Mat4.from_translation(self.pos)
+
+        # self.window.view = trans @ rot_x @ rot_y @ rot_z
 
     def ProjectHud(self):
         glDisable(GL_DEPTH_TEST)
