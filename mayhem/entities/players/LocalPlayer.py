@@ -22,7 +22,7 @@ import time
 
 class LocalPlayer(Player):
     def user_init(self):
-        self.visible = True
+        self.visible = False
 
         self.last_shoot_time = 0
         self.new_bullet = 0
