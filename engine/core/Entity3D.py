@@ -121,13 +121,5 @@ class Entity3D(Entity):
 
         return Vec3(forward_x, forward_y, forward_z)
 
-    def look_at(self, pos: Vec3):
-        """
-        Make the entity turn to look at the given position.
-        Not implemented.
-        """
-
-        # i actually don't think we need this function, the camera already has this biult in
-
-        look_towards: Vec3 = self.pos - pos
-        # uhh, math here i guess
+    def is_rightside_up(self) -> bool:
+        return (self.rotation.x < math.pi * 0.5 or self.rotation.x >= math.pi * 1.5)

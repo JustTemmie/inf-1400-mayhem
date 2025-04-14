@@ -57,9 +57,15 @@ class LocalPlayer(Player):
         key_movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
         key_movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
 
+        vertical_movement = normalized_mouse_position.y + key_movement_vertical
+        horizontal_movement = -normalized_mouse_position.x + key_movement_horizontal
+
+        if not self.is_rightside_up():
+            horizontal_movement = -horizontal_movement
+        
         self.rotation_acceleration = Vec3(
-            normalized_mouse_position.y + key_movement_vertical,
-            -normalized_mouse_position.x + key_movement_horizontal,
+            vertical_movement,
+            horizontal_movement,
             0,
         ) * config.rotation_thrust_force * delta
         
@@ -85,6 +91,8 @@ class LocalPlayer(Player):
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
+
+
 
         if forward.length == 0:
             logging.warning("player does not have a valid forward vector, skipping camera positioning update")

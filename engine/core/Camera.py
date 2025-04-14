@@ -45,8 +45,7 @@ class Camera(Entity3D):
         
         # loosely, flip the camera upside down if the player is upside down
         # if this isn't done you get a kind of screen wrapping in first person, very disorienting 
-        print(self.rotation)
-        if self.rotation.x < math.pi * 0.5 or self.rotation.x >= math.pi * 1.5:
+        if self.is_rightside_up():
             self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, 1))
         else:
             self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, -1))
