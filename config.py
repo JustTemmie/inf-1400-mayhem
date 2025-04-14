@@ -9,7 +9,7 @@ import os
     Client settings, these may be different from user to user
 """
 mouse_movement: bool = True
-mouse_virtual_joystick_deadzone: float = 0.1 # percentage from 0 to 1
+mouse_virtual_joystick_deadzone: float = 0.075 # percentage from 0 to 1
 
 key_binds = namedtuple("keybinds", ["vertical", "horizontal", "thrust", "shoot"])
 

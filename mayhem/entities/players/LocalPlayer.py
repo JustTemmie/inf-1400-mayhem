@@ -21,11 +21,16 @@ import logging
 import time
 
 class LocalPlayer(Player):
+    instance: Player = None
+    
     def user_init(self):
+        LocalPlayer.instance = self
+        
         self.visible = False
 
         self.last_shoot_time = 0
         self.new_bullet = 0
+        self.score = 0
 
         return super().user_init()
 

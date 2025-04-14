@@ -15,7 +15,9 @@ from mayhem.Packet import Packet
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 from mayhem.entities.players.RemotePlayer import RemotePlayer
 from mayhem.entities.Bullet import Bullet
-from mayhem.entities2D.HUD.movement_reticle import MovementReticle
+
+from mayhem.entities2D.HUD.MovementReticle import MovementReticle
+from mayhem.entities2D.HUD.ScoreCounter import ScoreCounter
 
 from pyglet.math import Vec3
 
@@ -44,8 +46,9 @@ class Mayhem(Game):
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
     def spawn_hud(self):
-        movement_reticle = MovementReticle()
-        movement_reticle.instantiate()
+        MovementReticle().instantiate()
+        ScoreCounter().instantiate()
+        
 
     def spawn_test_objects(self):
         player = Player()

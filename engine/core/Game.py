@@ -49,7 +49,6 @@ class Game:
         Camera.active_camera.instantiate()
 
         self.window.set_visible()
-        self.test_label = pyglet.text.Label(text="test text!!", batch=self.UI_batch)
 
     def init(self):
         """

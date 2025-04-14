@@ -1,0 +1,13 @@
+collisions
+    obstacles
+    fuel
+        fuel expenditure
+        refueling
+
+models
+score tracking
+docstrings for functions, classes, and files
+
+main menu?
+gravity down towards the planet?? ( depends on if we're in space )
+

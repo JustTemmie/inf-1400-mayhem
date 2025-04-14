@@ -32,15 +32,15 @@ class MovementReticle(Entity2D):
         radius_y = Window.size.y * config.mouse_virtual_joystick_deadzone / 2
         
         return Vec2(radius_x, radius_y)
-        
     
     def prepare_draw(self, delta):
-        self.middle_ellipse.position = Vec2(
-            x=Window.size.x / 2,
-            y=Window.size.y / 2
-        )
-        
-        ellipse_size = self.get_ellipse_dimensions()
-        
-        self.middle_ellipse.a = ellipse_size.x
-        self.middle_ellipse.b = ellipse_size.y
+        if config.mouse_movement:
+            self.middle_ellipse.position = Vec2(
+                x=Window.size.x / 2,
+                y=Window.size.y / 2
+            )
+            
+            ellipse_size = self.get_ellipse_dimensions()
+            
+            self.middle_ellipse.a = ellipse_size.x
+            self.middle_ellipse.b = ellipse_size.y
