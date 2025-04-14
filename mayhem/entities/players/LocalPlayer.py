@@ -43,16 +43,20 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
-        standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)  # generates a value between -1 and 1 for both axes
-        logging.debug(f"mouse_pos: {standardized_mouse_position}")
-
-        if ((abs(standardized_mouse_position.x) < config.mouse_virtual_joystick_deadzone
-        and abs(standardized_mouse_position.y) < config.mouse_virtual_joystick_deadzone)
-        or not config.mouse_movement):
-            standardized_mouse_position = Vec2(0, 0)
-
+        
+        # generates a value between -1 and 1 for both axes
+        standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)
+        logging.debug(f"mouse pos: {standardized_mouse_position}")
+        
+        # caps the length to one
         magnitude = max(1, standardized_mouse_position.length())
         normalized_mouse_position = standardized_mouse_position / magnitude
+        
+        # ignores mouse inputs if the value is too small
+        if (normalized_mouse_position.length() < config.mouse_virtual_joystick_deadzone
+        or not config.mouse_movement):
+            standardized_mouse_position = Vec2(0, 0)
+            normalized_mouse_position = Vec2(0, 0)
 
         key_movement_vertical = keys[config.KEY_BINDS.vertical[0]] - keys[config.KEY_BINDS.vertical[1]]
         key_movement_horizontal = keys[config.KEY_BINDS.horizontal[0]] - keys[config.KEY_BINDS.horizontal[1]]
@@ -60,6 +64,7 @@ class LocalPlayer(Player):
         vertical_movement = normalized_mouse_position.y + key_movement_vertical
         horizontal_movement = -normalized_mouse_position.x + key_movement_horizontal
 
+        # flip the horizontal movement if we're not rightside up, this is due to the game using global axes
         if not self.is_rightside_up():
             horizontal_movement = -horizontal_movement
         
@@ -91,8 +96,6 @@ class LocalPlayer(Player):
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
-
-
 
         if forward.length == 0:
             logging.warning("player does not have a valid forward vector, skipping camera positioning update")
