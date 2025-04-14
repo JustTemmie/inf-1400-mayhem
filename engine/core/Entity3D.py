@@ -26,7 +26,7 @@ class Entity3D(Entity):
         self.rotation_velocity: Vec3 = Vec3(0, 0, 0)  # x, y, z
         self.rotation_acceleration: Vec3 = Vec3(0, 0, 0)  # x, y, z
 
-        self.colliable = True
+        self.collidable = True
 
         self.model: pyglet.model.Scene
 
@@ -85,14 +85,13 @@ class Entity3D(Entity):
         self.rotation = self.rotation % (math.pi * 2)
 
     def check_for_collision(self):
-        if not self.colliable:
+        if not self.collidable:
             return
 
         for entity in Entity3D.all_3D_entities:
-            if not entity.colliable:
+            if not entity.collidable:
                 continue
             
-
 
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
@@ -128,4 +127,11 @@ class Entity3D(Entity):
         return Vec3(forward_x, forward_y, forward_z)
 
     def is_rightside_up(self) -> bool:
+        """
+        Returns true if the object is rightside up, false if not
+        """
         return (self.rotation.x < math.pi * 0.5 or self.rotation.x >= math.pi * 1.5)
+    
+    def free(self):
+        Entity3D.all_3D_entities.remove(self)
+        return super().free()

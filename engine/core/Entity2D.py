@@ -49,3 +49,7 @@ class Entity2D(Entity):
         # we don't actually want to keep acceleration
         self.acceleration = Vec2(0, 0)
         self.rotation_acceleration = Vec2(0, 0)
+
+    def free(self):
+        Entity2D.all_2D_entities.remove(self)
+        return super().free()
