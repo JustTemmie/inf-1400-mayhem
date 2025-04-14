@@ -1,5 +1,5 @@
 """
-Very simple entity that just draws the "deadzone" for the digital analogue stick.
+Very simple entity that just displays the player's score in the top left of the screen.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -7,12 +7,9 @@ from engine.core.Window import Window
 from engine.core.Entity2D import Entity2D
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 
-import config
-
 from pyglet.math import Vec3
 
 import pyglet
-
 
 class ScoreCounter(Entity2D):
     def user_instantiate(self):

@@ -109,14 +109,10 @@ class Game:
             entity.engine_process(delta)
 
         for entity in Entity2D.all_2D_entities:
-            entity.handle_physics(
-                delta, air_friction=config.air_friction, gravity=config.gravity
-            )
+            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
         for entity in Entity3D.all_3D_entities:
-            entity.handle_physics(
-                delta, air_friction=config.air_friction, gravity=config.gravity
-            )
+            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
@@ -140,8 +136,6 @@ class Game:
         """
         Start the game!
         """
-        pyglet.clock.schedule_interval(
-            self.engine_process, 1 / config.target_physics_rate
-        )
+        pyglet.clock.schedule_interval(self.engine_process, 1 / config.target_physics_rate)
         pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()
