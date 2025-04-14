@@ -85,8 +85,14 @@ class Entity3D(Entity):
         self.rotation = self.rotation % (math.pi * 2)
 
     def check_for_collision(self):
+        if not self.colliable:
+            return
+
         for entity in Entity3D.all_3D_entities:
-            pass
+            if not entity.colliable:
+                continue
+            
+
 
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
