@@ -38,6 +38,12 @@ class Entity:
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
 
+    def on_resize(self):
+        """
+        Called when the game window is resized
+        """
+        pass
+    
     def user_init(self):
         """
         Implement by extending class.

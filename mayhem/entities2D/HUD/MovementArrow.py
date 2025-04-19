@@ -23,6 +23,12 @@ class MovementArrow(Entity2D):
         self.arrow = pyglet.shapes.Line(middle.x, middle.y, 0, 0, 5, color=(255, 40, 80), batch=Entity2D.game_object.UI_batch)
         self.arrow_head = pyglet.shapes.Triangle(10, 10, 190, 10, 100, 150, color=(255, 40, 80), batch=Entity2D.game_object.UI_batch)
 
+    def on_resize(self):
+        middle = Window.size / 2
+        
+        self.arrow.x = middle.x
+        self.arrow.y = middle.y
+    
     def prepare_draw(self, delta):
         if MovementReticle.is_mouse_inside():
             self.arrow.visible = False
