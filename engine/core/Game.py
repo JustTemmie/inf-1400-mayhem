@@ -37,9 +37,8 @@ class Game:
         self.time_elapsed: float = 0
         self.frame_times: list[float] = []
 
-        self.entity_ID = (
-            0  # an increasing counter such that every entity has their own unique ID
-        )
+        self.entity_ID = 0  # an increasing counter such that every entity has their own unique ID
+        
 
         self.frame_start_time = time.time()
 

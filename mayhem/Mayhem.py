@@ -16,39 +16,45 @@ from mayhem.entities.players.LocalPlayer import LocalPlayer
 from mayhem.entities.players.RemotePlayer import RemotePlayer
 from mayhem.entities.Bullet import Bullet
 
+from mayhem.entities2D.HUD.MovementArrow import MovementArrow
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 from mayhem.entities2D.HUD.ScoreCounter import ScoreCounter
+
 
 from pyglet.math import Vec3
 
 import typing
-
 import pyglet
 import config
 
 
 class Mayhem(Game):
     def init(self):
-        self.player = LocalPlayer()
-        self.player.pos = pyglet.math.Vec3(2, -10, 0)
-        self.player.instantiate()
-
+        self.player: LocalPlayer
+        self.other_players: typing.Dict[int, RemotePlayer] = {}
+        
+        self.spawn_local_player()
+        self.spawn_remote_players()
         self.spawn_test_objects()
         self.spawn_hud()
 
+    def spawn_hud(self):
+        MovementArrow().instantiate()
+        MovementReticle().instantiate()
+        ScoreCounter().instantiate()
+    
+    def spawn_local_player(self):
+        self.player = LocalPlayer()
+        self.player.pos = pyglet.math.Vec3(2, -10, 0)
+        self.player.instantiate()
+    
+    def spawn_remote_players(self):
         self.networking = Networking(
             config.SERVER_PORT, config.SERVER_TEST_ADDRESS
         )  # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
             self.networking.start_listen()  # Creates a thread that listens to the server.
             self.networking.send(Packet.player_to_packet(self.player))
-
-        self.other_players: typing.Dict[int, RemotePlayer] = {}
-
-    def spawn_hud(self):
-        MovementReticle().instantiate()
-        ScoreCounter().instantiate()
-        
 
     def spawn_test_objects(self):
         player = Player()
@@ -59,15 +65,12 @@ class Mayhem(Game):
         player.pos = Vec3(-5, 0, 15)
         player.instantiate()
 
-        ExampleObject().instantiate()
-
         for i in range(100):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i - 50)
             object.instantiate()
 
     def user_engine_process(self, delta):
-
         self._handle_network_input()
         self._send_update()
         pass

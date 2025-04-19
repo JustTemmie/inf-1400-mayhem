@@ -11,6 +11,7 @@ from engine.core.Input import Input
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
+from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 
 import config
 
@@ -54,12 +55,11 @@ class LocalPlayer(Player):
         logging.debug(f"mouse pos: {standardized_mouse_position}")
         
         # caps the length to one
-        magnitude = max(1, standardized_mouse_position.length())
+        magnitude = max(1, standardized_mouse_position.length()) # don't divide by values under 1
         normalized_mouse_position = standardized_mouse_position / magnitude
         
         # ignores mouse inputs if the value is too small
-        if (normalized_mouse_position.length() < config.mouse_virtual_joystick_deadzone
-        or not config.mouse_movement):
+        if MovementReticle.is_mouse_inside():
             standardized_mouse_position = Vec2(0, 0)
             normalized_mouse_position = Vec2(0, 0)
 
@@ -87,7 +87,6 @@ class LocalPlayer(Player):
         and (time.time() - self.last_shoot_time) > config.SHOOTING_INTERVAL):
             self.shoot()
             self.last_shoot_time = time.time()
-
 
     def shoot(self):
         bullet = Bullet()

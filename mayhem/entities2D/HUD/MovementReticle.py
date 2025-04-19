@@ -4,6 +4,7 @@ Authors: JustTemmie (i'll replace names at handin)
 """
 
 from engine.core.Window import Window
+from engine.core.Input import Input
 from engine.core.Entity2D import Entity2D
 
 import config
@@ -44,3 +45,16 @@ class MovementReticle(Entity2D):
             
             self.middle_ellipse.a = ellipse_size.x
             self.middle_ellipse.b = ellipse_size.y
+    
+    def is_mouse_inside() -> bool:
+        if not config.mouse_movement:
+            return False
+        
+        # generates a value between -1 and 1 for both axes
+        standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)
+        
+        # caps the length to one
+        magnitude = max(1, standardized_mouse_position.length()) # don't divide by values under 1
+        normalized_mouse_position = standardized_mouse_position / magnitude
+        
+        return normalized_mouse_position.length() < config.mouse_virtual_joystick_deadzone

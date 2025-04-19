@@ -83,9 +83,10 @@ class BaseButton(Entity2D):
         if self.disabled:
             return
 
+        self.draw_mode = DrawMode.normal
         self.hit_area.update_object(self.pos, self.rotation)
         
-        
+        # if mouse is within button
         if self.hit_area.colliding_with(Input.mouse_hit_area):
             self.draw_mode = DrawMode.hover
             
@@ -94,6 +95,7 @@ class BaseButton(Entity2D):
                     self.on_button_down()
                 self.pressed = True
 
+        # if not holding left
         if pyglet_mouse.LEFT not in Input.active_mouse_buttons:
             if self.hit_area.colliding_with(Input.mouse_hit_area):
                 if self.toggle_mode:
@@ -101,8 +103,9 @@ class BaseButton(Entity2D):
                     self.on_toggled(self.toggle_mode)
                 else:
                     self.on_pressed()
-                
-            self.on_released()
+            
+            if self.pressed:
+                self.on_released()
             self.pressed = False
         
         if self.pressed:
