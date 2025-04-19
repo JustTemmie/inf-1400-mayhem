@@ -29,6 +29,8 @@ class Game:
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
+        self.window.event("on_mouse_press")(Input.on_mouse_press)
+        self.window.event("on_mouse_release")(Input.on_mouse_release)
         self.window.push_handlers(Input.keyboard_keys)
 
         self.frames_elapsed: int = 0

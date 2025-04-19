@@ -33,7 +33,7 @@ class Mayhem(Game):
         self.player.pos = pyglet.math.Vec3(2, -10, 0)
         self.player.instantiate()
 
-        # self.spawn_test_objects()
+        self.spawn_test_objects()
         self.spawn_hud()
 
         self.networking = Networking(

@@ -1,13 +1,13 @@
-from Hitarea import Hitarea
+from engine.core_ext.collision.collision2D.Hitarea2D import Hitarea2D
 
 from pyglet.math import Vec2
 
 from typing import Tuple
 
 
-class Hitbox2D(Hitarea):
+class Hitbox2D(Hitarea2D):
     def __init__(self, object_pos: Vec2, object_rot: float,
-                 box_pos: Vec2, box_size: Vec2):
+                box_pos: Vec2, box_size: Vec2):
         """
         Creates a 2D hitbox
 
@@ -24,9 +24,9 @@ class Hitbox2D(Hitarea):
         self.box_size = box_size
         self.box_pos = box_pos
 
-        super.__init__("2dbox")
+        return super().__init__("2dbox")
 
-    def colliding_with(self, area: Hitarea):
+    def colliding_with(self, area: Hitarea2D):
         if area.type == "2dbox":
             my_x = self.object_pos.x + self.box_pos.x
             my_y = self.object_pos.y + self.box_pos.y
