@@ -1,5 +1,6 @@
 """
 Generic hitarea using the GJK algorithem
+OBS: This is not tested yet
 authors: BAboe
 """
 import abc
