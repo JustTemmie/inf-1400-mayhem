@@ -86,6 +86,9 @@ class Entity3D(Entity):
         self.rotation = self.rotation % (math.pi * 2)
 
     def check_for_collision(self):
+        """
+        Checks for collision, and calles "handle_collision" on every collision
+        """
         if not self.collidable:
             return
 
@@ -95,10 +98,18 @@ class Entity3D(Entity):
 
             for entity_hitbox in entity.hitboxes:
                 for hitbox in self.hitboxes:
-                    print("Checking for collision")
                     if entity_hitbox.colliding_with(hitbox):
-                        print(f"Collision between: {entity_hitbox.center(), hitbox.center()}")
+                        self.handle_collision(entity)
+                        #print(f"Collision between: {entity_hitbox.center(), hitbox.center()}")
 
+    def handle_collision(self, entity: "Entity3D"):
+        """
+        Handles a collision
+
+        Parmetrs:
+            entity: the entity that was collided with
+        """
+        pass
 
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json

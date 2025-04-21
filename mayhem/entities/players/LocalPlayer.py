@@ -33,8 +33,9 @@ class LocalPlayer(Player):
         self.last_shoot_time = 0
         self.new_bullet = 0
         self.score = 0
+        self.health = 100
 
-        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 1)]
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
 
         super().user_init()
 
@@ -105,6 +106,16 @@ class LocalPlayer(Player):
         bullet.instantiate()
 
         self.new_bullet = 1
+
+    def handle_collision(self, entity):
+        if type(entity).__name__ == "Bullet":
+            if entity.owner != self.player_id:
+                entity.hitboxes = []
+                entity.free()
+                self.health -= 10
+        else:
+            print("Hit something")
+
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

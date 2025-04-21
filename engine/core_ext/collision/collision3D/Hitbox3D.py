@@ -112,13 +112,15 @@ class Hitbox3D(Hitarea3D):
         for point in points:
             if point.dot(d) > biggest.dot(d):
                 biggest = point
-
         return biggest
 
-    def update_object(self, object_pos: Vec3, object_rot: Vec3):
+    def update(self, object_pos: Vec3, object_rot: Vec3):
         """
         Updates the position of the object the hitbox is atteched to,
         and the rotation
         """
         self.object_pos = object_pos
         self.object_rot = object_rot
+
+    def center(self):
+        return self.object_pos+self.box_pos

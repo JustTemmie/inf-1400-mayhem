@@ -13,16 +13,17 @@ import math
 
 
 class Hitsphere2D(Hitarea2D):
+    """
+    Creates a 2D hitsphere
+
+    Keyword arguments:
+    object_pos      -- the center position to the object you want a hitbox for.
+    sphere_pos      -- the position relative to the object you want your hitspher.
+    sphere_radius   -- the radius the the hitspher.
+
+    """
+
     def __init__(self, object_pos: Vec2, sphere_pos: Vec2, sphere_radius: float):
-        """
-        Creates a 2D hitsphere
-
-        Keyword arguments:
-        object_pos      -- the center position to the object you want a hitbox for.
-        sphere_pos      -- the position relative to the object you want your hitspher.
-        sphere_radius   -- the radius the the hitspher.
-
-        """
         self.object_pos = object_pos
 
         self.sphere_pos = sphere_pos
