@@ -1,4 +1,4 @@
-collisions
+collisions :check:
     obstacles
     fuel
         fuel expenditure

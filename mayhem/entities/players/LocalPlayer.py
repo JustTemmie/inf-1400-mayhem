@@ -35,12 +35,16 @@ class LocalPlayer(Player):
         self.score = 0
         self.health = 100
 
+        self.killed_by = -1
+
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
 
         super().user_init()
 
 
     def engine_process(self, delta):
+        if self.killed_by != -1:
+            return
         self.handle_input(delta)
         self.update_camera_position(delta)
 
@@ -113,9 +117,22 @@ class LocalPlayer(Player):
                 entity.hitboxes = []
                 entity.free()
                 self.health -= 10
+
+                if self.health <= 0:
+                    print("died")
+                    self.killed_by = entity.owner
+                    print(self.killed_by)
+                    self.score -= 1
+                    self.pos = pyglet.math.Vec3(2, -10, 0)
+                    self.velocity = Vec3()
+                    self.rotation = Vec3()
+                    self.health = 100
+
+
         else:
             print("Hit something")
 
+        # Maybe add a respawn screen or something
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

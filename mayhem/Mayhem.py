@@ -75,12 +75,14 @@ class Mayhem(Game):
     def user_engine_process(self, delta):
         self._handle_network_input()
         self._send_update()
-        pass
 
     def _send_update(self):
         if self.networking.connected:
-            self.networking.send(Packet.player_to_packet(self.player, self.player.new_bullet))
+            self.networking.send(Packet.player_to_packet(self.player,
+                                                         self.player.new_bullet,
+                                                         self.player.killed_by))
             self.player.new_bullet = 0
+            self.player.killed_by = -1
 
     def _handle_network_input(self):
         self.networking.lock.acquire()  # Locks the queue so that two threads can not use it at the same time
@@ -102,5 +104,15 @@ class Mayhem(Game):
                 b.rotation = packet.packet.player_rotation
                 b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
                 b.instantiate()
+
+            if packet.packet.killed_by > 0:
+                print("Got a kill message")
+                killed_player = self.other_players[packet.packet.from_id]
+                self.other_players.pop(packet.packet.from_id)
+
+                killed_player.free()
+
+                if packet.packet.killed_by == self.player.player_id:
+                    self.player.score += 1
 
         self.networking.lock.release()
