@@ -1,7 +1,9 @@
 """
-3D hitbox
+Contains the Hitbox3D class
+
 authors: BAaboe
 """
+
 from engine.core_ext.collision.collision3D.Hitarea3D import Hitarea3D
 
 from pyglet.math import Vec3, Mat3
@@ -10,16 +12,19 @@ from math import cos, sin
 
 
 class Hitbox3D(Hitarea3D):
+    """
+    Subclass of Hitarea3D that gives info about a 3D box
+    """
     def __init__(self, object_pos: Vec3, object_rot: Vec3,
                  box_size: Vec3, box_pos: Vec3):
         """
         Creates a 3D hitbox
 
         Keyword arguments:
-        object_pos     -- the center position to the object you want a hitbox for
-        box_pos        -- the position relative to the object you want your hitbox.
-        box_size       -- the size of the hitbox
-        box_rotation   -- the rotationi of the box
+            object_pos: The center position to the object you want a hitbox for
+            box_pos: the position relative to the object you want your hitbox.
+            box_size: The size of the hitbox
+            box_rotation: The rotation of the box
 
         """
         self.object_pos = object_pos
@@ -28,11 +33,7 @@ class Hitbox3D(Hitarea3D):
         self.box_size = box_size
         self.box_pos = box_pos
 
-    def furthestPoint(self, d):
-        """
-        Ruterns the point furthest from origio in direction "d"
-        Note: should not be called by user
-        """
+    def furthestPoint(self, d: Vec3):
         theta = self.object_rot.x
         x_rot = Mat3(1, 0, 0,
                      0, cos(theta), -sin(theta),
@@ -116,8 +117,10 @@ class Hitbox3D(Hitarea3D):
 
     def update(self, object_pos: Vec3, object_rot: Vec3):
         """
-        Updates the position of the object the hitbox is atteched to,
-        and the rotation
+        Updates the position and rotation.
+
+        Parameters:
+            object_pos: The position of the object the hitarea is associated with
         """
         self.object_pos = object_pos
         self.object_rot = object_rot

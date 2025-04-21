@@ -1,9 +1,8 @@
 """
-2D Hitbox, can check for collisions with other areas
+Contains the Hitbox2D class
 
 authors: BAaboe
 """
-
 
 from engine.core_ext.collision.collision2D.Hitarea2D import Hitarea2D
 
@@ -12,17 +11,20 @@ from pyglet.math import Vec2, Vec3
 
 class Hitbox2D(Hitarea2D):
     """
-    Creates a 2D hitbox
-
-    Keyword arguments:
-    object_pos     -- the center position to the object you want a hitbox for
-    box_pos        -- the position relative to the object you want your hitbox.
-    box_size       -- the size of the hitbox
-    box_rotation   -- the rotationi of the box
-
+    Subclass of Hitarea2D that gives info about a 2D box
     """
 
     def __init__(self, object_pos: Vec2, box_pos: Vec2, box_size: Vec2, box_rotation: float):
+        """
+        Creates a 2D hitbox
+
+        Keyword arguments:
+            object_pos: The center position to the object you want a hitbox for
+            box_pos: The position relative to the object you want your hitbox.
+            box_size: The size of the hitbox
+            box_rotation: The rotationi of the box
+
+        """
         self.object_pos = object_pos
 
         self.box_pos = box_pos
@@ -61,6 +63,12 @@ class Hitbox2D(Hitarea2D):
         return biggest
 
     def update(self, object_pos: Vec2, rotation: float):
+        """
+        Updates the position and rotation.
+
+        Parameters:
+            object_pos: The position of the object the hitarea is associated with
+        """
         self.object_pos = object_pos
         self.box_rotation = rotation
 

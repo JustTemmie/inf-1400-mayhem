@@ -1,5 +1,6 @@
 """
-Generic hitarea using the GJK algorithem
+Contains the Hitarea class
+
 authors: BAboe
 """
 import abc
@@ -8,11 +9,24 @@ from pyglet.math import Vec3
 
 
 class Hitarea(abc.ABC):
-    def __init__(self, type: str):
-        self.type = type
+    """
+    Parent class of all Hitboxes/Hitspheres.
+    Contains also the collision function.
+    """
+    def __init__(self):
+        pass
 
     # GJK algorithem, https://youtu.be/ajv46BSqcK4?si=4tmuvwAcWBDa-Ch0
     def colliding_with(self, area: "Hitarea"):
+        """
+        Checks if this hitarea is colliding wiht "area" hitarea
+
+        Parameters:
+            area: The area you want to check if you are colliding with
+
+        Returns:
+            Bool: True if colliding, False if not
+        """
         direction = (self.center()-area.center()).normalize()
 
         A = self._support(area, direction)
@@ -30,9 +44,26 @@ class Hitarea(abc.ABC):
                 return True
 
     def _support(self, area, direction):
+        """
+        Returns the minkowsky difference of the two areas
+
+        Parameters:
+            area: The area you want the minkowsky difference with
+            direction: The direction you want the minkowsky difference
+        """
         return self.furthestPoint(direction) - area.furthestPoint(-direction)
 
     def _handleSimplex(self, simplex, direction):
+        """
+        Finds the next point on the simplex, and if origo is in the current simplex
+
+        Parameters:
+            simplex: The simplex to operate on
+            direction: Current direction
+
+        Returns:
+            (Vec3, bool): New direction, if origo is in the simplex
+        """
         if len(simplex) == 2:
             B, A = simplex
             AB, AO = B - A, -A
@@ -53,12 +84,30 @@ class Hitarea(abc.ABC):
 
     @abc.abstractmethod
     def update(self, object_pos):
+        """
+        Updates the position, and potentialy other parameters.
+
+        Parameters:
+            object_pos: The position of the object the hitarea is associated with
+        """
         pass
 
     @abc.abstractmethod
     def furthestPoint(self, d):
+        """
+        The furthest point in a given direction
+
+        Parameters:
+            d: The given direction
+
+        Returns:
+            Vec3: The furthest point
+        """
         pass
 
     @abc.abstractmethod
     def center(self):
+        """
+        Returns the center of the area
+        """
         pass

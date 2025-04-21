@@ -1,16 +1,26 @@
+"""
+Contains the Hitsphere3D class
+
+authors: BAboe
+"""
+
 from engine.core_ext.collision.collision3D.Hitarea3D import Hitarea3D
 
 from pyglet.math import Vec3
 
+
 class Hitsphere3D(Hitarea3D):
+    """
+    Subclass of Hitarea3D that contains info about a 3D sphere
+    """
     def __init__(self, object_pos: Vec3, sphere_pos: Vec3, sphere_radius: float):
         """
         Creates a 3D hitsphere
 
         Keyword arguments:
-        object_pos      -- the center position to the object you want a hitbox for.
-        sphere_pos      -- the position relative to the object you want your hitspher.
-        sphere_radius   -- the radius the the hitspher.
+            object_pos: The center position to the object you want a hitbox for.
+        sphere_pos: The position relative to the object you want your hitspher.
+        sphere_radius: The radius the the hitspher.
 
         """
         self.object_pos = object_pos
