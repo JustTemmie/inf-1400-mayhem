@@ -97,7 +97,7 @@ class Mayhem(Game):
                 b = Bullet()
                 b.owner = packet.packet.from_id
                 b.pos = packet.packet.player_pos
-                b.velocity = packet.packet.player_rotation
+                b.rotation = packet.packet.player_rotation
                 b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
                 b.instantiate()
 
