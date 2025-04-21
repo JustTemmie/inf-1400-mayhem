@@ -113,7 +113,7 @@ class Hitbox3D(Hitarea3D):
             if point.dot(d) > biggest.dot(d):
                 biggest = point
 
-        return point
+        return biggest
 
     def update_object(self, object_pos: Vec3, object_rot: Vec3):
         """
