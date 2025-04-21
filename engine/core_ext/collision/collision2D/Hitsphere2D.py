@@ -28,7 +28,7 @@ class Hitsphere2D(Hitarea2D):
         self.sphere_pos = sphere_pos
         self.sphere_radius = sphere_radius
 
-    def support(self, d: Vec3):
+    def furthestPoint(self, d: Vec3):
         d = d.normalize()
 
         pos = Vec3(self.object_pos.x + self.sphere_pos.x,
@@ -36,5 +36,9 @@ class Hitsphere2D(Hitarea2D):
 
         return pos+d*self.sphere_radius
 
-    def update_object(self, object_pos):
+    def update(self, object_pos):
         self.object_pos = object_pos
+
+    def center(self):
+        center = self.object_pos+self.sphere_pos
+        return Vec3(center.x, center.y)

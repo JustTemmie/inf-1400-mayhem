@@ -33,4 +33,4 @@ class Input:
             Input.active_mouse_buttons.remove(button)
         
         Input.mouse = Vec2(x, y)
-        Input.mouse_hit_area.update(Input.mouse, 0)
+        Input.mouse_hit_area.update(Input.mouse, -1)

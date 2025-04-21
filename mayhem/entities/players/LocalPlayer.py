@@ -8,6 +8,7 @@ from engine.core.Camera import Camera
 from engine.core.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
+from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
@@ -33,11 +34,18 @@ class LocalPlayer(Player):
         self.new_bullet = 0
         self.score = 0
 
-        return super().user_init()
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 1)]
+
+        super().user_init()
+
 
     def engine_process(self, delta):
         self.handle_input(delta)
         self.update_camera_position(delta)
+
+        for hitbox in self.hitboxes:
+            hitbox.update(self.pos)
+
         self.check_for_collision()
 
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")

@@ -28,7 +28,7 @@ class Hitbox3D(Hitarea3D):
         self.box_size = box_size
         self.box_pos = box_pos
 
-    def support(self, d):
+    def furthestPoint(self, d):
         """
         Ruterns the point furthest from origio in direction "d"
         Note: should not be called by user

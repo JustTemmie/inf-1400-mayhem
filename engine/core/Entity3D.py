@@ -27,6 +27,7 @@ class Entity3D(Entity):
         self.rotation_acceleration: Vec3 = Vec3(0, 0, 0)  # x, y, z
 
         self.collidable = True
+        self.hitboxes = []
 
         self.model: pyglet.model.Scene
 
@@ -89,9 +90,15 @@ class Entity3D(Entity):
             return
 
         for entity in Entity3D.all_3D_entities:
-            if not entity.collidable:
+            if not entity.collidable or entity == self:
                 continue
-            
+
+            for entity_hitbox in entity.hitboxes:
+                for hitbox in self.hitboxes:
+                    print("Checking for collision")
+                    if entity_hitbox.colliding_with(hitbox):
+                        print(f"Collision between: {entity_hitbox.center(), hitbox.center()}")
+
 
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json

@@ -11,24 +11,25 @@ from pyglet.math import Vec2, Vec3
 
 
 class Hitbox2D(Hitarea2D):
+    """
+    Creates a 2D hitbox
+
+    Keyword arguments:
+    object_pos     -- the center position to the object you want a hitbox for
+    box_pos        -- the position relative to the object you want your hitbox.
+    box_size       -- the size of the hitbox
+    box_rotation   -- the rotationi of the box
+
+    """
+
     def __init__(self, object_pos: Vec2, box_pos: Vec2, box_size: Vec2, box_rotation: float):
-        """
-        Creates a 2D hitbox
-
-        Keyword arguments:
-        object_pos     -- the center position to the object you want a hitbox for
-        box_pos        -- the position relative to the object you want your hitbox.
-        box_size       -- the size of the hitbox
-        box_rotation   -- the rotationi of the box
-
-        """
         self.object_pos = object_pos
 
         self.box_pos = box_pos
         self.box_size = box_size
         self.box_rotation = box_rotation
 
-    def support(self, d: Vec3):
+    def furthestPoint(self, d: Vec3):
         d = d.normalize()
         points = []
 
@@ -57,8 +58,12 @@ class Hitbox2D(Hitarea2D):
             if point.dot(d) > biggest.dot(d):
                 biggest = point
 
-        return point
+        return biggest
 
     def update(self, object_pos: Vec2, rotation: float):
         self.object_pos = object_pos
         self.box_rotation = rotation
+
+    def center(self):
+        center = self.object_pos + self.box_pos
+        return Vec3(center.x, center.y,0)
