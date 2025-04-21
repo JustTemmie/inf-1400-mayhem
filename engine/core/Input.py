@@ -20,17 +20,17 @@ class Input:
 
     def on_mouse_motion(x, y, dx, dy):
         Input.mouse = Vec2(x, y)
-        Input.mouse_hit_area.update_object(Input.mouse, 0)
+        Input.mouse_hit_area.update(Input.mouse, 0)
     
     def on_mouse_press(x, y, button, modifiers):
         Input.active_mouse_buttons.append(button)
         
         Input.mouse = Vec2(x, y)
-        Input.mouse_hit_area.update_object(Input.mouse, 0)
+        Input.mouse_hit_area.update(Input.mouse, 0)
 
     def on_mouse_release(x, y, button, modifiers):
         if button in Input.active_mouse_buttons:
             Input.active_mouse_buttons.remove(button)
         
         Input.mouse = Vec2(x, y)
-        Input.mouse_hit_area.update_object(Input.mouse, 0)
+        Input.mouse_hit_area.update(Input.mouse, 0)
