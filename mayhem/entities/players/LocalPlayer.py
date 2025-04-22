@@ -8,9 +8,11 @@ from engine.core.Camera import Camera
 from engine.core.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
+from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
+from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 
 import config
 
@@ -19,25 +21,46 @@ from pyglet.math import Vec2, Vec3
 import pyglet
 import logging
 import time
+import random
+
 
 class LocalPlayer(Player):
     instance: Player = None
-    
+
     def user_init(self):
         LocalPlayer.instance = self
-        
+
         self.visible = False
 
         self.last_shoot_time = 0
         self.new_bullet = 0
         self.score = 0
+        self.health = 100
+        self.fuel = 100
 
-        return super().user_init()
+        self.killed_by = -1
+
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
+
+        super().user_init()
 
     def engine_process(self, delta):
-        self.handle_input(delta)
+        if self.killed_by != -1:
+            return
+
+        if self.fuel > 0:
+            self.handle_input(delta)
+            if self.acceleration.length() > 0:
+                self.fuel -= config.FUEL_RATE*delta
+            elif self.rotation_acceleration.length() > 0:
+                self.fuel -= config.FUEL_RATE/2*delta
+
         self.update_camera_position(delta)
-        self.check_for_collision()
+
+        for hitbox in self.hitboxes:
+            hitbox.update(self.pos)
+
+        self.check_for_collision(delta)
 
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
@@ -48,18 +71,17 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
-        
+
         # generates a value between -1 and 1 for both axes
         standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)
         logging.debug(f"mouse pos: {standardized_mouse_position}")
-        
+
         # caps the length to one
-        magnitude = max(1, standardized_mouse_position.length())
+        magnitude = max(1, standardized_mouse_position.length()) # don't divide by values under 1
         normalized_mouse_position = standardized_mouse_position / magnitude
-        
+
         # ignores mouse inputs if the value is too small
-        if (normalized_mouse_position.length() < config.mouse_virtual_joystick_deadzone
-        or not config.mouse_movement):
+        if MovementReticle.is_mouse_inside():
             standardized_mouse_position = Vec2(0, 0)
             normalized_mouse_position = Vec2(0, 0)
 
@@ -88,7 +110,6 @@ class LocalPlayer(Player):
             self.shoot()
             self.last_shoot_time = time.time()
 
-
     def shoot(self):
         bullet = Bullet()
         bullet.owner = self.player_id
@@ -98,6 +119,27 @@ class LocalPlayer(Player):
         bullet.instantiate()
 
         self.new_bullet = 1
+
+    def handle_collision(self, entity, delta):
+        if type(entity).__name__ == "Bullet":
+            if entity.owner != self.player_id:
+                entity.free()
+                self.health -= 10
+
+        else:
+            if self.velocity.length() > 0:
+                self.health -= self.velocity.length()*0.5
+                self.velocity = Vec3()
+                self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+
+        if self.health <= 0:
+            self.killed_by = entity.owner
+            self.score -= 1
+            self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+            self.velocity = Vec3()
+            self.rotation = Vec3()
+            self.health = 100
+        # Maybe add a respawn screen or something
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

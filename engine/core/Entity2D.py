@@ -22,6 +22,7 @@ class Entity2D(Entity):
         self.rotation_acceleration: Vec2 = Vec2(0, 0)  # x, y
 
         self.render_batch = None
+        self.size: Vec2 = Vec2(0, 0) # not required to be used by an entity
 
         self.user_init()
 

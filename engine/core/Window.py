@@ -5,6 +5,7 @@ Authors: JustTemmie (i'll replace names at handin)
 """
 
 from engine.core.Camera import Camera
+from engine.core.Entity import Entity
 
 import config
 
@@ -61,4 +62,7 @@ class Window(pyglet.window.Window):
 
         self.update_views()
 
+        for entity in Entity.all_entities:
+            entity.on_resize()
+        
         return pyglet.event.EVENT_HANDLED

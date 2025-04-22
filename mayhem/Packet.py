@@ -29,7 +29,7 @@ class Packet:
         player_rotation_velocity=Vec3(0, 0, 0),
         player_rotation_acceleration=Vec3(0, 0, 0),
         new_bullet=0,
-        killed_by=0,
+        killed_by=-1,
     ):
 
         PacketTuple = namedtuple(
@@ -116,7 +116,7 @@ class Packet:
         return packet
 
     @classmethod
-    def player_to_packet(self, p: Player, new_bullet=0, killed_by=0) -> tuple:
+    def player_to_packet(self, p: Player, new_bullet=0, killed_by=-1) -> tuple:
         packet = Packet(
             p.player_id,
             0,

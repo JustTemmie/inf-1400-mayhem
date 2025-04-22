@@ -7,6 +7,8 @@ from engine.core.Game import Game
 from engine.core_ext.Netwoking import Networking
 import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
+from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
+
 from mayhem.entities.players.Player import Player
 from mayhem.entities.ExampleObject import ExampleObject
 
@@ -16,39 +18,49 @@ from mayhem.entities.players.LocalPlayer import LocalPlayer
 from mayhem.entities.players.RemotePlayer import RemotePlayer
 from mayhem.entities.Bullet import Bullet
 
+from mayhem.entities2D.HUD.MovementArrow import MovementArrow
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 from mayhem.entities2D.HUD.ScoreCounter import ScoreCounter
+from mayhem.entities2D.HUD.HealthCounter import HealthCounter
+from mayhem.entities2D.HUD.FuelCounter import FuelCounter
+
 
 from pyglet.math import Vec3
 
 import typing
-
 import pyglet
 import config
 
 
 class Mayhem(Game):
     def init(self):
-        self.player = LocalPlayer()
-        self.player.pos = pyglet.math.Vec3(2, -10, 0)
-        self.player.instantiate()
-
+        self.player: LocalPlayer
+        self.other_players: typing.Dict[int, RemotePlayer] = {}
+        
+        self.spawn_local_player()
+        self.spawn_remote_players()
         self.spawn_test_objects()
         self.spawn_hud()
 
+    def spawn_hud(self):
+        MovementArrow().instantiate()
+        MovementReticle().instantiate()
+        ScoreCounter().instantiate()
+        HealthCounter().instantiate()
+        FuelCounter().instantiate()
+    
+    def spawn_local_player(self):
+        self.player = LocalPlayer()
+        self.player.pos = pyglet.math.Vec3(2, -10, 0)
+        self.player.instantiate()
+    
+    def spawn_remote_players(self):
         self.networking = Networking(
             config.SERVER_PORT, config.SERVER_TEST_ADDRESS
         )  # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
             self.networking.start_listen()  # Creates a thread that listens to the server.
             self.networking.send(Packet.player_to_packet(self.player))
-
-        self.other_players: typing.Dict[int, RemotePlayer] = {}
-
-    def spawn_hud(self):
-        MovementReticle().instantiate()
-        ScoreCounter().instantiate()
-        
 
     def spawn_test_objects(self):
         player = Player()
@@ -59,23 +71,23 @@ class Mayhem(Game):
         player.pos = Vec3(-5, 0, 15)
         player.instantiate()
 
-        ExampleObject().instantiate()
-
         for i in range(100):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i - 50)
+            object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
             object.instantiate()
 
     def user_engine_process(self, delta):
-
         self._handle_network_input()
         self._send_update()
-        pass
 
     def _send_update(self):
         if self.networking.connected:
-            self.networking.send(Packet.player_to_packet(self.player, self.player.new_bullet))
+            self.networking.send(Packet.player_to_packet(self.player,
+                                                         self.player.new_bullet,
+                                                         self.player.killed_by))
             self.player.new_bullet = 0
+            self.player.killed_by = -1
 
     def _handle_network_input(self):
         self.networking.lock.acquire()  # Locks the queue so that two threads can not use it at the same time
@@ -94,8 +106,17 @@ class Mayhem(Game):
                 b = Bullet()
                 b.owner = packet.packet.from_id
                 b.pos = packet.packet.player_pos
-                b.velocity = packet.packet.player_rotation
+                b.rotation = packet.packet.player_rotation
                 b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
                 b.instantiate()
+
+            if packet.packet.killed_by > 0:
+                killed_player = self.other_players[packet.packet.from_id]
+                self.other_players.pop(packet.packet.from_id)
+
+                killed_player.free()
+
+                if packet.packet.killed_by == self.player.player_id:
+                    self.player.score += 1
 
         self.networking.lock.release()

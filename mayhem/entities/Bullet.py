@@ -1,13 +1,16 @@
 """
-< write some stuff >
+Bullet entity
 Authors: BAaboe (i'll replace names at handin)
 """
 
 from engine.core.Entity3D import Entity3D
 from engine.core.Game import Game
 from engine.core.Utils import Utils
+from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
+from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 import pyglet
+from pyglet.math import Vec3
 import gc
 import time
 
@@ -24,10 +27,14 @@ class Bullet(Entity3D):
 
         self.model = model_scene.create_models(batch=Entity3D.game_object.main_batch)[0]
 
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 1)]
+
     def engine_process(self, delta):
         self.age += delta
 
         if self.age > 10:
             self.free()
             Entity3D.game_object.main_batch.invalidate()
-            
+
+        for hitbox in self.hitboxes:
+            hitbox.update(self.pos)

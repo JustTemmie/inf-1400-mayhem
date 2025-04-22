@@ -27,6 +27,7 @@ class Entity3D(Entity):
         self.rotation_acceleration: Vec3 = Vec3(0, 0, 0)  # x, y, z
 
         self.collidable = True
+        self.hitboxes = []
 
         self.model: pyglet.model.Scene
 
@@ -84,14 +85,31 @@ class Entity3D(Entity):
 
         self.rotation = self.rotation % (math.pi * 2)
 
-    def check_for_collision(self):
+    def check_for_collision(self, delta):
+        """
+        Checks for collision, and calles "handle_collision" on every collision
+        """
         if not self.collidable:
             return
 
         for entity in Entity3D.all_3D_entities:
-            if not entity.collidable:
+            if not entity.collidable or entity == self:
                 continue
-            
+
+            for entity_hitbox in entity.hitboxes:
+                for hitbox in self.hitboxes:
+                    if entity_hitbox.colliding_with(hitbox):
+                        self.handle_collision(entity, delta)
+
+    def handle_collision(self, entity: "Entity3D", delta):
+        """
+        Handles a collision
+
+        Parmetrs:
+            entity: The entity that was collided with
+            delta: Delta time
+        """
+        pass
 
     # i do NOT feel like doing math as i'm writing this
     # so the up and right vector functions are modified from output from chat.uit.no, see chatlogs/Compute Front Right Vecto.json
@@ -131,7 +149,12 @@ class Entity3D(Entity):
         Returns true if the object is rightside up, false if not
         """
         return (self.rotation.x < math.pi * 0.5 or self.rotation.x >= math.pi * 1.5)
-    
+
     def free(self):
+        if self.model:
+            for vertex_list in self.model.vertex_lists:
+                vertex_list.delete()
+            del self.model
+            self.model = None
         Entity3D.all_3D_entities.remove(self)
         return super().free()

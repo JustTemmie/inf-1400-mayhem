@@ -38,6 +38,12 @@ class Entity:
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
 
+    def on_resize(self):
+        """
+        Called when the game window is resized
+        """
+        pass
+    
     def user_init(self):
         """
         Implement by extending class.
@@ -74,15 +80,7 @@ class Entity:
         """
         for child in self.child_entities:
             child.free()
-        
-        # this doesn't work, not sure why
-        if self.model:
-            for group in self.model.groups:
-                if hasattr(group, 'vertex_list') and group.vertex_list:
-                    group.vertex_list.delete()
-            
-            self.model = None
-        
+
         Entity.all_entities.remove(self)
 
     @abc.abstractmethod

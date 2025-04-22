@@ -69,7 +69,7 @@ class Server:
 
             20          --- new bullet? If 0 no new bullet
 
-            21          --- Killed by player id (if zero not killed)
+            21          --- Killed by player id (if negativ not killed)
             """
 
             if addr not in self.clients:

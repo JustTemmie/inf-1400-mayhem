@@ -12,5 +12,5 @@ How the data is formatted (Probably under 1 KB):
 
 20          --- new bullet? If 0 no new bullet
 
-21          --- Killed by player id (if zero not killed)
+21          --- Killed by player id (if negativ not killed)
 ```
