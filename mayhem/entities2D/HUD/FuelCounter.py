@@ -11,17 +11,44 @@ from pyglet.math import Vec3
 
 import pyglet
 import math
+import config
 
 
 class FuelCounter(Entity2D):
     def user_instantiate(self):
-        self.score_label = pyglet.text.Label(text="Fuel: 0", batch=self.game_object.UI_batch)
-        self.update_size_and_position()
+        self.y_offset = 85
+        x = 15
+        y = Window.size.y - Window.size.y/30 - self.y_offset
+
+        width = Window.size.y*config.MAX_UI_BAR_WIDTH
+        height = width*config.UI_BAR_HEIGHT
+
+        margin = height*config.UI_BAR_MARGIN
+
+        self.fuel_bar_bc = pyglet.shapes.Rectangle(x = x, y = y,
+                                                     width = width, height = height,
+                                                     color = config.GREY,
+                                                     batch = self.game_object.UI_batch)
+
+        self.fuel_bar = pyglet.shapes.Rectangle(x = x+margin, y = y+margin,
+                                                  width = width-margin*2, height = height-margin*2,
+                                                  color = config.YELLOW,
+                                                  batch = self.game_object.UI_batch)
 
     def prepare_draw(self, delta):
-        self.score_label.text = f"Fuel: {int(math.ceil(LocalPlayer.instance.fuel))}"
-        self.update_size_and_position()
+        x = 15
+        y = Window.size.y - Window.size.y/30 - self.y_offset
 
-    def update_size_and_position(self):
-        self.score_label.font_size = Window.size.y / 30
-        self.score_label.position = Vec3(15, Window.size.y - 95 - self.score_label.font_size, 0)
+        width = Window.size.y*config.MAX_UI_BAR_WIDTH
+        height = width*config.UI_BAR_HEIGHT
+
+        margin = height*config.UI_BAR_MARGIN
+
+        self.fuel_bar_bc.y = y
+        self.fuel_bar_bc.width = width
+        self.fuel_bar_bc.height = height
+
+        self.fuel_bar.x = x+margin
+        self.fuel_bar.y = y+margin
+        self.fuel_bar.width = (width-margin*2)*LocalPlayer.instance.fuel/100
+        self.fuel_bar.height = height-margin*2

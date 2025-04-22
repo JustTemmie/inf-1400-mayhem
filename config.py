@@ -45,3 +45,13 @@ SHOOTING_INTERVAL = 0.2
 BULLET_SPEED = 30
 
 FUEL_RATE  = 1
+
+
+MAX_UI_BAR_WIDTH = 0.2 # Compared to the screen width
+UI_BAR_HEIGHT = 0.1 # Compared to the bar width
+
+UI_BAR_MARGIN = 0.15 # Compared to the bar height
+
+RED = (255, 0, 0)
+YELLOW = (255, 239, 0)
+GREY = (128, 128, 128)

@@ -51,7 +51,7 @@ class LocalPlayer(Player):
             self.handle_input(delta)
             if self.acceleration.length() > 0:
                 self.fuel -= config.FUEL_RATE*delta
-            elif self.rotation_velocity.length() > 0:
+            elif self.rotation_acceleration.length() > 0:
                 self.fuel -= config.FUEL_RATE/2*delta
 
         self.update_camera_position(delta)
