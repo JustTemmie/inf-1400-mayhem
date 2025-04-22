@@ -85,7 +85,7 @@ class Entity3D(Entity):
 
         self.rotation = self.rotation % (math.pi * 2)
 
-    def check_for_collision(self):
+    def check_for_collision(self, delta):
         """
         Checks for collision, and calles "handle_collision" on every collision
         """
@@ -99,15 +99,16 @@ class Entity3D(Entity):
             for entity_hitbox in entity.hitboxes:
                 for hitbox in self.hitboxes:
                     if entity_hitbox.colliding_with(hitbox):
-                        self.handle_collision(entity)
+                        self.handle_collision(entity, delta)
                         #print(f"Collision between: {entity_hitbox.center(), hitbox.center()}")
 
-    def handle_collision(self, entity: "Entity3D"):
+    def handle_collision(self, entity: "Entity3D", deleta):
         """
         Handles a collision
 
         Parmetrs:
-            entity: the entity that was collided with
+            entity: The entity that was collided with
+            delta: Delta time
         """
         pass
 

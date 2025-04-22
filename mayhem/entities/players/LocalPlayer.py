@@ -59,7 +59,7 @@ class LocalPlayer(Player):
         for hitbox in self.hitboxes:
             hitbox.update(self.pos)
 
-        self.check_for_collision()
+        self.check_for_collision(delta)
 
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
@@ -119,7 +119,7 @@ class LocalPlayer(Player):
 
         self.new_bullet = 1
 
-    def handle_collision(self, entity):
+    def handle_collision(self, entity, delta):
         if type(entity).__name__ == "Bullet":
             if entity.owner != self.player_id:
                 entity.hitboxes = []
@@ -134,6 +134,9 @@ class LocalPlayer(Player):
                     self.velocity = Vec3()
                     self.rotation = Vec3()
                     self.health = 100
+
+        elif type(entity).__name__ == "ExampleObject":
+            self.pos -= self.velocity*delta  # Do better, idk how
 
 
         else:

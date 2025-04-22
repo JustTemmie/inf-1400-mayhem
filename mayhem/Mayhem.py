@@ -7,6 +7,8 @@ from engine.core.Game import Game
 from engine.core_ext.Netwoking import Networking
 import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
+from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
+
 from mayhem.entities.players.Player import Player
 from mayhem.entities.ExampleObject import ExampleObject
 
@@ -72,6 +74,7 @@ class Mayhem(Game):
         for i in range(100):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i - 50)
+            object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
             object.instantiate()
 
     def user_engine_process(self, delta):
