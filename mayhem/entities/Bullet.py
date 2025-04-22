@@ -38,4 +38,3 @@ class Bullet(Entity3D):
 
         for hitbox in self.hitboxes:
             hitbox.update(self.pos)
-

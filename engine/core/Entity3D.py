@@ -100,9 +100,8 @@ class Entity3D(Entity):
                 for hitbox in self.hitboxes:
                     if entity_hitbox.colliding_with(hitbox):
                         self.handle_collision(entity, delta)
-                        #print(f"Collision between: {entity_hitbox.center(), hitbox.center()}")
 
-    def handle_collision(self, entity: "Entity3D", deleta):
+    def handle_collision(self, entity: "Entity3D", delta):
         """
         Handles a collision
 

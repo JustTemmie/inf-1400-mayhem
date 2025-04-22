@@ -82,9 +82,9 @@ class Game:
 
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            #logging.info(
-            #    f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}"
-            #)
+            logging.info(
+                f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}"
+            )
 
         for entity in Entity.all_entities:
             entity.process(delta)

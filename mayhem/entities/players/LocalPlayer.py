@@ -21,6 +21,7 @@ from pyglet.math import Vec2, Vec3
 import pyglet
 import logging
 import time
+import random
 
 
 class LocalPlayer(Player):
@@ -122,26 +123,22 @@ class LocalPlayer(Player):
     def handle_collision(self, entity, delta):
         if type(entity).__name__ == "Bullet":
             if entity.owner != self.player_id:
-                entity.hitboxes = []
                 entity.free()
                 self.health -= 10
 
-                if self.health <= 0:
-                    print("died")
-                    self.killed_by = entity.owner
-                    self.score -= 1
-                    self.pos = pyglet.math.Vec3(2, -10, 0)
-                    self.velocity = Vec3()
-                    self.rotation = Vec3()
-                    self.health = 100
-
-        elif type(entity).__name__ == "ExampleObject":
-            self.pos -= self.velocity*delta  # Do better, idk how
-
-
         else:
-            print("Hit something")
+            if self.velocity.length() > 0:
+                self.health -= self.velocity.length()*0.5
+                self.velocity = Vec3()
+                self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
 
+        if self.health <= 0:
+            self.killed_by = entity.owner
+            self.score -= 1
+            self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+            self.velocity = Vec3()
+            self.rotation = Vec3()
+            self.health = 100
         # Maybe add a respawn screen or something
 
     def update_camera_position(self, delta):
