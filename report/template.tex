@@ -1,0 +1,70 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs,threeparttable}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+
+% Syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codeorange}{rgb}{0.9,0.45,0.3}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{PythonStyle}{  
+    language=Python, % Identifiers from C
+	alsoletter={\{,\}},
+    commentstyle=\color{codegreen}, % Green comments, like we used to
+    keywordstyle=\color{blue}, % Blue keywords like 'int'
+    numberstyle=\tiny\color{codegray}, % Grey numbers
+    numbers=left, % Line number on left side 
+    stringstyle=\color{codeorange}, % Strings look orange
+    basicstyle=\ttfamily\footnotesize, % Same size for code as footnotes
+    captionpos=t, % Caption on top
+    xleftmargin=2em, % Margin on left side
+    showstringspaces=false, % Don't show whitespaces
+    tabsize=4, % Who doesn't use tabsize=4?
+	emph=[1]{auto,break,case,char,const,continue,default,do, double, else, enum, extern, float, for, goto, if, int, long, register, return, short, signed, sizeof, static, struct, switch, typedef, union, unsigned, void, volatile, while, \{,\}},
+    emphstyle=[1]{\color{codepurple}}, % Color keywords purple
+    frame=lines, % Put the snippet within horizontal lines
+}
+
+
+\pagestyle{headings}
+\begin{document}
+
+\title{Assignment 3\\ INF-1400}
+
+\author{Benjamin Aaboe Mjaatvedt\\ JustTemmie(change later)}
+\markboth{INF-1400 Assignment 1 \today}%
+{Mayhem}
+
+
+\maketitle
+
+\section{Introduction} \label{Section:Introduction}
+In this program we were tasked with recreating the old game Mayhem. We instead wanted a challenge and made it 3D and with online multiplayer, and this of course posed some challenges.
+\section{Design}\label{Section:Design}
+
+\section{Challenges}\label{Section:Challenges}
+\subsection{Networking}
+\subsection{3D rendering}
+\subsection{Collision detection}
+\subsection{Movement}
+\section{Discussion}\label{Section:Discussion}
+\section{Conclusion}\label{Section:Conclusion}
+\printbibliography{
+
+
+\end{document}
