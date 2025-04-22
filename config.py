@@ -44,7 +44,7 @@ rotation_thrust_force: float = 150_000
 SHOOTING_INTERVAL = 0.2
 BULLET_SPEED = 30
 
-FUEL_RATE  = 1
+FUEL_RATE = 1  # Fuel per second
 
 
 MAX_UI_BAR_WIDTH = 0.2 # Compared to the screen width

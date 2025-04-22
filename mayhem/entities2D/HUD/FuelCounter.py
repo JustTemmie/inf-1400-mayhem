@@ -16,14 +16,13 @@ import config
 
 class FuelCounter(Entity2D):
     def user_instantiate(self):
-        self.y_offset = 85
-        x = 15
-        y = Window.size.y - Window.size.y/30 - self.y_offset
-
-        width = Window.size.y*config.MAX_UI_BAR_WIDTH
+        width = Window.size.x*config.MAX_UI_BAR_WIDTH
         height = width*config.UI_BAR_HEIGHT
 
         margin = height*config.UI_BAR_MARGIN
+
+        x = 15
+        y = Window.size.y - Window.size.y/30 - height*3.5
 
         self.fuel_bar_bc = pyglet.shapes.Rectangle(x = x, y = y,
                                                      width = width, height = height,
@@ -36,13 +35,13 @@ class FuelCounter(Entity2D):
                                                   batch = self.game_object.UI_batch)
 
     def prepare_draw(self, delta):
-        x = 15
-        y = Window.size.y - Window.size.y/30 - self.y_offset
-
-        width = Window.size.y*config.MAX_UI_BAR_WIDTH
+        width = Window.size.x*config.MAX_UI_BAR_WIDTH
         height = width*config.UI_BAR_HEIGHT
 
         margin = height*config.UI_BAR_MARGIN
+
+        x = 15
+        y = Window.size.y - Window.size.y/30 - height*3.5
 
         self.fuel_bar_bc.y = y
         self.fuel_bar_bc.width = width
