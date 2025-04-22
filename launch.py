@@ -2,6 +2,7 @@
 
 from mayhem.Mayhem import Mayhem
 
-mayhem = Mayhem()
+if __name__ == "__main__":
+    mayhem = Mayhem()
 
-mayhem.run()
+    mayhem.run()
