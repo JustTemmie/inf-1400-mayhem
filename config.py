@@ -43,3 +43,5 @@ rotation_thrust_force: float = 150_000
 
 SHOOTING_INTERVAL = 0.2
 BULLET_SPEED = 30
+
+FUEL_RATE  = 1

@@ -20,6 +20,7 @@ from mayhem.entities2D.HUD.MovementArrow import MovementArrow
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 from mayhem.entities2D.HUD.ScoreCounter import ScoreCounter
 from mayhem.entities2D.HUD.HealthCounter import HealthCounter
+from mayhem.entities2D.HUD.FuelCounter import FuelCounter
 
 
 from pyglet.math import Vec3
@@ -44,6 +45,7 @@ class Mayhem(Game):
         MovementReticle().instantiate()
         ScoreCounter().instantiate()
         HealthCounter().instantiate()
+        FuelCounter().instantiate()
     
     def spawn_local_player(self):
         self.player = LocalPlayer()

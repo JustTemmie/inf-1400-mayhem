@@ -22,18 +22,20 @@ import pyglet
 import logging
 import time
 
+
 class LocalPlayer(Player):
     instance: Player = None
-    
+
     def user_init(self):
         LocalPlayer.instance = self
-        
+
         self.visible = False
 
         self.last_shoot_time = 0
         self.new_bullet = 0
         self.score = 0
         self.health = 100
+        self.fuel = 100
 
         self.killed_by = -1
 
@@ -41,11 +43,17 @@ class LocalPlayer(Player):
 
         super().user_init()
 
-
     def engine_process(self, delta):
         if self.killed_by != -1:
             return
-        self.handle_input(delta)
+
+        if self.fuel > 0:
+            self.handle_input(delta)
+            if self.acceleration.length() > 0:
+                self.fuel -= config.FUEL_RATE*delta
+            elif self.rotation_velocity.length() > 0:
+                self.fuel -= config.FUEL_RATE/2*delta
+
         self.update_camera_position(delta)
 
         for hitbox in self.hitboxes:
@@ -62,15 +70,15 @@ class LocalPlayer(Player):
 
     def handle_input(self, delta):
         keys = Input.keyboard_keys
-        
+
         # generates a value between -1 and 1 for both axes
         standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)
         logging.debug(f"mouse pos: {standardized_mouse_position}")
-        
+
         # caps the length to one
         magnitude = max(1, standardized_mouse_position.length()) # don't divide by values under 1
         normalized_mouse_position = standardized_mouse_position / magnitude
-        
+
         # ignores mouse inputs if the value is too small
         if MovementReticle.is_mouse_inside():
             standardized_mouse_position = Vec2(0, 0)
