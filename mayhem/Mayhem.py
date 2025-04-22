@@ -10,6 +10,7 @@ import engine.extras.logger # this is just to init the module, do not remove eve
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 
 from mayhem.entities.players.Player import Player
+from mayhem.entities.Planet import Planet
 from mayhem.entities.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
@@ -71,9 +72,13 @@ class Mayhem(Game):
         player.pos = Vec3(-5, 0, 15)
         player.instantiate()
 
-        for i in range(100):
+        planet = Planet()
+        planet.pos = Vec3(15, 140, 70)
+        planet.instantiate()
+
+        for i in range(50):
             object = ExampleObject()
-            object.pos = Vec3(0, 0, i - 50)
+            object.pos = Vec3(0, 0, i * 2 - 50)
             object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
             object.instantiate()
 

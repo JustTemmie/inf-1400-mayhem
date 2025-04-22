@@ -1,0 +1,12 @@
+# Blender 4.4.1 MTL File: 'planet.blend'
+# www.blender.org
+
+newmtl PLanetSurface
+Ns 165.433990
+Ka 0.129534 0.129534 0.129534
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 3
+map_Kd assets/models/planet/planet.png

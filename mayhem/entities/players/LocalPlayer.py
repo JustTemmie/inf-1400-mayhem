@@ -28,6 +28,7 @@ class LocalPlayer(Player):
     instance: Player = None
 
     def user_init(self):
+        super().user_init()
         LocalPlayer.instance = self
 
         self.visible = False
@@ -42,7 +43,7 @@ class LocalPlayer(Player):
 
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
 
-        super().user_init()
+
 
     def engine_process(self, delta):
         if self.killed_by != -1:
