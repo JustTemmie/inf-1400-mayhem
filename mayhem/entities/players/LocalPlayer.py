@@ -129,7 +129,6 @@ class LocalPlayer(Player):
                 if self.health <= 0:
                     print("died")
                     self.killed_by = entity.owner
-                    print(self.killed_by)
                     self.score -= 1
                     self.pos = pyglet.math.Vec3(2, -10, 0)
                     self.velocity = Vec3()

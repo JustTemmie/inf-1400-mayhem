@@ -149,7 +149,12 @@ class Entity3D(Entity):
         Returns true if the object is rightside up, false if not
         """
         return (self.rotation.x < math.pi * 0.5 or self.rotation.x >= math.pi * 1.5)
-    
+
     def free(self):
+        if self.model:
+            for vertex_list in self.model.vertex_lists:
+                vertex_list.delete()
+            del self.model
+            self.model = None
         Entity3D.all_3D_entities.remove(self)
         return super().free()

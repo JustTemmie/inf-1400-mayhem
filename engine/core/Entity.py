@@ -80,15 +80,7 @@ class Entity:
         """
         for child in self.child_entities:
             child.free()
-        
-        # this doesn't work, not sure why
-        if self.model:
-            for group in self.model.groups:
-                if hasattr(group, 'vertex_list') and group.vertex_list:
-                    group.vertex_list.delete()
-            
-            self.model = None
-        
+
         Entity.all_entities.remove(self)
 
     @abc.abstractmethod

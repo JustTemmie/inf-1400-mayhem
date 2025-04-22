@@ -108,7 +108,6 @@ class Mayhem(Game):
                 b.instantiate()
 
             if packet.packet.killed_by > 0:
-                print("Got a kill message")
                 killed_player = self.other_players[packet.packet.from_id]
                 self.other_players.pop(packet.packet.from_id)
 
