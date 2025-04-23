@@ -29,3 +29,6 @@ KEY_BINDS = key_binds(
             [key.LEFT, key.RIGHT], # horizontal
             key.LSHIFT, # thrust
             key.SPACE)  # shoot
+
+
+GRAVITATIONAL_CONSTANT = 6.67*10**-5

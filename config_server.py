@@ -6,9 +6,10 @@ from pyglet.math import Vec2, Vec3
 from pyglet.window import key
 from collections import namedtuple
 
-SERVER_ADDRESS: str = "example.com"
-SERVER_TEST_ADDRESS: str = "127.0.0.1"
+SERVER_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
+
+SERVER_TIMEOUT = 10
 
 target_physics_rate: int = 60
 
@@ -20,4 +21,4 @@ rotation_thrust_force: float = 150_000
 SHOOTING_INTERVAL = 0.2
 BULLET_SPEED = 30
 
-FUEL_RATE = 1  # Fuel per second
+FUEL_RATE = 1  # Fuel per seconod
