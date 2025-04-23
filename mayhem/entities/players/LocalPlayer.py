@@ -139,7 +139,6 @@ class LocalPlayer(Player):
             if entity.owner != self.player_id:
                 self.health -= 25
                 logging.info(f"shot by {entity.owner}")
-                self.killed_by = entity.owner
                 entity.free()
 
             
@@ -153,6 +152,13 @@ class LocalPlayer(Player):
             return
         
         if self.health <= 0:
+            if isinstance(entity, Bullet):
+                self.killed_by = entity.owner
+            elif isinstance(entity, Player):
+                self.killed_by = entity.player_id
+            else:
+                self.killed_by = -1
+            
             self.respawn()
 
     def update_camera_position(self, delta):

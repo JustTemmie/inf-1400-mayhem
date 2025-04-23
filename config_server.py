@@ -2,7 +2,7 @@
     Server settings, these are intended to be the same for all players
 """
 
-SERVER_ADDRESS: str = "127.0.0.1"
+SERVER_ADDRESS: str = "hetzner.beaver.mom"
 SERVER_PORT: int = 27827
 
 SERVER_TIMEOUT = 10
