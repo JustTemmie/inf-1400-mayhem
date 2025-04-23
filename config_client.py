@@ -11,7 +11,7 @@ import logging
 mouse_movement: bool = True
 mouse_virtual_joystick_deadzone: float = 0.075 # percentage from 0 to 1
 
-target_refresh_rate: int = 120
+target_refresh_rate: int = 60
 display_resolution = Vec2(1920, 1080)
 FOV: float = 80
 VSYNC: bool = False

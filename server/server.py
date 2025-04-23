@@ -13,6 +13,8 @@ if __name__ == "__main__":
 
 import socket
 from server.player import Player
+import time
+import config
 
 
 class Server:
@@ -79,16 +81,49 @@ class Server:
                     new_player_id = self.player_ids[-1] + 1
 
                 self.player_ids.append(new_player_id)
-                new_player = Player(addr, new_player_id)
+                new_player = Player(addr, new_player_id, time.time())
                 self.clients[addr] = new_player
+                print(f"Player from {addr} joined. Given the ID {new_player_id}")
 
-            for client in self.clients.values():
-                packet = decoded_data
-                packet[0] = self.clients[addr].player_id
+            self.clients[addr].time_last_message = time.time()
+            self.broadcast(decoded_data, self.clients[addr])
+
+    def broadcast(self, packet, client_from=None):
+        """
+        Broadcasts a message to all clients
+
+        Parameters:
+            packet: The packet to broadcacst
+            client_from: Who sent the message
+        """
+        timeout_clients = []
+        for client in self.clients.values():
+            # Check out if the client has timedout
+            if time.time()-client.time_last_message > config.SERVER_TIMEOUT:
+                timeout_clients.append(client)
+                client.time_last_message = time.time() # Making sure that it will not be flaged when the timeout message get broadcasted
+                continue
+
+            if client != client_from:
+                # Send packet to client
+                if client_from:
+                    packet[0] = client_from.player_id
+                else:
+                    packet[0] = 0
                 packet[1] = client.player_id
+                self.serverSocket.sendto(self.encode(packet), client.addr)
 
-                if client != self.clients[addr]:
-                    self.serverSocket.sendto(self.encode(packet), client.addr)
+        # Tell the other clients that the player has disconnected
+        for client in timeout_clients:
+            print(f"Player from {client.addr} with ID {client.player_id} timedout")
+            self.clients.pop(client.addr)
+            self.player_ids.remove(client.player_id)
+            packet = [0]*22
+
+            self.broadcast(packet, client)
+
+
+
 
 
 if __name__ == "__main__":

@@ -31,6 +31,7 @@ from pyglet.math import Vec3
 import typing
 import pyglet
 import config
+import logging
 
 
 class Mayhem(Game):
@@ -57,7 +58,7 @@ class Mayhem(Game):
     
     def spawn_remote_players(self):
         self.networking = Networking(
-            config.SERVER_PORT, config.SERVER_TEST_ADDRESS
+            config.SERVER_PORT, config.SERVER_ADDRESS
         )  # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
             self.networking.start_listen()  # Creates a thread that listens to the server.
@@ -76,7 +77,7 @@ class Mayhem(Game):
         planet.pos = Vec3(15, 140, 70)
         planet.instantiate()
 
-        for i in range(50):
+        for i in range(25):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i * 2 - 50)
             object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
@@ -115,7 +116,7 @@ class Mayhem(Game):
                 b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
                 b.instantiate()
 
-            if packet.packet.killed_by > 0:
+            if packet.packet.killed_by >= 0:
                 killed_player = self.other_players[packet.packet.from_id]
                 self.other_players.pop(packet.packet.from_id)
 
@@ -123,5 +124,8 @@ class Mayhem(Game):
 
                 if packet.packet.killed_by == self.player.player_id:
                     self.player.score += 1
+                # Server id, this just means that the player dissconected
+                elif packet.packet.killed_by == 0:
+                    logging.info(f"Player with ID {packet.packet.from_id} dissconected")
 
         self.networking.lock.release()

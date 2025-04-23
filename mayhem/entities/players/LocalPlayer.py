@@ -64,7 +64,6 @@ class LocalPlayer(Player):
         self.check_for_collision(delta)
 
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
-        print(self.velocity)
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
