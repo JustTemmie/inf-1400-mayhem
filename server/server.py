@@ -14,7 +14,7 @@ if __name__ == "__main__":
 import socket
 from server.player import Player
 import time
-import config
+import config_server
 
 
 class Server:
@@ -99,7 +99,7 @@ class Server:
         timeout_clients = []
         for client in self.clients.values():
             # Check out if the client has timedout
-            if time.time()-client.time_last_message > config.SERVER_TIMEOUT:
+            if time.time()-client.time_last_message > config_server.SERVER_TIMEOUT:
                 timeout_clients.append(client)
                 client.time_last_message = time.time() # Making sure that it will not be flaged when the timeout message get broadcasted
                 continue
