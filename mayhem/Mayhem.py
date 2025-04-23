@@ -51,8 +51,6 @@ class Mayhem(Game):
         self._handle_network_input()
         self._send_update()
         
-        print(Battery.current_battery)
-        
         if self.time_elapsed > self.last_spawned_battery_time + 20:
             self.last_spawned_battery_time = self.time_elapsed
             

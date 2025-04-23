@@ -21,7 +21,7 @@ class Battery(Pickup):
         self.area = 1  # m^2, affects the objects interaction with air
         self.ignore_friction: bool = True
         self.rotation_velocity = Vec3(0, 5, 0)
-        self.rotation = Vec3(math.pi / 2, 0, math.pi)
+        self.rotation = Vec3(math.pi / 2, 0, 0)
 
         Battery.current_battery = self
     
