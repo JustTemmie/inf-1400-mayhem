@@ -72,8 +72,6 @@ class LocalPlayer(Player):
             max(-500, min(500, self.pos.z))
         )
         
-        print(self.pos)
-            
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
     def user_instantiate(self):
