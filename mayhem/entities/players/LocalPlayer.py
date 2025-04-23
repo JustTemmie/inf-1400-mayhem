@@ -10,6 +10,8 @@ from engine.core.Window import Window
 from engine.core.Input import Input
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
+from engine.core.Entity3D import Entity3D
+
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
@@ -43,7 +45,6 @@ class LocalPlayer(Player):
 
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
 
-
     def engine_process(self, delta):
         if self.killed_by != -1:
             return
@@ -63,6 +64,7 @@ class LocalPlayer(Player):
         self.check_for_collision(delta)
 
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
+        print(self.velocity)
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
@@ -152,3 +154,15 @@ class LocalPlayer(Player):
         Camera.active_camera.pos = self.pos
         Camera.active_camera.target = self.pos + forward
         Camera.active_camera.rotation = self.rotation
+
+    def get_gravity(self):
+        g = Vec3()
+        for entity in Entity3D.all_3D_entities:
+            d = entity.pos - self.pos
+            if d.length() == 0:
+                continue
+            F = (config.GRAVITATIONAL_CONSTANT * self.mass*entity.mass)/d.length()**2
+
+            g += d.normalize()*F
+
+        return g
