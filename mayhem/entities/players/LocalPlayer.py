@@ -141,16 +141,16 @@ class LocalPlayer(Player):
                 logging.info(f"shot by {entity.owner}")
                 entity.free()
 
-            
+
         elif isinstance(entity, Obstacle) or isinstance(entity, Player):
             if self.velocity.length() > 0 or entity.velocity.length() > 0:
                 self.health -= max(10, self.velocity.length()) * 0.5 + max(10, entity.velocity.length()) * 0.5
                 self.spawn()
-        
+
         elif isinstance(entity, Pickup):
             entity.picked_up(self)
             return
-        
+
         if self.health <= 0:
             if isinstance(entity, Bullet):
                 self.killed_by = entity.owner
@@ -158,7 +158,7 @@ class LocalPlayer(Player):
                 self.killed_by = entity.player_id
             else:
                 self.killed_by = -1
-            
+
             self.respawn()
 
     def update_camera_position(self, delta):
