@@ -5,6 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 from engine.core.Window import Window
 from engine.core.Entity2D import Entity2D
+from engine.core_ext.Colour import Colour
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 
 from pyglet.math import Vec3
@@ -12,7 +13,6 @@ from pyglet.math import Vec3
 import pyglet
 import math
 import config
-
 
 class FuelCounter(Entity2D):
     def user_instantiate(self):
@@ -26,16 +26,16 @@ class FuelCounter(Entity2D):
 
         self.fuel_bar_bc = pyglet.shapes.Rectangle(x = x, y = y,
                                                      width = width, height = height,
-                                                     color = config.GREY,
+                                                     color = Colour.GREY,
                                                      batch = self.game_object.UI_batch)
 
         self.fuel_bar = pyglet.shapes.Rectangle(x = x+margin, y = y+margin,
                                                   width = width-margin*2, height = height-margin*2,
-                                                  color = config.YELLOW,
+                                                  color = Colour.YELLOW,
                                                   batch = self.game_object.UI_batch)
 
     def prepare_draw(self, delta):
-        width = Window.size.x*config.MAX_UI_BAR_WIDTH
+        width = Window.size.y*config.MAX_UI_BAR_WIDTH
         height = width*config.UI_BAR_HEIGHT
 
         margin = height*config.UI_BAR_MARGIN

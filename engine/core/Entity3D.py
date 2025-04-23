@@ -59,9 +59,7 @@ class Entity3D(Entity):
         drag = Vec3(0, 0, 0)
         if not self.ignore_friction:
             air_density = 1  # Since the game is in space, this is in fact zero, makeing the entire drag disapear
-            drag_without_speed = (
-                (1 / 2) * self.drag_coeficient * air_density * self.area
-            )
+            drag_without_speed = (1 / 2) * self.drag_coeficient * air_density * self.area
 
             # Using abs to keep the the correct sign
             drag = Vec3(
@@ -89,9 +87,6 @@ class Entity3D(Entity):
         """
         Checks for collision, and calles "handle_collision" on every collision
         """
-        if not self.collidable:
-            return
-
         for entity in Entity3D.all_3D_entities:
             if not entity.collidable or entity == self:
                 continue

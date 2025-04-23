@@ -16,7 +16,7 @@ class Input:
     keyboard_keys = pyglet.window.key.KeyStateHandler()
     mouse: Vec2 = Vec2(0, 0)
     active_mouse_buttons: list[bool] = []
-    mouse_hit_area = Hitbox2D(Vec2(0, 0), 0, Vec2(0, 0), Vec2(1, 1))
+    mouse_hit_area = Hitbox2D(Vec2(0, 0), Vec2(0, 0), Vec2(0, 0), 0)
 
     def on_mouse_motion(x, y, dx, dy):
         Input.mouse = Vec2(x, y)

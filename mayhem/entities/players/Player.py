@@ -21,7 +21,7 @@ class Player(Entity3D):
         logging.info("new ship!")
         self.player_id = 0
 
-        self.mass = 200  # kg
+        self.mass = 2_000  # kg
         self.area = 1  # m^2, affects the objects interaction with air
         self.drag_coeficient = 1.225
         self.ignore_friction: bool = False

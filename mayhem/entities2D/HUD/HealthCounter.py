@@ -5,6 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 from engine.core.Window import Window
 from engine.core.Entity2D import Entity2D
+from engine.core_ext.Colour import Colour
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 
 from pyglet.math import Vec3
@@ -25,17 +26,17 @@ class HealthCounter(Entity2D):
 
         self.health_bar_bc = pyglet.shapes.Rectangle(x = x, y = y,
                                                      width = width, height = height,
-                                                     color = config.GREY,
+                                                     color = Colour.GREY,
                                                      batch = self.game_object.UI_batch)
 
         margin = config.UI_BAR_MARGIN
         self.health_bar = pyglet.shapes.Rectangle(x = x+margin, y = y+margin,
                                                   width = width-margin*2, height = height-margin*2,
-                                                  color = config.RED,
+                                                  color = Colour.RED,
                                                   batch = self.game_object.UI_batch)
 
     def prepare_draw(self, delta):
-        width = Window.size.x*config.MAX_UI_BAR_WIDTH
+        width = Window.size.y*config.MAX_UI_BAR_WIDTH
         height = width*config.UI_BAR_HEIGHT
 
         margin = height*config.UI_BAR_MARGIN

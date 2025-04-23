@@ -44,7 +44,6 @@ class LocalPlayer(Player):
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
 
 
-
     def engine_process(self, delta):
         if self.killed_by != -1:
             return
@@ -124,11 +123,13 @@ class LocalPlayer(Player):
     def handle_collision(self, entity, delta):
         if type(entity).__name__ == "Bullet":
             if entity.owner != self.player_id:
+                logging.info(f"shot by {entity.owner}")
                 entity.free()
                 self.health -= 10
 
         else:
             if self.velocity.length() > 0:
+                logging.warning("owie, hurtie")
                 self.health -= self.velocity.length()*0.5
                 self.velocity = Vec3()
                 self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))

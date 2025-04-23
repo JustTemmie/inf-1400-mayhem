@@ -11,7 +11,7 @@ import logging
 mouse_movement: bool = True
 mouse_virtual_joystick_deadzone: float = 0.075 # percentage from 0 to 1
 
-target_refresh_rate: int = 60
+target_refresh_rate: int = 6000
 display_resolution = Vec2(1920, 1080)
 FOV: float = 80
 VSYNC: bool = False
@@ -29,7 +29,3 @@ KEY_BINDS = key_binds(
             [key.LEFT, key.RIGHT], # horizontal
             key.LSHIFT, # thrust
             key.SPACE)  # shoot
-
-RED = (255, 0, 0)
-YELLOW = (255, 239, 0)
-GREY = (128, 128, 128)

@@ -19,8 +19,8 @@ class Hitsphere3D(Hitarea3D):
 
         Keyword arguments:
             object_pos: The center position to the object you want a hitbox for.
-        sphere_pos: The position relative to the object you want your hitspher.
-        sphere_radius: The radius the the hitspher.
+            sphere_pos: The position relative to the object you want your hitspher.
+            sphere_radius: The radius the the hitspher.
 
         """
         self.object_pos = object_pos

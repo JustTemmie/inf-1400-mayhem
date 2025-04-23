@@ -53,61 +53,24 @@ class Hitbox3D(Hitarea3D):
 
         points = []
 
-        x = self.object_pos.x + self.box_pos.x-self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y-self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z-self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
+        offsets = [
+            (-0.5, -0.5, -0.5),
+            (0.5, -0.5, -0.5),
+            (-0.5, 0.5, -0.5),
+            (-0.5, -0.5, 0.5),
+            (0.5, 0.5, -0.5),
+            (-0.5, 0.5, 0.5),
+            (0.5, -0.5, 0.5),
+            (0.5, 0.5, 0.5)
+        ]
 
-        x = self.object_pos.x + self.box_pos.x+self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y-self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z-self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x-self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y+self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z-self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x-self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y-self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z+self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x+self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y+self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z-self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x-self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y+self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z+self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x+self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y-self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z+self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
-
-        x = self.object_pos.x + self.box_pos.x+self.box_size.x/2
-        y = self.object_pos.y + self.box_pos.y+self.box_size.y/2
-        z = self.object_pos.z + self.box_pos.z+self.box_size.z/2
-        pos = Vec3(x, y, z)
-        pos = x_rot @ y_rot @ z_rot @ pos
-        points.append(pos)
+        for dx, dy, dz in offsets:
+            x = self.object_pos.x + self.box_pos.x + dx * self.box_size.x
+            y = self.object_pos.y + self.box_pos.y + dy * self.box_size.y
+            z = self.object_pos.z + self.box_pos.z + dz * self.box_size.z
+            pos = Vec3(x, y, z)
+            pos = x_rot @ y_rot @ z_rot @ pos
+            points.append(pos)
 
         biggest = points[0]
         for point in points:

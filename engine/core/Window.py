@@ -43,7 +43,7 @@ class Window(pyglet.window.Window):
         glEnable(GL_CULL_FACE)
 
         # sky colour :3
-        pyglet.gl.glClearColor(0.6, 0.75, 0.92, 1.0)
+        pyglet.gl.glClearColor(0.05, 0, 0.08, 1.0)
 
         glViewport(0, 0, width, height)
 
