@@ -140,6 +140,7 @@ class LocalPlayer(Player):
                 self.health -= 25
                 logging.info(f"shot by {entity.owner}")
                 self.killed_by = entity.owner
+                entity.free()
 
             
         elif isinstance(entity, Obstacle) or isinstance(entity, Player):
