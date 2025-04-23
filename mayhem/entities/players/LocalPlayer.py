@@ -8,10 +8,13 @@ from engine.core.Camera import Camera
 from engine.core.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
+from engine.core.Entity3D import Entity3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.Bullet import Bullet
+from mayhem.entities.obstacles.Obstacle import Obstacle
+from mayhem.entities.pickups.Pickup import Pickup
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 
 import config
@@ -119,29 +122,36 @@ class LocalPlayer(Player):
         bullet.instantiate()
 
         self.new_bullet = 1
+    
+    def respawn(self):    
+        self.score -= 1
+        self.health = 100
+        self.spawn()
+        
+    def spawn(self):
+        self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+        self.velocity = Vec3()
+        self.rotation = Vec3()
 
-    def handle_collision(self, entity, delta):
-        if type(entity).__name__ == "Bullet":
+    def handle_collision(self, entity: Entity3D, delta: float):
+        if isinstance(entity, Bullet):
             if entity.owner != self.player_id:
+                self.health -= 25
                 logging.info(f"shot by {entity.owner}")
-                entity.free()
-                self.health -= 10
+                self.killed_by = entity.owner
 
-        else:
-            if self.velocity.length() > 0:
-                logging.warning("owie, hurtie")
-                self.health -= self.velocity.length()*0.5
-                self.velocity = Vec3()
-                self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
-
+            
+        elif isinstance(entity, Obstacle) or isinstance(entity, Player):
+            if self.velocity.length() > 0 or entity.velocity.length() > 0:
+                self.health -= max(10, self.velocity.length()) * 0.5 + max(10, entity.velocity.length()) * 0.5
+                self.spawn()
+        
+        elif isinstance(entity, Pickup):
+            entity.picked_up(self)
+            return
+        
         if self.health <= 0:
-            self.killed_by = entity.owner
-            self.score -= 1
-            self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
-            self.velocity = Vec3()
-            self.rotation = Vec3()
-            self.health = 100
-        # Maybe add a respawn screen or something
+            self.respawn()
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()

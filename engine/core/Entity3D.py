@@ -151,6 +151,7 @@ class Entity3D(Entity):
                 vertex_list.delete()
             del self.model
             self.model = None
+        
         Entity3D.all_3D_entities.remove(self)
         return super().free()
 

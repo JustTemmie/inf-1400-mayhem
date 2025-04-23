@@ -10,8 +10,9 @@ import engine.extras.logger # this is just to init the module, do not remove eve
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 
 from mayhem.entities.players.Player import Player
-from mayhem.entities.Planet import Planet
-from mayhem.entities.ExampleObject import ExampleObject
+from mayhem.entities.pickups.Battery import Battery
+from mayhem.entities.obstacles.Planet import Planet
+from mayhem.entities.obstacles.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
 
@@ -42,6 +43,27 @@ class Mayhem(Game):
         self.spawn_remote_players()
         self.spawn_test_objects()
         self.spawn_hud()
+        
+        self.last_spawned_battery_time: float = -50
+    
+    def user_engine_process(self, delta):
+        self._handle_network_input()
+        self._send_update()
+        
+        print(Battery.current_battery)
+        
+        if self.time_elapsed > self.last_spawned_battery_time + 20:
+            self.last_spawned_battery_time = self.time_elapsed
+            
+            if Battery.current_battery:
+                Battery.current_battery.free()
+                Battery.current_battery = None
+
+            battery = Battery()
+            battery.pos = Vec3(2, -5, 2)
+            battery.instantiate()
+        
+    
     
     def spawn_hud(self):
         MovementArrow().instantiate()
@@ -52,7 +74,7 @@ class Mayhem(Game):
     
     def spawn_local_player(self):
         self.player = LocalPlayer()
-        self.player.pos = pyglet.math.Vec3(2, -10, 0)
+        self.player.pos = Vec3(2, -10, 0)
         self.player.instantiate()
     
     def spawn_remote_players(self):
@@ -75,16 +97,12 @@ class Mayhem(Game):
         planet = Planet()
         planet.pos = Vec3(15, 140, 70)
         planet.instantiate()
-
+        
         for i in range(50):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i * 2 - 50)
             object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
             object.instantiate()
-
-    def user_engine_process(self, delta):
-        self._handle_network_input()
-        self._send_update()
 
     def _send_update(self):
         if self.networking.connected:

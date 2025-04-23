@@ -1,0 +1,48 @@
+@startuml
+class Mayhem {
+    init()
+    spawn_hud()
+    spawn_local_player()
+    spawn_remote_players()
+    spawn_test_objects()
+    user_engine_process()
+    _send_update()
+    _handle_network_input()
+        player : LocalPlayer
+    other_players : typing.Dict[int, RemotePlayer] 
+    player
+    networking
+    __init__(player: LocalPlayer, other_players: typing.Dict[int, RemotePlayer] )
+}
+Game <|-- Mayhem
+Mayhem --> LocalPlayer
+Mayhem --> RemotePlayer
+class LocalPlayer {
+    user_init()
+    engine_process()
+    user_instantiate()
+    handle_input()
+    shoot()
+    handle_collision()
+    update_camera_position()
+        visible
+    last_shoot_time
+    new_bullet
+    score
+    health
+    fuel
+    model
+    rotation_acceleration
+    last_shoot_time
+    new_bullet
+    velocity
+    pos
+    killed_by
+    pos
+    velocity
+    rotation
+    health
+    __init__()
+}
+Player <|-- LocalPlayer
+@enduml
