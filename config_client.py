@@ -31,4 +31,3 @@ KEY_BINDS = key_binds(
             key.SPACE)  # shoot
 
 
-GRAVITATIONAL_CONSTANT = 6.67*10**-5

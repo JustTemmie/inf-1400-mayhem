@@ -39,21 +39,21 @@ class Mayhem(Game):
     def init(self):
         self.player: LocalPlayer
         self.other_players: typing.Dict[int, RemotePlayer] = {}
-        
+
         self.spawn_local_player()
         self.spawn_remote_players()
         self.spawn_test_objects()
         self.spawn_hud()
-        
+
         self.last_spawned_battery_time: float = -50
-    
+
     def user_engine_process(self, delta):
         self._handle_network_input()
         self._send_update()
-        
+
         if self.time_elapsed > self.last_spawned_battery_time + 20:
             self.last_spawned_battery_time = self.time_elapsed
-            
+
             if Battery.current_battery:
                 Battery.current_battery.free()
                 Battery.current_battery = None
@@ -119,8 +119,13 @@ class Mayhem(Game):
             if self.player.player_id == 0:
                 self.player.player_id = packet.packet.to_id
             if packet.packet.from_id not in self.other_players:
+                logging.info(f"Player with ID {packet.packet.from_id} joined")
                 self.other_players[packet.packet.from_id] = RemotePlayer()
                 self.other_players[packet.packet.from_id].instantiate()
+            else:
+                if not self.other_players[packet.packet.from_id]:
+                    self.other_players[packet.packet.from_id] = RemotePlayer()
+                    self.other_players[packet.packet.from_id].instantiate()
 
             self.other_players[packet.packet.from_id].update_pos(packet)
 
@@ -134,7 +139,7 @@ class Mayhem(Game):
 
             if packet.packet.killed_by >= 0:
                 killed_player = self.other_players[packet.packet.from_id]
-                self.other_players.pop(packet.packet.from_id)
+                self.other_players[packet.packet.from_id] = None
 
                 killed_player.free()
 
@@ -142,6 +147,7 @@ class Mayhem(Game):
                     self.player.score += 1
                 # Server id, this just means that the player dissconected
                 elif packet.packet.killed_by == 0:
+                    self.other_players.pop(packet.packet.from_id)
                     logging.info(f"Player with ID {packet.packet.from_id} disconnected")
 
         self.networking.lock.release()
