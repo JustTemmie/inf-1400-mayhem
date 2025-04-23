@@ -44,6 +44,7 @@ class Networking(abc.ABC):
                 self.lock.release()
             except ConnectionRefusedError:
                 self.connected = False
+                logging.warn(f"Could not connect to server {self.addr}, playing localy")
 
     def start_listen(self):
         thread = Thread(target=self._listen, args=(self,))
