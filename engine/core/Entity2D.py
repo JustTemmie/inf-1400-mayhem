@@ -34,11 +34,11 @@ class Entity2D(Entity):
     def prepare_draw(self, delta):
         pass
 
-    def handle_physics(self, delta: float, air_friction: float, gravity: Vec2):
+    def handle_physics(self, delta: float, air_friction: float):
         """
         Handles physics, called within the engine, not meant to be interacted with by the user
         """
-        self.acceleration += gravity
+        self.acceleration += self.get_gravity()
         self.velocity += self.acceleration * delta
         self.velocity *= 1 - air_friction
         self.pos += self.velocity * delta
@@ -54,3 +54,9 @@ class Entity2D(Entity):
     def free(self):
         Entity2D.all_2D_entities.remove(self)
         return super().free()
+
+    def get_gravity(self) -> Vec2:
+        """
+        Get the direction of gravity, usually a constant
+        """
+        return Vec2(0, 0)

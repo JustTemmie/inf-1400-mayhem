@@ -6,6 +6,7 @@ Authors: JustTemmie (i'll replace names at handin)
 from engine.core.Window import Window
 from engine.core.Entity2D import Entity2D
 from engine.core.Input import Input
+from engine.core_ext.Colour import Colour
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 
 import config
@@ -20,8 +21,8 @@ class MovementArrow(Entity2D):
         
         middle = Window.size / 2
         
-        self.arrow = pyglet.shapes.Line(middle.x, middle.y, 0, 0, 5, color=(255, 40, 80), batch=Entity2D.game_object.UI_batch)
-        self.arrow_head = pyglet.shapes.Triangle(10, 10, 190, 10, 100, 150, color=(255, 40, 80), batch=Entity2D.game_object.UI_batch)
+        self.arrow = pyglet.shapes.Line(middle.x, middle.y, 0, 0, 5, color=Colour.RED, batch=Entity2D.game_object.UI_batch)
+        self.arrow_head = pyglet.shapes.Triangle(10, 10, 190, 10, 100, 150, color=Colour.RED, batch=Entity2D.game_object.UI_batch)
 
     def on_resize(self):
         middle = Window.size / 2

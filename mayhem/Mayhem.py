@@ -42,7 +42,7 @@ class Mayhem(Game):
         self.spawn_remote_players()
         self.spawn_test_objects()
         self.spawn_hud()
-
+    
     def spawn_hud(self):
         MovementArrow().instantiate()
         MovementReticle().instantiate()

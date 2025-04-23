@@ -52,7 +52,7 @@ class Entity3D(Entity):
 
         self.model.matrix = trans @ (rot_z @ rot_y @ rot_x)
 
-    def handle_physics(self, delta: float, air_friction: float, gravity: Vec3):
+    def handle_physics(self, delta: float, air_friction: float):
         """
         Handles physics, called within the engine, not meant to be interacted with by the user.
         """
@@ -68,7 +68,7 @@ class Entity3D(Entity):
                 drag_without_speed * self.velocity.z * abs(self.velocity.z),
             )
 
-        self.acceleration += gravity / self.mass
+        self.acceleration += self.get_gravity() / self.mass
         self.velocity += self.acceleration * delta - drag/self.mass  # Drag is allready multiplied with delta, because of the speed.
         self.pos += self.velocity * delta
 
@@ -153,3 +153,9 @@ class Entity3D(Entity):
             self.model = None
         Entity3D.all_3D_entities.remove(self)
         return super().free()
+
+    def get_gravity(self) -> Vec3:
+        """
+        Get the direction of gravity, usually a constant
+        """
+        return Vec3(0, 0, 0)

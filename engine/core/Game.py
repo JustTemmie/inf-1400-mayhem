@@ -105,16 +105,18 @@ class Game:
 
     def engine_process(self, delta: float):
         """
-        Called every engine tick (30 tps), not intended to be touched by the end user.
+        Called every engine tick (60 tps), not intended to be touched by the end user.
         """
         for entity in Entity.all_entities:
             entity.engine_process(delta)
 
+        self.user_engine_process(delta)
+
         for entity in Entity2D.all_2D_entities:
-            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
+            entity.handle_physics(delta, air_friction=config.air_friction)
 
         for entity in Entity3D.all_3D_entities:
-            entity.handle_physics(delta, air_friction=config.air_friction, gravity=config.gravity)
+            entity.handle_physics(delta, air_friction=config.air_friction)
 
         # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
         # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
@@ -123,7 +125,6 @@ class Game:
         # for entity in self.entities_3D:
         #     entity.tick(delta)
 
-        self.user_engine_process(delta)
 
     def on_draw(self):
         self.window.clear()

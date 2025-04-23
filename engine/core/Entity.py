@@ -42,13 +42,11 @@ class Entity:
         """
         Called when the game window is resized
         """
-        pass
     
     def user_init(self):
         """
         Implement by extending class.
         """
-        pass
 
     def process(self, delta):
         """
@@ -83,6 +81,13 @@ class Entity:
 
         Entity.all_entities.remove(self)
 
+    @abc.abstractmethod
+    def get_gravity(self):
+        """
+        Implement by extending class.
+        """
+        raise NotImplemented
+    
     @abc.abstractmethod
     def prepare_draw(self, delta):
         """
