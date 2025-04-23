@@ -142,6 +142,6 @@ class Mayhem(Game):
                     self.player.score += 1
                 # Server id, this just means that the player dissconected
                 elif packet.packet.killed_by == 0:
-                    logging.info(f"Player with ID {packet.packet.from_id} dissconected")
+                    logging.info(f"Player with ID {packet.packet.from_id} disconnected")
 
         self.networking.lock.release()

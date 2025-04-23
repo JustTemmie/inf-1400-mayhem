@@ -66,6 +66,14 @@ class LocalPlayer(Player):
 
         self.check_for_collision(delta)
 
+        self.pos = Vec3(
+            max(-500, min(500, self.pos.x)),
+            max(-500, min(500, self.pos.y)),
+            max(-500, min(500, self.pos.z))
+        )
+        
+        print(self.pos)
+            
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
     def user_instantiate(self):
