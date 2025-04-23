@@ -2,10 +2,6 @@
     Server settings, these are intended to be the same for all players
 """
 
-from pyglet.math import Vec2, Vec3
-from pyglet.window import key
-from collections import namedtuple
-
 SERVER_ADDRESS: str = "127.0.0.1"
 SERVER_PORT: int = 27827
 
