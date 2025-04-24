@@ -12,6 +12,8 @@ from engine.core.Entity import Entity
 from engine.core.Entity2D import Entity2D
 from engine.core.Entity3D import Entity3D
 
+from engine.core.Music import MusicManager
+
 import config
 
 from collections import namedtuple
@@ -32,6 +34,8 @@ class Game:
         self.window.event("on_mouse_press")(Input.on_mouse_press)
         self.window.event("on_mouse_release")(Input.on_mouse_release)
         self.window.push_handlers(Input.keyboard_keys)
+
+        self.music_manager = MusicManager()
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
@@ -109,7 +113,7 @@ class Game:
         """
         for entity in Entity.all_entities:
             entity.engine_process(delta)
-
+        
         self.user_engine_process(delta)
 
         for entity in Entity2D.all_2D_entities:
@@ -118,15 +122,13 @@ class Game:
         for entity in Entity3D.all_3D_entities:
             entity.handle_physics(delta, air_friction=config.air_friction)
 
-        # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
-        # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
-
-        # # process all loaded 3D entities
-        # for entity in self.entities_3D:
-        #     entity.tick(delta)
-
-
+        # using deltas here could crash the game due to audio players potentially having negative volume
+        self.music_manager.process_fading()
+    
     def on_draw(self):
+        """
+        Called every time pyglet attempts to render a frame
+        """
         self.window.clear()
 
         Camera.active_camera.ProjectWorld()
