@@ -42,7 +42,7 @@ class LocalPlayer(Player):
         self.new_bullet = 0
         self.score = 0
         self.health = 100
-        self.fuel = 100
+        self.fuel = config.STARTING_FUEL
 
         self.killed_by = -1
 

@@ -48,10 +48,11 @@ class MusicManager:
         Start fading to a new music track
         """
         if self.main_player == self.player_1:
+            self.player_1.volume = 0.5
             self._fade_to_with_player(path, self.player_2)
         else:
+            self.player_2.volume = 0.5
             self._fade_to_with_player(path, self.player_1)
-        
     
     def process_fading(self):
         """
@@ -79,7 +80,7 @@ class MusicManager:
         
         elif self.player_2.volume >= 0.48 and self.main_player != self.player_2:
             self.player_1.pause()
-            
+
             self.main_player = self.player_2
             self.main_player.volume = 0.5
             self.main_player.loop = True
