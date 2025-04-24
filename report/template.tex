@@ -56,12 +56,17 @@
 \section{Introduction} \label{Section:Introduction}
 In this program we were tasked with recreating the old game Mayhem. We instead wanted a challenge and made it 3D and with online multiplayer, and this of course posed some challenges.
 \section{Design}\label{Section:Design}
-We ended up using a library called pyglet to render the game. Pyglet is not a complete game engine, so we ended up making our own engine based on pyglet.
+As we wanted a 3D game, we ended up with not using Pygame, and instead used a library called Pyglet, and made our own game engine on top of it\footnote{Since this was not a part of the assignment, its design will not be discussed in this report.}.
 
-Our engine, consists of three parts: core, core\_ext and extras. Core contains classes like: Window, Entity, Game, Input and Camera. Core\_ext contains things like: Networking and collision. Extras contains a logger.
+Our engine provides some important super classes, some of this are Entity2D/3D and Game. Everything drawn or rendered to the screen is a subclass of Entity. All initiated, and visible Entities will be drawn/rendered to the screen. 
 
-Everything that is drawn or rendered to the screen is a subclass of the entity class, or more specifically is a subclass of either Entity2D or Entity3D. Entity2D and Entity3D is then again a subclass of Entity.
+Mayhem needs: bullets, 2 players, some obstacles and pickups.
 
+The 2 players has a lot of common attributes, but different methods, so we ended up with having a parent class "Player" who inherits from "Entity3D", and 2 child classes: "LocalPlayer" and "RemotePlayer" who inherits from "Player".
+
+"Obstacle" and "Pickup" are parent classes, who are inherited by "Planet" and "Battery" respectively. These are also rendered to the screen so "Obstacle" and "Pickup" inherits from "Entity3D"
+
+Since we wanted an online multiplayer game, we needed a Network class as well. This class is provided by our engine, so we only needed a method to handle the new requsts.
 \section{Challenges}\label{Section:Challenges}
 \subsection{3D rendering}
 \subsection{Movement}
@@ -75,7 +80,7 @@ This is not the best solution. For example, if there is packet loss while you sh
 \subsection{Collision detection}
 In 3D there is no easy way to do proper collision detection, and pyglet had no module to help with that. We were therefore forced to make our own collision detection system, and we did this by using the Gilbert-Johnson-Keerthi algorithm. 
 
-The Gilbert-Johnson-Keerthi or GJK for short, works by calculating the three points in the Minkowski difference to make a triangle and then check if it contains origin.~\cite{wikipediaGilbertJohnsonKeerthiDistance}
+The Gilbert-Johnson-Keerthi or GJK for short, works by calculating three points in the Minkowski difference to make a triangle and then check if it contains origin.~\cite{wikipediaGilbertJohnsonKeerthiDistance}
 
 The Minkowski difference is just every point in one shape minus every point in another shape.~\cite{wikipediaMinkowskiAddition}
 
