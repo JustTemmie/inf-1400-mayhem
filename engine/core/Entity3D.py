@@ -81,6 +81,7 @@ class Entity3D(Entity):
         self.acceleration = Vec3(0, 0, 0)
         self.rotation_acceleration = Vec3(0, 0, 0)
 
+        # clamp all values between 0 and 2pi
         self.rotation = self.rotation % (math.pi * 2)
 
     def check_for_collision(self, delta):

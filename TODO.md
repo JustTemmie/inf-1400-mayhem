@@ -10,3 +10,6 @@
   
 - [ ] main menu?  
 - [x] gravity down towards the planet?? ( depends on if we're in space. No it is a requirement )  
+- [x] music player
+
+- [ ] scene system

@@ -45,9 +45,18 @@ class Mayhem(Game):
         self.spawn_test_objects()
         self.spawn_hud()
 
+        self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
+        self.faded = False
+
         self.last_spawned_battery_time: float = -50
 
     def user_engine_process(self, delta):
+        # this music check should probably just run when the player goes from the main menu to the game
+        # or, we could fade to the action music whenever another player is nearby, though i'm not sure that would work well
+        if self.time_elapsed > 20 and not self.faded:
+            self.faded = True
+            self.music_manager.fade_to("assets/music/gravity_turn_action.ogg")
+        
         self._handle_network_input()
         self._send_update()
 
@@ -62,7 +71,6 @@ class Mayhem(Game):
             battery.pos = Vec3(2, -5, 2)
             battery.instantiate()
         
-    
     
     def spawn_hud(self):
         MovementArrow().instantiate()
@@ -148,6 +156,6 @@ class Mayhem(Game):
                 # Server id, this just means that the player dissconected
                 elif packet.packet.killed_by == 0:
                     self.other_players.pop(packet.packet.from_id)
-                    logging.info(f"Player with ID {packet.packet.from_id} dissconected")
+                    logging.info(f"Player with ID {packet.packet.from_id} disconnected")
 
         self.networking.lock.release()

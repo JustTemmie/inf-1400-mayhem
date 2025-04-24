@@ -12,6 +12,8 @@ from engine.core.Entity import Entity
 from engine.core.Entity2D import Entity2D
 from engine.core.Entity3D import Entity3D
 
+from engine.core.Music import MusicManager
+
 import config
 
 from collections import namedtuple
@@ -22,6 +24,8 @@ import logging
 
 class Game:
     def __init__(self):
+        Utils.print_system_info()
+
         # rendering "batches"
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
@@ -32,22 +36,27 @@ class Game:
         self.window.event("on_mouse_press")(Input.on_mouse_press)
         self.window.event("on_mouse_release")(Input.on_mouse_release)
         self.window.push_handlers(Input.keyboard_keys)
+        self.window.push_handlers(Input.controller_manager)
+
+        self.music_manager = MusicManager()
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
         self.frame_times: list[float] = []
 
         self.entity_ID = 0  # an increasing counter such that every entity has their own unique ID
-        
-
         self.frame_start_time = time.time()
-
-        Utils.print_system_info()
 
         Entity.game_object = self
         self.init()
 
         Camera.active_camera.instantiate()
+
+        Input.controller_manager.on_connect = Input.on_controller_connect
+        Input.controller_manager.on_disconnect = Input.on_controller_disconnect
+        if controllers := Input.controller_manager.get_controllers():
+            for controller in controllers:
+                Input.on_controller_connect(controller)
 
         self.window.set_visible()
 
@@ -82,7 +91,7 @@ class Game:
 
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            # logging.info(f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+            logging.debug(f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
             
             if fps * 1.2 < config.target_refresh_rate:
                 logging.warning(f"the current fps of {round(fps, 1)} is a lot lower than the target fps of {config.target_refresh_rate}, this can lead to choppy feeling behaviour")
@@ -109,7 +118,7 @@ class Game:
         """
         for entity in Entity.all_entities:
             entity.engine_process(delta)
-
+        
         self.user_engine_process(delta)
 
         for entity in Entity2D.all_2D_entities:
@@ -118,15 +127,13 @@ class Game:
         for entity in Entity3D.all_3D_entities:
             entity.handle_physics(delta, air_friction=config.air_friction)
 
-        # # sort 3D entities' processing order using their Z index to ensure the rendering is done is the correct order
-        # self.entities_3D.sort(key=lambda entity: entity.pos.z, reverse=True)
-
-        # # process all loaded 3D entities
-        # for entity in self.entities_3D:
-        #     entity.tick(delta)
-
-
+        # using deltas here could crash the game due to audio players potentially having negative volume
+        self.music_manager.process_fading()
+    
     def on_draw(self):
+        """
+        Called every time pyglet attempts to render a frame
+        """
         self.window.clear()
 
         Camera.active_camera.ProjectWorld()

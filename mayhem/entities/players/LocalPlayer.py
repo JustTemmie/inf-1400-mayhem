@@ -42,7 +42,7 @@ class LocalPlayer(Player):
         self.new_bullet = 0
         self.score = 0
         self.health = 100
-        self.fuel = 100
+        self.fuel = config.STARTING_FUEL
 
         self.killed_by = -1
 
@@ -66,6 +66,12 @@ class LocalPlayer(Player):
 
         self.check_for_collision(delta)
 
+        self.pos = Vec3(
+            max(-500, min(500, self.pos.x)),
+            max(-500, min(500, self.pos.y)),
+            max(-500, min(500, self.pos.z))
+        )
+        
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
 
     def user_instantiate(self):
