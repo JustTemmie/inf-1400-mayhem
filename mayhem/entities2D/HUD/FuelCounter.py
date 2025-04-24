@@ -1,5 +1,5 @@
 """
-Very simple entity that just displays the player's health in the top left of the screen.
+Contains the FuelCounter class
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -15,6 +15,9 @@ import math
 import config
 
 class FuelCounter(Entity2D):
+    """
+    Very simple entity that just displays the player's Fuel in the top left of the screen.
+    """
     def user_instantiate(self):
         width = Window.size.x*config.MAX_UI_BAR_WIDTH
         height = width*config.UI_BAR_HEIGHT

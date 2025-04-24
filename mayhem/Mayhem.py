@@ -113,9 +113,7 @@ class Mayhem(Game):
 
     def _send_update(self):
         if self.networking.connected:
-            self.networking.send(Packet.player_to_packet(self.player,
-                                                         self.player.new_bullet,
-                                                         self.player.killed_by))
+            self.networking.send(Packet.player_to_packet(self.player))
             self.player.new_bullet = 0
             self.player.killed_by = -1
 

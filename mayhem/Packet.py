@@ -1,5 +1,5 @@
 """
-< write some stuff >
+Contains the Packet class
 Authors: BAaboe (i'll replace names at handin)
 """
 
@@ -18,6 +18,10 @@ from collections import namedtuple
 
 
 class Packet:
+    """
+    A utility class that represents the network packet.
+    """
+
     def __init__(
         self,
         from_id=0,
@@ -31,7 +35,18 @@ class Packet:
         new_bullet=0,
         killed_by=-1,
     ):
-
+        """
+        Creates a namedtuple with all the packets information
+        Parameters:
+            from_id: The ID of the client that sent the package.
+            to_id: The ID of the client that recived the packet. This is set by server, so can be whatever when sending.
+            player_pos: Player_Pos
+            player_velocity: The player velocity
+            player_acceleration: The player acceleration
+            player_rotation: The player rotation
+            player_rotation_velocity: The player rotation velocity
+            player_rotation_acceleration: The player rotation acceleration
+        """
         PacketTuple = namedtuple(
             "Packet",
             [
@@ -62,6 +77,11 @@ class Packet:
         )
 
     def encode(self) -> bytes:
+        """
+        Encodes the packet
+
+        Returns the encoded packet.
+        """
         out = ""
         for i in self.packet:
             out += " "
@@ -77,6 +97,15 @@ class Packet:
 
     @classmethod
     def decode(self, data: bytes) -> "Packet":
+        """
+        Decodes a packet.
+
+        Parameters:
+            data: The data to decode
+
+        Returns:
+            A Packet instance with the decoded data.
+        """
         decoded_data = data.decode().split(" ")
         # Please read README in server
         try:
@@ -116,7 +145,15 @@ class Packet:
         return packet
 
     @classmethod
-    def player_to_packet(self, p: Player, new_bullet=0, killed_by=-1) -> tuple:
+    def player_to_packet(self, p: Player) -> "Packet":
+        """
+        Makes a packet from a player.
+
+        Parameters:
+            p: The player
+
+        Returns a packet instance with the player data.
+        """
         packet = Packet(
             p.player_id,
             0,
@@ -126,8 +163,8 @@ class Packet:
             p.rotation,
             p.rotation_velocity,
             p.rotation_acceleration,
-            new_bullet,
-            killed_by
+            p.new_bullet,
+            p.killed_by
         )
 
         return packet
