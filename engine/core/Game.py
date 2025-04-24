@@ -24,6 +24,8 @@ import logging
 
 class Game:
     def __init__(self):
+        Utils.print_system_info()
+
         # rendering "batches"
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
@@ -34,6 +36,7 @@ class Game:
         self.window.event("on_mouse_press")(Input.on_mouse_press)
         self.window.event("on_mouse_release")(Input.on_mouse_release)
         self.window.push_handlers(Input.keyboard_keys)
+        self.window.push_handlers(Input.controller_manager)
 
         self.music_manager = MusicManager()
 
@@ -42,16 +45,18 @@ class Game:
         self.frame_times: list[float] = []
 
         self.entity_ID = 0  # an increasing counter such that every entity has their own unique ID
-        
-
         self.frame_start_time = time.time()
-
-        Utils.print_system_info()
 
         Entity.game_object = self
         self.init()
 
         Camera.active_camera.instantiate()
+
+        Input.controller_manager.on_connect = Input.on_controller_connect
+        Input.controller_manager.on_disconnect = Input.on_controller_disconnect
+        if controllers := Input.controller_manager.get_controllers():
+            for controller in controllers:
+                Input.on_controller_connect(controller)
 
         self.window.set_visible()
 
@@ -86,7 +91,7 @@ class Game:
 
             fps = 1 / (sum(self.frame_times) / len(self.frame_times))
 
-            logging.info(f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
+            logging.debug(f"fps: {round(fps, 1)}, entities: {len(Entity.all_entities)}, delta: {round(delta, 6)}, delta*fps: {round(delta * fps, 4)}")
             
             if fps * 1.2 < config.target_refresh_rate:
                 logging.warning(f"the current fps of {round(fps, 1)} is a lot lower than the target fps of {config.target_refresh_rate}, this can lead to choppy feeling behaviour")
