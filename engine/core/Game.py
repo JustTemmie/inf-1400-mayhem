@@ -4,7 +4,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
 # core modules are simply defined as what is imported by this file
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core.Camera import Camera
 from engine.core.Window import Window
 from engine.core.Input import Input

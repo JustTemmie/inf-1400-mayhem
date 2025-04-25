@@ -1,5 +1,5 @@
 """
-Very simple entity that just draws the "deadzone" for the digital analogue stick.
+Contains the MovementReticle class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -15,6 +15,9 @@ import pyglet
 
 
 class MovementReticle(Entity2D):
+    """
+    Very simple entity that just draws the "deadzone" for the digital analogue stick.
+    """
     def user_instantiate(self):
         if config.mouse_movement:
             ellipse_size = self.get_ellipse_dimensions()
@@ -47,6 +50,9 @@ class MovementReticle(Entity2D):
             self.middle_ellipse.b = ellipse_size.y
     
     def is_mouse_inside() -> bool:
+        """
+        Returns a bool depending on if the user's mouse is outside of the deadzone or not.
+        """
         if not config.mouse_movement:
             return False
         

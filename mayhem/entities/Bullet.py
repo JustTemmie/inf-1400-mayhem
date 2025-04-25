@@ -5,7 +5,7 @@ Authors: BAaboe (i'll replace names at handin)
 
 from engine.core.Entity3D import Entity3D
 from engine.core.Game import Game
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
@@ -25,6 +25,8 @@ class Bullet(Entity3D):
 
         self.owner = 0
         self.age = 0
+
+        self.log_spawn = False
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("rocket"))

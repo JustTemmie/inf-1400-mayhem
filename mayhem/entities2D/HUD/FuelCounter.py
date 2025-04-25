@@ -52,5 +52,5 @@ class FuelCounter(Entity2D):
 
         self.fuel_bar.x = x+margin
         self.fuel_bar.y = y+margin
-        self.fuel_bar.width = (width-margin*2)*LocalPlayer.instance.fuel/100
+        self.fuel_bar.width = (width-margin*2)*LocalPlayer.instance.fuel / config.MAX_FUEL
         self.fuel_bar.height = height-margin*2

@@ -3,7 +3,10 @@ This module just contains some utility functions to be used elsewhere
 Authors: JustTemmie (i'll replace names at handin)
 """
 
+from pyglet.math import Vec3
+
 import pyglet
+import random
 
 class Utils:
     """
@@ -30,6 +33,17 @@ class Utils:
         Shorthand for fetching model pathes
         """
         return f"assets/models/{model}/{model}.obj"
+
+    @staticmethod
+    def get_random_normalized_3D_vector() -> Vec3:
+        """
+        Returns a random normalized 3D vector
+        """
+        return Vec3(
+            random.uniform(-1, 1),
+            random.uniform(-1, 1),
+            random.uniform(-1, 1),
+        ).normalize()
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 from engine.core.Game import Game
 from engine.core.Camera import Camera
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
 from engine.core.Entity3D import Entity3D
@@ -34,14 +34,14 @@ class LocalPlayer(Player):
     The local player, inherits from the generic player class.
     Handles collision and input for the player
     """
-    
+
     instance: Player = None
 
     def user_init(self):
         super().user_init()
         LocalPlayer.instance = self
 
-        self.visible = True
+        self.visible = False
 
         self.last_shoot_time = 0
         self.new_bullet = 0
@@ -71,6 +71,7 @@ class LocalPlayer(Player):
 
         self.check_for_collision(delta)
 
+        # make sure the player doesn't go too far away from the battlefield
         self.pos = Vec3(
             max(-500, min(500, self.pos.x)),
             max(-500, min(500, self.pos.y)),
@@ -148,7 +149,7 @@ class LocalPlayer(Player):
         """
         Spawns the player
         """
-        self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+        self.pos = Utils.get_random_normalized_3D_vector() * 300
         self.velocity = Vec3()
         self.rotation = Vec3()
 

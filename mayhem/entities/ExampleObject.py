@@ -3,9 +3,8 @@ The minimum required to create a 3D object.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core.Entity3D import Entity3D
-from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 
 import pyglet
 

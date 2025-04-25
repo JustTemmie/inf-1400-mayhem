@@ -1,5 +1,5 @@
 """
-Very simple entity that just displays the player's score in the top left of the screen.
+Contains the ScoreCounter class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -12,6 +12,9 @@ from pyglet.math import Vec3
 import pyglet
 
 class ScoreCounter(Entity2D):
+    """
+    Very simple entity that just displays the player's score in the top left of the screen.
+    """
     def user_instantiate(self):
         self.score_label = pyglet.text.Label(text="Score: 0", batch=self.game_object.UI_batch)
         self.score_label.weight = "bold"

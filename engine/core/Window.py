@@ -52,7 +52,7 @@ class Window(pyglet.window.Window):
         """
         Updates some internal openGL information, call this whenever the window changes size, or similar
         """
-        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far=50000, fov=Camera.active_camera.FOV)
+        self.model_view = Mat4.perspective_projection(self.aspect_ratio, z_near=0.01, z_far=1000, fov=Camera.active_camera.FOV)
         self.ui_view = Mat4.orthogonal_projection(0, Window.size.x, 0, Window.size.y, z_near=0, z_far=2555)
 
     def _on_resize(self, width, height):

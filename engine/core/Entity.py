@@ -5,6 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 import typing
 import abc
+import logging
 
 if typing.TYPE_CHECKING:
     from engine.core.Game import Game
@@ -33,6 +34,7 @@ class Entity:
     deferred_calls: typing.List[typing.Callable] = []
 
     def __init__(self):
+        
         self.entity_ID: int
         self.components = Component()
         self.visible = True
@@ -41,6 +43,7 @@ class Entity:
         self.area = 1  # m^2, affects the objects interaction with air
         self.drag_coeficient = 1
         self.ignore_friction: bool = True
+        self.log_spawn: bool = True
 
         # entities that should also be cleared when this entity is cleared
         self.child_entities: list[Entity] = []
@@ -69,6 +72,9 @@ class Entity:
         """
         Instantiates the entity, this adds it to the world, sets their internal entity_ID, and may also load a custom model if the entity has one
         """
+        if self.log_spawn:
+            logging.info(f"spawning a {self.__class__.__name__}...")
+
         self.entity_ID = Entity.game_object.entity_ID
         Entity.game_object.entity_ID += 1
 
