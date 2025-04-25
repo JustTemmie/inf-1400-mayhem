@@ -150,4 +150,78 @@ class Packet {
 }
 
 Mayhem --> Packet
+
+class ScoreCounter {
+    user_instantiate()
+    prepare_draw()
+    on_resize()
+        score_label
+    __init__()
+}
+Entity2D <|-- ScoreCounter
+Mayhem --> ScoreCounter
+
+class PopupManager {
+    user_instantiate()
+    prepare_draw()
+    on_resize()
+    create_popup()
+    edit_popup()
+    delte_popup()
+    get_popup_text()
+    process()
+    prepare_draw()
+        text
+    fontsize
+    colour
+    created
+    duration
+    lable
+    fontsize
+    __init__()
+}
+Entity <|-- PopupManager
+Mayhem --> PopupManager
+
+class MovementReticle {
+    user_instantiate()
+    get_ellipse_dimensions()
+    prepare_draw()
+    is_mouse_inside()
+        middle_ellipse
+    __init__()
+}
+Entity2D <|-- MovementReticle
+Mayhem --> MovementReticle
+
+class MovementArrow {
+    user_instantiate()
+    on_resize()
+    prepare_draw()
+        arrow
+    arrow_head
+    __init__()
+}
+Entity2D <|-- MovementArrow
+Mayhem -->MovementArrow
+
+class HealthCounter {
+    user_instantiate()
+    prepare_draw()
+        health_bar_bc
+    health_bar
+    __init__()
+}
+Entity2D <|-- HealthCounter
+Mayhem -->HealthCounter
+
+class FuelCounter {
+    user_instantiate()
+    prepare_draw()
+        fuel_bar_bc
+    fuel_bar
+    __init__()
+}
+Entity2D <|-- FuelCounter
+Mayhem --> FuelCounter
 @enduml
