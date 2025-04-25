@@ -50,9 +50,10 @@ class Mayhem(Game):
         self.player: LocalPlayer
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
-        self.spawn_test_objects()
         self.spawn_local_player()
         self.spawn_remote_players()
+        self.spawn_test_objects()
+        self.spawn_obstacles()
         self.spawn_hud()
 
         self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
