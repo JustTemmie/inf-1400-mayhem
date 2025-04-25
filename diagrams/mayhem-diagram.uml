@@ -148,4 +148,6 @@ class Packet {
         packet
     __init__()
 }
+
+Mayhem --> Packet
 @enduml
