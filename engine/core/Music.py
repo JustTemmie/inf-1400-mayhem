@@ -21,6 +21,7 @@ class MusicManager:
         self.player_2 = pyglet.media.Player()
 
         self.main_player = self.player_1
+        self.currently_playing: str = ""
 
         self.player_1.volume = 0.5
         self.player_2.volume = 0
@@ -41,6 +42,7 @@ class MusicManager:
         player.queue(source)
         player.volume = 0
         player.play()
+        self.currently_playing = path
         self.fading = True
 
     def fade_to(self, path: str):

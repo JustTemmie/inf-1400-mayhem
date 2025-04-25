@@ -23,10 +23,8 @@ import config
 
 from pyglet.math import Vec2, Vec3
 
-import pyglet
 import logging
 import time
-import random
 
 
 class LocalPlayer(Player):

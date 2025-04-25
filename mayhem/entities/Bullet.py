@@ -21,7 +21,7 @@ class Bullet(Entity3D):
         self.mass = 0.01
         self.ignore_friction = True
 
-        self.owner = 0
+        self.owner: int = 0
         self.age = 0
 
         self.log_spawn = False

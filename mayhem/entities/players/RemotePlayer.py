@@ -4,8 +4,10 @@ Authors: BAaboe (i'll replace names at handin)
 """
 
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
-
 from mayhem.entities.players.Player import Player
+from mayhem.entities.Bullet import Bullet
+
+import config
 
 from pyglet.math import Vec3
 
@@ -32,6 +34,16 @@ class RemotePlayer(Player):
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 1)]
 
         super().user_init()
+    
+    def shoot(self, packet):
+        bullet = Bullet()
+        bullet.owner = packet.packet.from_id
+        bullet.pos = packet.packet.player_pos
+        bullet.rotation = packet.packet.player_rotation
+        bullet.velocity = self.get_forward_vector() * config.BULLET_SPEED
+        bullet.instantiate()
+
+        # self.audio_player.play("")
 
     def update_pos(self, packet: typing.NamedTuple):
         """

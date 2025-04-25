@@ -26,6 +26,7 @@ class Game:
 
     the class' init() function is called when the engine is ready to do anything, use this over __init__().
     """
+
     def __init__(self):
         Utils.print_system_info()
 

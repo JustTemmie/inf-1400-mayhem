@@ -3,17 +3,10 @@ Contains the Player class
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
-from engine.core.Game import Game
 from engine.extras.Utils import Utils
 from engine.core.Entity3D import Entity3D
 
-import config
-
-from pyglet.math import Vec3
-
 import pyglet
-import typing
-import logging
 
 
 class Player(Entity3D):
@@ -29,9 +22,10 @@ class Player(Entity3D):
         self.drag_coeficient = 1.225
         self.ignore_friction: bool = False
 
+        self.audio_player = pyglet.media.Player()
+
     def process(self, delta):
-        # self.roll += delta
-        pass
+        self.audio_player.position = self.pos
 
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("ship"))

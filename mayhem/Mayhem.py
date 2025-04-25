@@ -50,18 +50,15 @@ class Mayhem(Game):
         self.spawn_obstacles()
         self.spawn_hud()
 
-        self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
-        self.faded = False
-
         self.last_spawned_battery_time: float = -50
 
     def user_engine_process(self, delta):
-        # this music check should probably just run when the player goes from the main menu to the game
-        # or, we could fade to the action music whenever another player is nearby, though i'm not sure that would work well
-        if self.time_elapsed > 20 and not self.faded:
-            self.faded = True
+        # play calm or action music, depending on if you're alone or not
+        if len(self.other_players) == 0 and self.music_manager.currently_playing != "assets/music/gravity_turn_calm.ogg":
+            self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
+        elif len(self.other_players) >= 1 and self.music_manager.currently_playing != "assets/music/gravity_turn_action.ogg":
             self.music_manager.fade_to("assets/music/gravity_turn_action.ogg")
-
+        
         self._handle_network_input()
         self._send_update()
 
@@ -144,12 +141,7 @@ class Mayhem(Game):
             self.other_players[packet.packet.from_id].update_pos(packet)
 
             if packet.packet.new_bullet:
-                b = Bullet()
-                b.owner = packet.packet.from_id
-                b.pos = packet.packet.player_pos
-                b.rotation = packet.packet.player_rotation
-                b.velocity = self.other_players[packet.packet.from_id].get_forward_vector()*config.BULLET_SPEED
-                b.instantiate()
+                self.other_players[packet.packet.from_id].shoot()
 
             if packet.packet.killed_by >= 0:
                 killed_player = self.other_players[packet.packet.from_id]
