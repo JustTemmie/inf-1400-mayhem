@@ -58,7 +58,7 @@ In this program we were tasked with recreating the old game Mayhem. We instead w
 \section{Design}\label{Section:Design}
 As we wanted a 3D game, we ended up with not using Pygame, and instead used a library called Pyglet, and made our own game engine on top of it\footnote{Since this was not a part of the assignment, its design will not be discussed in this report.}.
 
-Our engine provides some important super classes, some of this are Entity2D/3D and Game. Everything drawn or rendered to the screen is a subclass of Entity. All initiated, and visible Entities will be drawn/rendered to the screen. 
+Our engine provides some important super classes, some of these are Entity2D/3D and Game. Everything drawn or rendered to the screen is a subclass of Entity. All initiated, and visible Entities will be drawn/rendered to the screen. 
 
 Mayhem needs: bullets, 2 players, some obstacles and pickups.
 
@@ -67,6 +67,10 @@ The 2 players has a lot of common attributes, but different methods, so we ended
 "Obstacle" and "Pickup" are parent classes, who are inherited by "Planet" and "Battery" respectively. These are also rendered to the screen so "Obstacle" and "Pickup" inherits from "Entity3D"
 
 Since we wanted an online multiplayer game, we needed a Network class as well. This class is provided by our engine, so we only needed a method to handle the new requests.
+
+The game itself is handled by the "Mayhem" class which is a subclass of the "Game" class. The "Game" class is the class that is responsible for rendering and update the game. Game updates and rendering are completely separate, they each got their own thread. This is done to get better performance.
+
+The "Mayhem" class is also responsible for sending and checking network updates. This is done every game update.
 \section{Challenges}\label{Section:Challenges}
 \subsection{3D rendering}
 \subsection{Movement}
@@ -86,6 +90,18 @@ The Minkowski difference is just every point in one shape minus every point in a
 
 There is more to the algorithm than described above, for further reading~\cite{wikipediaGilbertJohnsonKeerthiDistance}.
 \section{Discussion}\label{Section:Discussion}
+The networking code is maybe a little to simple. All entities are handled client side, so you can hit two players with the same bullet, or two players can pick up the same battery pack.
+
+One bottleneck is the collision detection. If there is more than 100, depends on the computer, hitboxes, the frame rate will drop significantly. If you look at the cProfile screenshot~[figure:\ref{fig:cprofile}] you can see that Hitbox3D furthest point takes up lot of time, so this function could probably be done better.
+
+Another bottleneck is that we made the game in python. Python is not meant to make 3D games, or anything that needs performance for that matter. If we were to do it again, we would probably have chosen something like C++.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{figures/cProfile.png}
+	\caption{Screenshot of a part of the cProfile results}\label{fig:cprofile}
+\end{figure}
+
 
 \section{Conclusion}\label{Section:Conclusion}
 \printbibliography{

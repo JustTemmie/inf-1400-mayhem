@@ -33,6 +33,8 @@ import typing
 import pyglet
 import config
 import logging
+import random
+import math
 
 
 class Mayhem(Game):
@@ -40,9 +42,9 @@ class Mayhem(Game):
         self.player: LocalPlayer
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
+        self.spawn_test_objects()
         self.spawn_local_player()
         self.spawn_remote_players()
-        self.spawn_test_objects()
         self.spawn_hud()
 
         self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
@@ -68,22 +70,21 @@ class Mayhem(Game):
                 Battery.current_battery = None
 
             battery = Battery()
-            battery.pos = Vec3(2, -5, 2)
+            battery.pos = Vec3()
             battery.instantiate()
-        
-    
+
     def spawn_hud(self):
         MovementArrow().instantiate()
         MovementReticle().instantiate()
         ScoreCounter().instantiate()
         HealthCounter().instantiate()
         FuelCounter().instantiate()
-    
+
     def spawn_local_player(self):
         self.player = LocalPlayer()
-        self.player.pos = Vec3(2, -10, 0)
+        self.player.pos = Vec3()
         self.player.instantiate()
-    
+
     def spawn_remote_players(self):
         self.networking = Networking(
             config.SERVER_PORT, config.SERVER_ADDRESS
@@ -108,7 +109,6 @@ class Mayhem(Game):
         for i in range(25):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i * 2 - 50)
-            object.hitboxes.append(Hitbox3D(object.pos, object.rotation, Vec3(1, 1, 1), Vec3()))
             object.instantiate()
 
     def _send_update(self):

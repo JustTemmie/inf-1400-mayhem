@@ -104,13 +104,13 @@ class LocalPlayer(Player):
         # flip the horizontal movement if we're not rightside up, this is due to the game using global axes
         if not self.is_rightside_up():
             horizontal_movement = -horizontal_movement
-        
+
         self.rotation_acceleration = Vec3(
             vertical_movement,
             horizontal_movement,
             0,
         ) * config.rotation_thrust_force * delta
-        
+
 
         if keys[config.KEY_BINDS.thrust]:
             self.acceleration += self.get_forward_vector() * config.rear_thrust_force * delta
@@ -129,12 +129,12 @@ class LocalPlayer(Player):
         bullet.instantiate()
 
         self.new_bullet = 1
-    
+
     def respawn(self):    
         self.score -= 1
         self.health = 100
         self.spawn()
-        
+
     def spawn(self):
         self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
         self.velocity = Vec3()
@@ -146,7 +146,6 @@ class LocalPlayer(Player):
                 self.health -= 25
                 logging.info(f"shot by {entity.owner}")
                 entity.free()
-
 
         elif isinstance(entity, Obstacle) or isinstance(entity, Player):
             if self.velocity.length() > 0 or entity.velocity.length() > 0:

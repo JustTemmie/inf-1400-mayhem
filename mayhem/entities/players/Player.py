@@ -29,7 +29,7 @@ class Player(Entity3D):
     def process(self, delta):
         # self.roll += delta
         pass
-    
+
     def user_instantiate(self):
         model_scene = pyglet.resource.scene(Utils.get_model_path("axes"))
 
