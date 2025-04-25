@@ -1,5 +1,5 @@
 """
-( write more later )
+Contains the LocalPlayer class
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -30,6 +30,10 @@ import random
 
 
 class LocalPlayer(Player):
+    """
+    The local player, inherits from the generic player class.
+    Handles collision and input for the player
+    """
     instance: Player = None
 
     def user_init(self):
@@ -80,6 +84,9 @@ class LocalPlayer(Player):
         self.model = model_scene.create_models(batch=Player.game_object.main_batch)[0]
 
     def handle_input(self, delta):
+        """
+        Handles the input.
+        """
         keys = Input.keyboard_keys
 
         # generates a value between -1 and 1 for both axes
@@ -117,10 +124,13 @@ class LocalPlayer(Player):
 
         if (keys[config.KEY_BINDS.shoot]
         and (time.time() - self.last_shoot_time) > config.SHOOTING_INTERVAL):
-            self.shoot()
+            self._shoot()
             self.last_shoot_time = time.time()
 
-    def shoot(self):
+    def _shoot(self):
+        """
+        Creates a bullet.
+        """
         bullet = Bullet()
         bullet.owner = self.player_id
         bullet.pos = self.pos
@@ -128,35 +138,54 @@ class LocalPlayer(Player):
         bullet.velocity = self.get_forward_vector() * 30
         bullet.instantiate()
 
-        self.new_bullet = 1
+        self.new_bullet = 1  # Informs the game loop that a new bullet was created and it should be reported to the server
 
-    def respawn(self):    
+    def _respawn(self):
+        """
+        Respawns the player
+        """
         self.score -= 1
         self.health = 100
-        self.spawn()
+        self._spawn()
 
-    def spawn(self):
+    def _spawn(self):
+        """
+        Spawns the player
+        """
         self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
         self.velocity = Vec3()
         self.rotation = Vec3()
 
     def handle_collision(self, entity: Entity3D, delta: float):
+        """
+        Handles collision
+        Gets called on every collision.
+
+        Parameters:
+            entity: The entity it collided with
+            delta: delta time
+        """
+        # If it hit a bullet
         if isinstance(entity, Bullet):
             if entity.owner != self.player_id:
                 self.health -= 25
                 logging.info(f"shot by {entity.owner}")
                 entity.free()
 
+        # If it hit an obstacle
         elif isinstance(entity, Obstacle) or isinstance(entity, Player):
             if self.velocity.length() > 0 or entity.velocity.length() > 0:
                 self.health -= max(10, self.velocity.length()) * 0.5 + max(10, entity.velocity.length()) * 0.5
-                self.spawn()
+                self._spawn()
 
+        # If it hit a pickup
         elif isinstance(entity, Pickup):
             entity.picked_up(self)
             return
 
+        # Is dead?
         if self.health <= 0:
+            # Makes sure the correct player gets credit for the kill
             if isinstance(entity, Bullet):
                 self.killed_by = entity.owner
             elif isinstance(entity, Player):
@@ -164,7 +193,7 @@ class LocalPlayer(Player):
             else:
                 self.killed_by = -1
 
-            self.respawn()
+            self._respawn()
 
     def update_camera_position(self, delta):
         forward = self.get_forward_vector()
@@ -177,6 +206,10 @@ class LocalPlayer(Player):
         Camera.active_camera.rotation = self.rotation
 
     def get_gravity(self):
+        """
+        Calculates the gravity acting on the player.
+        Using Newtons gravity law.
+        """
         g = Vec3()
         for entity in Entity3D.all_3D_entities:
             d = entity.pos - self.pos

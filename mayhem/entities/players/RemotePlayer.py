@@ -1,5 +1,5 @@
 """
-< write some stuff idk >
+Contains the RemotePlayer class
 Authors: BAaboe (i'll replace names at handin)
 """
 
@@ -20,6 +20,9 @@ import config
 
 
 class RemotePlayer(Player):
+    """
+    Simple child class of the generic Player class.
+    """
     def engine_process(self, delta):
         pass
 
@@ -38,6 +41,12 @@ class RemotePlayer(Player):
         super().user_init()
 
     def update_pos(self, packet: typing.NamedTuple):
+        """
+        Updates the position, velocity and hitbox of the player.
+
+        Parameters:
+            packet: The network packet with the new position
+        """
         self.pos = packet.packet.player_pos
         self.velocity = packet.packet.player_velocity
         self.acceleration = packet.packet.player_acceleration

@@ -1,5 +1,5 @@
 """
-( write more later )
+Contains the mayhem class
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -38,7 +38,15 @@ import math
 
 
 class Mayhem(Game):
+    """
+    The main game class.
+    Spawns all the objects in the game, except bullets.
+    """
+
     def init(self):
+        """
+        Runs once at the start of the game.
+        """
         self.player: LocalPlayer
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
@@ -74,6 +82,9 @@ class Mayhem(Game):
             battery.instantiate()
 
     def spawn_hud(self):
+        """
+        Spawns all the HUD entities
+        """
         MovementArrow().instantiate()
         MovementReticle().instantiate()
         ScoreCounter().instantiate()
@@ -81,11 +92,17 @@ class Mayhem(Game):
         FuelCounter().instantiate()
 
     def spawn_local_player(self):
+        """
+        Spawns the local player
+        """
         self.player = LocalPlayer()
         self.player.pos = Vec3()
         self.player.instantiate()
 
     def spawn_remote_players(self):
+        """
+        Starts listening to server.
+        """
         self.networking = Networking(
             config.SERVER_PORT, config.SERVER_ADDRESS
         )  # FIXME: Should be changed later. Port and address should be a user input
@@ -93,7 +110,18 @@ class Mayhem(Game):
             self.networking.start_listen()  # Creates a thread that listens to the server.
             self.networking.send(Packet.player_to_packet(self.player))
 
+    def spawn_obstacles(self):
+        """
+        Spawns the planet
+        """
+        planet = Planet()
+        planet.pos = Vec3(15, 140, 70)
+        planet.instantiate()
+
     def spawn_test_objects(self):
+        """
+        Spawns test objects (should not be called in the final product)
+        """
         player = Player()
         player.pos = Vec3(-5, 0, 0)
         player.instantiate()
@@ -102,22 +130,24 @@ class Mayhem(Game):
         player.pos = Vec3(-5, 0, 15)
         player.instantiate()
 
-        planet = Planet()
-        planet.pos = Vec3(15, 140, 70)
-        planet.instantiate()
-
         for i in range(25):
             object = ExampleObject()
             object.pos = Vec3(0, 0, i * 2 - 50)
             object.instantiate()
 
     def _send_update(self):
+        """
+        Sends all the relevent info about the player to the server
+        """
         if self.networking.connected:
             self.networking.send(Packet.player_to_packet(self.player))
             self.player.new_bullet = 0
             self.player.killed_by = -1
 
     def _handle_network_input(self):
+        """
+        Empties the network queue and handles all the requests
+        """
         self.networking.lock.acquire()  # Locks the queue so that two threads can not use it at the same time
         while not self.networking.q.empty():
             data = self.networking.q.get()

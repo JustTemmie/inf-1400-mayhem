@@ -1,5 +1,5 @@
 """
-( write more later )
+Contains the Player class
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -17,6 +17,9 @@ import logging
 
 
 class Player(Entity3D):
+    """
+    Generic Player class. 
+    """
     def user_init(self):
         logging.info("new ship!")
         self.player_id = 0

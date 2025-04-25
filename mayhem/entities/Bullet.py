@@ -1,5 +1,5 @@
 """
-Bullet entity
+Contains the bullet class
 Authors: BAaboe (i'll replace names at handin)
 """
 
@@ -14,7 +14,11 @@ from pyglet.math import Vec3
 import gc
 import time
 
+
 class Bullet(Entity3D):
+    """
+    Bullet class contains info about a bullet
+    """
     def user_init(self):
         self.mass = 0.01
         self.ignore_friction = True
