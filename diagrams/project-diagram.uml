@@ -149,6 +149,8 @@ class Packet {
     __init__()
 }
 
+Mayhem --> Packet
+
 class Server {
     encode()
     start()
@@ -179,9 +181,6 @@ Entity3D <|-- Camera
 Camera --> Window
 
 
-class Component {
-        __init__()
-}
 class Entity {
     on_resize()
     user_init()
@@ -255,7 +254,6 @@ class Entity3D {
     __init__(pos: Vec3 , velocity: Vec3 , acceleration: Vec3 , rotation: Vec3 , rotation_velocity: Vec3 , rotation_acceleration: Vec3 , model: pyglet.model.Scene)
 }
 Entity <|-- Entity3D
-Entity3D --> Scene
 
 class Game {
     init()
@@ -277,13 +275,6 @@ class Game {
     __init__(frames_elapsed: int , time_elapsed: float , frame_times: list[float] )
 }
 
-class ControllerHandler {
-    on_stick_motion()
-    on_button_press()
-    on_button_release()
-    on_trigger_motion()
-        __init__()
-}
 class Input {
     on_mouse_motion()
     on_mouse_press()
@@ -292,6 +283,18 @@ class Input {
     on_controller_disconnect()
         __init__()
 }
+
+Mayhem --> Input
+
+class ControllerHandler {
+    on_stick_motion()
+    on_button_press()
+    on_button_release()
+    on_trigger_motion()
+        __init__()
+}
+
+Input --> ControllerHandler
 
 class MusicManager {
     _fade_to_with_player()
@@ -310,6 +313,8 @@ class MusicManager {
     fading
     __init__(currently_playing: str , fading: bool )
 }
+
+Mayhem --> MusicManager
 
 class Window {
     _init_gl()
@@ -433,6 +438,12 @@ class Hitsphere3D {
     __init__()
 }
 Hitarea3D <|-- Hitsphere3D
+
+Planet --> Hitsphere3D
+LocalPlayer --> Hitsphere3D
+RemotePlayer --> Hitsphere3D
+Bullet --> Hitsphere3D
+
 class Hitarea {
     colliding_with()
     _support()
@@ -458,11 +469,7 @@ class Networking {
     __init__()
 }
 
-class Scene {
-    add_entity()
-    set_scene()
-        __init__()
-}
+Mayhem --> Networking
 
 class Utils {
     print_system_info()

@@ -2,7 +2,7 @@
 class Obstacle {
     engine_process()
     handle_collision()
-        __init__()
+     __init__()
 }
 Entity3D <|-- Obstacle
 
