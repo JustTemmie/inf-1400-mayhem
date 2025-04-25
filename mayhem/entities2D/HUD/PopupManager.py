@@ -27,7 +27,7 @@ class PopupManager(Entity):
             """
             Parameters:
                 text: The text the popup should have
-                duration: How long the popup should stay on the screen
+                duration: How long the popup should stay on the screen. -1 disables the duration
                 colour: The colour of the popup
             """
             self.text = text
@@ -46,25 +46,62 @@ class PopupManager(Entity):
         def on_resize(self):
             self.fontsize = Window.size.y/50
 
-    def create_popup(self, text, duration=10, colour=Colour.YELLOW):
+    def create_popup(self, text, duration=10, colour=Colour.YELLOW, position=-1):
         """
         Creates an popup.
 
         Parameters:
             text: The text the popup should have
-            duration: How long the popup should stay on the screen, deafult 10 seconds
+            duration: How long the popup should stay on the screen, deafult 10 seconds, -1 disables the duration
             colour: The colour of the text
+
+        returns the popup object
         """
         popup = self.Popup(text, duration=duration, colour=colour)
         popup.instantiate()
-        self.popups.append(popup)
+        self.popups.insert(position, popup)
+        return popup
+
+    def edit_popup(self, popup, text, duration=None, colour=None):
+        """
+        Edits an popup.
+
+        Parameters:
+            text: The text the popup should have
+            duration: How long the popup should stay on the screen, deafult 10 seconds, -1 disables the duration
+            colour: The colour of the text
+
+        returns the popup object
+        """
+        popup.text = text
+        popup.lable.text = text
+
+        if duration:
+            popup.duration = duration
+        if colour:
+            popup.colour = colour
+
+    def delte_popup(self, popup):
+        """
+        Deltes an popup.
+
+        Parameters:
+            popup: The popup to delete
+        """
+        self.popups.remove(popup)
+        popup.free()
+
+    def get_popup_text(self, popup):
+        """
+        Return the text of a popup
+        """
+        return popup.lable.text
 
     def process(self, delta):
-
         # Checks if the popup should be deleted
         for popup in self.popups:
-            if time.time()-popup.created >= popup.duration:
-                PopupManager.popups.remove(popup)
+            if time.time()-popup.created >= popup.duration and popup.duration != -1:
+                self.popups.remove(popup)
                 popup.free()
 
     def prepare_draw(self, delta):

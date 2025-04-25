@@ -58,20 +58,21 @@ class Server:
             decoded_data = list(data.decode().split(" "))
             """
             How the data is formated (Porbably under 1 KB):
+            0           --- If not zero, this is a chat message, and the rest of the format can be ignored
 
-            0, 1        --- player/server ids (from, to)
+            1, 2        --- player/server ids (from, to)
 
-            2, 3, 4     --- client pos (x, y, z)
-            5, 6, 7     --- client velocity (x, y, z)
-            8, 9, 10    --- client acceleration (x, y, z)
+            3, 4, 5     --- client pos (x, y, z)
+            6, 7, 8     --- client velocity (x, y, z)
+            9, 10, 11    --- client acceleration (x, y, z)
 
-            11, 12, 13  --- client rotation (x, y, z)
-            14, 15, 16  --- client rotation speed (x, y, z)
-            17, 18, 19  --- client rotation acceleration (x, y, z)
+            12, 13, 14  --- client rotation (x, y, z)
+            15, 16, 17  --- client rotation speed (x, y, z)
+            18, 19, 20  --- client rotation acceleration (x, y, z)
 
-            20          --- new bullet? If 0 no new bullet
+            21          --- new bullet? If 0 no new bullet
 
-            21          --- Killed by player id (if negativ not killed)
+            22          --- Killed by player id (if negativ not killed)
             """
 
             if addr not in self.clients:
@@ -107,10 +108,10 @@ class Server:
             if client != client_from:
                 # Send packet to client
                 if client_from:
-                    packet[0] = client_from.player_id
+                    packet[1] = client_from.player_id
                 else:
-                    packet[0] = 0
-                packet[1] = client.player_id
+                    packet[1] = 0
+                packet[2] = client.player_id
                 self.serverSocket.sendto(self.encode(packet), client.addr)
 
         # Tell the other clients that the player has disconnected
@@ -118,7 +119,7 @@ class Server:
             print(f"Player from {client.addr} with ID {client.player_id} timedout")
             self.clients.pop(client.addr)
             self.player_ids.remove(client.player_id)
-            packet = [0]*22
+            packet = [0]*23
 
             self.broadcast(packet, client)
 

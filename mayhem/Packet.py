@@ -29,6 +29,7 @@ class Packet:
         player_rotation_acceleration=Vec3(0, 0, 0),
         new_bullet=0,
         killed_by=-1,
+        message=""
     ):
         """
         Creates a namedtuple with all the packets information
@@ -54,7 +55,8 @@ class Packet:
                 "player_rotation_velocity",
                 "player_rotation_acceleration",
                 "new_bullet",
-                "killed_by"
+                "killed_by",
+                "message"
             ],
         )
 
@@ -68,7 +70,8 @@ class Packet:
             player_rotation_velocity,
             player_rotation_acceleration,
             new_bullet,
-            killed_by
+            killed_by,
+            message
         )
 
     def encode(self) -> bytes:
@@ -78,17 +81,22 @@ class Packet:
         Returns the encoded packet.
         """
         out = ""
-        for i in self.packet:
-            out += " "
-            if isinstance(i, Vec3):
-                out += str(i.x)
+        if self.packet.message == "":
+            out = "0"
+            for i in self.packet:
                 out += " "
-                out += str(i.y)
-                out += " "
-                out += str(i.z)
-            else:
-                out += str(i)
-        return out[1:].encode()
+                if isinstance(i, Vec3):
+                    out += str(i.x)
+                    out += " "
+                    out += str(i.y)
+                    out += " "
+                    out += str(i.z)
+                else:
+                    out += str(i)
+            return out.encode()
+        else:
+            out = f"1 {self.packet.from_id} {self.packet.to_id} {self.packet.message}"
+            return out.encode()
 
     @classmethod
     def decode(self, data: bytes) -> "Packet":
@@ -104,38 +112,42 @@ class Packet:
         decoded_data = data.decode().split(" ")
         # Please read README in server
         try:
-            packet = Packet(
-                int(decoded_data[0]),
-                int(decoded_data[1]),
-                Vec3(
-                    float(decoded_data[2]), float(decoded_data[3]), float(decoded_data[4])
-                ),
-                Vec3(
-                    float(decoded_data[5]), float(decoded_data[6]), float(decoded_data[7])
-                ),
-                Vec3(
-                    float(decoded_data[8]), float(decoded_data[9]), float(decoded_data[10])
-                ),
-                Vec3(
-                    float(decoded_data[11]),
-                    float(decoded_data[12]),
-                    float(decoded_data[13]),
-                ),
-                Vec3(
-                    float(decoded_data[14]),
-                    float(decoded_data[15]),
-                    float(decoded_data[16]),
-                ),
-                Vec3(
-                    float(decoded_data[17]),
-                    float(decoded_data[18]),
-                    float(decoded_data[19]),
-                ),
-                int(decoded_data[20]),
-                int(decoded_data[21]),
-            )
-        except:
+            if int(decoded_data[0]) == 0:
+                packet = Packet(
+                    int(decoded_data[1]),
+                    int(decoded_data[2]),
+                    Vec3(
+                        float(decoded_data[3]), float(decoded_data[4]), float(decoded_data[5])
+                    ),
+                    Vec3(
+                        float(decoded_data[6]), float(decoded_data[7]), float(decoded_data[8])
+                    ),
+                    Vec3(
+                        float(decoded_data[9]), float(decoded_data[10]), float(decoded_data[11])
+                    ),
+                    Vec3(
+                        float(decoded_data[12]),
+                        float(decoded_data[13]),
+                        float(decoded_data[14]),
+                    ),
+                    Vec3(
+                        float(decoded_data[15]),
+                        float(decoded_data[16]),
+                        float(decoded_data[17]),
+                    ),
+                    Vec3(
+                        float(decoded_data[18]),
+                        float(decoded_data[19]),
+                        float(decoded_data[20]),
+                    ),
+                    int(decoded_data[21]),
+                    int(decoded_data[22]),
+                )
+            else:
+                packet = Packet(from_id=decoded_data[1], to_id=decoded_data[2], message=" ".join(decoded_data[3:]))
+        except Exception as e:
             logging.error("Bad packet :(")
+            print(e)
             return None
         return packet
 
@@ -159,7 +171,8 @@ class Packet:
             p.rotation_velocity,
             p.rotation_acceleration,
             p.new_bullet,
-            p.killed_by
+            p.killed_by,
+            ""
         )
 
         return packet

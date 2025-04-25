@@ -84,6 +84,8 @@ class LocalPlayer(Player):
         """
         Handles the input.
         """
+        if Input.is_typing:
+            return
         keys = Input.keyboard_keys
 
         # generates a value between -1 and 1 for both axes

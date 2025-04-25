@@ -35,7 +35,7 @@ class Input:
     """
     Makes it easier to fetch keyboard, mouse, and controller inputs from a centralized class.
     """
-
+    is_typing = False
     keyboard_keys = pyglet.window.key.KeyStateHandler()
 
     mouse: Vec2 = Vec2(0, 0)
