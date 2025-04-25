@@ -72,8 +72,17 @@ The game itself is handled by the "Mayhem" class which is a subclass of the "Gam
 
 The "Mayhem" class is also responsible for sending and checking network updates. This is done every game update.
 \section{Challenges}\label{Section:Challenges}
-\subsection{3D rendering}
+\subsection{2D and 3D rendering}
+One significant challenge we faced was managing the camera system effectively. Implementing a camera that can switch between different views—such as world rendering and HUD rendering requires careful handling of transformations and projections.
+Ensuring that the camera correctly interprets the player's orientation and position in 3D space, particularly when dealing with upside-down scenarios.
+
+In addition to the complexities of the camera system, optimizing rendering performance was another critical focus. Batched rendering was very important, by grouping similar entities together and rendering them in a single batch we save a ton of system overhead by minimizing the number of draw calls made to the GPU.
+
 \subsection{Movement}
+Implementing the player movement in a 3D environment presented significant challenges due to the complexity of the underlying maths. Initially, we were uncertain what the best way to control the player would be, but we ultimately decided to use the mouse cursor as a "digital joystick". This approach was heavily inspired by other games in the genre, particularly Elite Dangerous.
+
+The final system allows the player's ship to rotate toward the mouse cursor. By employing some mathmatical calculations, we can accurately determine the direction the ship is facing based on its rotation, which is used in the process of generating thrust.
+
 \subsection{Networking}
 Since we wanted the game to be able to play online multiplayer, we had to code network code.
 We decided to have a server that the clients has to connect to using UDP. The server works by taking in a packet from a client and then redistribute it to all the other clients. The server is also responsible for giving each client a unique ID.
