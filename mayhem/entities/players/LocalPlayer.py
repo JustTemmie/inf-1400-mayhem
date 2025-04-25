@@ -40,7 +40,7 @@ class LocalPlayer(Player):
         super().user_init()
         LocalPlayer.instance = self
 
-        self.visible = False
+        self.visible = True
 
         self.last_shoot_time = 0
         self.new_bullet = 0
@@ -50,7 +50,7 @@ class LocalPlayer(Player):
 
         self.killed_by = -1
 
-        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 3.5)]
 
     def engine_process(self, delta):
         if self.killed_by != -1:
@@ -77,11 +77,6 @@ class LocalPlayer(Player):
         )
         
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
-
-    def user_instantiate(self):
-        model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
-
-        self.model = model_scene.create_models(batch=Player.game_object.main_batch)[0]
 
     def handle_input(self, delta):
         """

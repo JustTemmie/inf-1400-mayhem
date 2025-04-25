@@ -54,6 +54,7 @@ class Game:
 
         Input.controller_manager.on_connect = Input.on_controller_connect
         Input.controller_manager.on_disconnect = Input.on_controller_disconnect
+        # handle already connected controllers
         if controllers := Input.controller_manager.get_controllers():
             for controller in controllers:
                 Input.on_controller_connect(controller)
