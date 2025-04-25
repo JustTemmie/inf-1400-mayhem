@@ -1,24 +1,27 @@
 """
 Contains the bullet class
-Authors: BAaboe (i'll replace names at handin)
+Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
 from engine.core.Entity3D import Entity3D
 from engine.core.Game import Game
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
+from enum import Enum
+
 import pyglet
 from pyglet.math import Vec3
-import gc
-import time
 
 
 class Bullet(Entity3D):
     """
     Bullet class contains info about a bullet
     """
+
+    bullet_colours = ["blue", "green", "grey", "purple", "red", "yellow"]
+
     def user_init(self):
         self.mass = 0.01
         self.ignore_friction = True
@@ -26,8 +29,12 @@ class Bullet(Entity3D):
         self.owner = 0
         self.age = 0
 
+        self.log_spawn = False
+
     def user_instantiate(self):
-        model_scene = pyglet.resource.scene(Utils.get_model_path("rocket"))
+        colour = Bullet.bullet_colours[self.owner % len(Bullet.bullet_colours)]
+
+        model_scene = pyglet.resource.scene(f"assets/models/bullets/{colour}/bullet.obj")
 
         self.model = model_scene.create_models(batch=Entity3D.game_object.main_batch)[0]
 

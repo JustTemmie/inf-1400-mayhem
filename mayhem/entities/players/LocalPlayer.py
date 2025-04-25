@@ -5,7 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 from engine.core.Game import Game
 from engine.core.Camera import Camera
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
 from engine.core.Entity3D import Entity3D
@@ -34,6 +34,7 @@ class LocalPlayer(Player):
     The local player, inherits from the generic player class.
     Handles collision and input for the player
     """
+
     instance: Player = None
 
     def user_init(self):
@@ -48,9 +49,11 @@ class LocalPlayer(Player):
         self.health = 100
         self.fuel = config.STARTING_FUEL
 
+        self.last_bullet_shot_from_right: bool = True
+
         self.killed_by = -1
 
-        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 2)]
+        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 3.5)]
 
     def engine_process(self, delta):
         if self.killed_by != -1:
@@ -70,6 +73,7 @@ class LocalPlayer(Player):
 
         self.check_for_collision(delta)
 
+        # make sure the player doesn't go too far away from the battlefield
         self.pos = Vec3(
             max(-500, min(500, self.pos.x)),
             max(-500, min(500, self.pos.y)),
@@ -77,11 +81,6 @@ class LocalPlayer(Player):
         )
         
         logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
-
-    def user_instantiate(self):
-        model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
-
-        self.model = model_scene.create_models(batch=Player.game_object.main_batch)[0]
 
     def handle_input(self, delta):
         """
@@ -134,10 +133,16 @@ class LocalPlayer(Player):
         Creates a bullet.
         """
         bullet = Bullet()
+        
+        self.last_bullet_shot_from_right = not self.last_bullet_shot_from_right
+        if self.last_bullet_shot_from_right:
+            bullet.pos = self.pos + self.get_right_vector() * 1.5
+        else:
+            bullet.pos = self.pos - self.get_right_vector() * 1.5
+
         bullet.owner = self.player_id
-        bullet.pos = self.pos
         bullet.rotation = self.rotation
-        bullet.velocity = self.get_forward_vector() * 30
+        bullet.velocity = self.get_forward_vector() * config.BULLET_SPEED
         bullet.instantiate()
 
         self.new_bullet = 1  # Informs the game loop that a new bullet was created and it should be reported to the server
@@ -149,12 +154,13 @@ class LocalPlayer(Player):
         self.score -= 1
         self.health = 100
         self._spawn()
+        self._spawn()
 
     def _spawn(self):
         """
         Spawns the player
         """
-        self.pos = pyglet.math.Vec3(random.uniform(-10, 10), random.uniform(-10, 10), random.uniform(-10, 10))
+        self.pos = Utils.get_random_normalized_3D_vector() * 300
         self.velocity = Vec3()
         self.rotation = Vec3()
 

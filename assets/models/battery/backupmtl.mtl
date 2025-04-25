@@ -1,0 +1,14 @@
+# Blender 4.4.1 MTL File: '9V_Battery.blend'
+# www.blender.org
+
+newmtl Mat_Duracell
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd assets/models/battery/battery.png
+map_Ns assets/models/battery/battery_roughness.png
+map_refl assets/models/battery/battery_metalness.png
+map_Bump -bm 1.000000 assets/models/battery/battery_normal.png

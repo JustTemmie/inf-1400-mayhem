@@ -14,10 +14,14 @@ air_friction = 0.95 # float from 0 to 1, where 1 is 100%, really shouldn't ever 
 rear_thrust_force: float = 500
 rotation_thrust_force: float = 150_000
 
-SHOOTING_INTERVAL = 0.2
-BULLET_SPEED = 30
+SHOOTING_INTERVAL = 0.25
+BULLET_SPEED = 50
 
 FUEL_RATE = 1  # Fuel per seconod
 STARTING_FUEL = 80
+MAX_FUEL = 100
+BATTERY_RECHARGING_AMOUNT = 60
+BATTERY_SPAWN_COOLDOWN = 15
+MAX_BATTERY_COUNT = 5
 
 GRAVITATIONAL_CONSTANT = 6.67*10**-11

@@ -1,9 +1,9 @@
 """
-The minimum required to create a 3D object.
+Contains the planet class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 from mayhem.entities.obstacles.Obstacle import Obstacle
 
@@ -13,15 +13,19 @@ import pyglet
 
 
 class Planet(Obstacle):
+    """
+    Class for the massive planet you see in the game world.
+    """
+    
     def user_init(self):
-        self.mass = 6*10**13  # kg
+        self.mass = 6*10**14  # kg
         self.area = 1  # m^2, affects the objects interaction with air
         self.ignore_friction: bool = True
         self.rotation_velocity = Vec3(0.02, 0, 0)
         self.rotation = Vec3(0, 0.28, 0.74)
     
     def user_instantiate(self):
-        self.hitboxes.append(Hitsphere3D(self.pos, Vec3(0, 0, 0), 100))
+        self.hitboxes.append(Hitsphere3D(self.pos, Vec3(0, 0, 0), 200))
         
         model_scene = pyglet.resource.scene(Utils.get_model_path("planet"))
 

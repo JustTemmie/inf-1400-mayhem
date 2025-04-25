@@ -40,6 +40,12 @@ class Camera(Entity3D):
         logging.debug(f"camera pos: {self.pos}, camera rotation: {self.rotation}")
 
     def ProjectWorld(self):
+        """
+        Changes a couple of the camera's internal variables.
+
+        Intended to be called just ahead of rendering the world
+        """
+
         glEnable(GL_DEPTH_TEST)
         self.window.projection = self.window.model_view
         
@@ -51,6 +57,11 @@ class Camera(Entity3D):
             self.window.view = Mat4.look_at(position=self.pos, target=self.target, up=Vec3(0, 0, -1))
 
     def ProjectHud(self):
+        """
+        Changes a couple of the camera's internal variables.
+
+        Intended to be called just ahead of rendering the HUD
+        """
         glDisable(GL_DEPTH_TEST)
         self.window.projection = self.window.ui_view
         self.window.view = Mat4()

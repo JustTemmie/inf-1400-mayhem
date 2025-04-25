@@ -4,7 +4,7 @@ Authors: BAaboe (i'll replace names at handin)
 """
 
 from engine.core.Game import Game
-from engine.core.Utils import Utils
+from engine.extras.Utils import Utils
 from engine.core.Entity3D import Entity3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
@@ -23,6 +23,7 @@ class RemotePlayer(Player):
     """
     Simple child class of the generic Player class.
     """
+
     def engine_process(self, delta):
         pass
 

@@ -1,5 +1,5 @@
 """
-2d entities ( write more later )
+Contains the 2D entity class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -8,6 +8,10 @@ from engine.core.Entity import Entity
 from pyglet.math import Vec2
 
 class Entity2D(Entity):
+    """
+    2D entities are just entities, but specialized for a 2D environment 
+    """
+        
     all_2D_entities: list["Entity2D"] = []
 
     def __init__(self):

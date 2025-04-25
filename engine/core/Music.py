@@ -85,10 +85,3 @@ class MusicManager:
             self.main_player.volume = 0.5
             self.main_player.loop = True
             self.fading = False
-
-    
-
-# for testing
-if __name__ == "__main__":
-    music = MusicManager()
-    music.play("assets/music/gravity_turn_calm.wav")

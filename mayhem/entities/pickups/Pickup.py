@@ -10,4 +10,14 @@ import abc
 class Pickup(Entity3D):
     @abc.abstractmethod
     def picked_up(self, player):
+        """
+        Called whenever the player picks up the object, remember to free it yourself.
+        """
+        pass
+
+    @abc.abstractmethod
+    def spawn(self):
+        """
+        Called whenever the game wants to spawn a pickup, this is optional to implement.
+        """
         pass

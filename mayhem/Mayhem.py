@@ -9,11 +9,12 @@ from engine.core.Input import Input
 import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
+from engine.extras.Utils import Utils
 
 from mayhem.entities.players.Player import Player
 from mayhem.entities.pickups.Battery import Battery
 from mayhem.entities.obstacles.Planet import Planet
-from mayhem.entities.obstacles.ExampleObject import ExampleObject
+from mayhem.entities.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
 
@@ -28,15 +29,12 @@ from mayhem.entities2D.HUD.HealthCounter import HealthCounter
 from mayhem.entities2D.HUD.FuelCounter import FuelCounter
 from mayhem.entities2D.HUD.PopupManager import PopupManager
 
+import config
 
 from pyglet.math import Vec3
 
 import typing
-import pyglet
-import config
 import logging
-import random
-import math
 
 
 class Mayhem(Game):
@@ -52,9 +50,9 @@ class Mayhem(Game):
         self.player: LocalPlayer
         self.other_players: typing.Dict[int, RemotePlayer] = {}
 
+        print("LOADING...")
         self.spawn_local_player()
         self.spawn_remote_players()
-        self.spawn_test_objects()
         self.spawn_obstacles()
         self.spawn_hud()
 
@@ -75,15 +73,11 @@ class Mayhem(Game):
         self._handle_network_input()
         self._send_update()
 
-        if self.time_elapsed > self.last_spawned_battery_time + 20:
+        if self.time_elapsed > self.last_spawned_battery_time + config.BATTERY_SPAWN_COOLDOWN:
             self.last_spawned_battery_time = self.time_elapsed
 
-            if Battery.current_battery:
-                Battery.current_battery.free()
-                Battery.current_battery = None
-
             battery = Battery()
-            battery.pos = Vec3()
+            battery.spawn(230)
             battery.instantiate()
 
     def on_text(self, text):
@@ -128,7 +122,7 @@ class Mayhem(Game):
         Spawns the local player
         """
         self.player = LocalPlayer()
-        self.player.pos = Vec3()
+        self.player._spawn()
         self.player.instantiate()
 
     def spawn_remote_players(self):
@@ -147,25 +141,8 @@ class Mayhem(Game):
         Spawns the planet
         """
         planet = Planet()
-        planet.pos = Vec3(15, 140, 70)
+        planet.pos = Vec3(0, 0, 0)
         planet.instantiate()
-
-    def spawn_test_objects(self):
-        """
-        Spawns test objects (should not be called in the final product)
-        """
-        player = Player()
-        player.pos = Vec3(-5, 0, 0)
-        player.instantiate()
-
-        player = Player()
-        player.pos = Vec3(-5, 0, 15)
-        player.instantiate()
-
-        for i in range(25):
-            object = ExampleObject()
-            object.pos = Vec3(0, 0, i * 2 - 50)
-            object.instantiate()
 
     def _send_update(self):
         """

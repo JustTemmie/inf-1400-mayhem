@@ -1,5 +1,5 @@
 """
-Very simple entity that just draws the "deadzone" for the digital analogue stick.
+Contains the MovementArrow class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -17,6 +17,9 @@ import pyglet
 import math
 
 class MovementArrow(Entity2D):
+    """
+    Simple entity that draws an arrow from the centre of the screen to the mouse, with size depending on distance.
+    """
     def user_instantiate(self):
         
         middle = Window.size / 2
