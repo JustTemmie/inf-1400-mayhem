@@ -34,6 +34,7 @@ class LocalPlayer(Player):
     The local player, inherits from the generic player class.
     Handles collision and input for the player
     """
+    
     instance: Player = None
 
     def user_init(self):

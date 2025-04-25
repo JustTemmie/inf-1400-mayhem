@@ -23,6 +23,11 @@ import time
 import logging
 
 class Game:
+    """
+    Contains the game loop itself, this is what you want to extend if you're making a game.
+
+    the class' init() function is called when the engine is ready to do anything, use this over __init__().
+    """
     def __init__(self):
         Utils.print_system_info()
 
@@ -30,6 +35,7 @@ class Game:
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
 
+        self.music_manager = MusicManager()
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
@@ -38,7 +44,6 @@ class Game:
         self.window.push_handlers(Input.keyboard_keys)
         self.window.push_handlers(Input.controller_manager)
 
-        self.music_manager = MusicManager()
 
         self.frames_elapsed: int = 0
         self.time_elapsed: float = 0
@@ -48,7 +53,6 @@ class Game:
         self.frame_start_time = time.time()
 
         Entity.game_object = self
-        self.init()
 
         Camera.active_camera.instantiate()
 
@@ -59,11 +63,13 @@ class Game:
             for controller in controllers:
                 Input.on_controller_connect(controller)
 
+        self.init()
+
         self.window.set_visible()
 
     def init(self):
         """
-        Implement by extending class
+        Called when the game is started.
         """
         pass
 
@@ -81,7 +87,9 @@ class Game:
 
     def process(self, delta: float):
         """
-        Called every frame, not intended to be touched by the end user.
+        Called every frame (60 fps by default).
+
+        Not intended to be touched by the end user, instead use user_process()
         """
         Entity.time_elapsed = self.time_elapsed
 
@@ -115,7 +123,9 @@ class Game:
 
     def engine_process(self, delta: float):
         """
-        Called every engine tick (60 tps), not intended to be touched by the end user.
+        Called every engine tick (60 tps by default).
+
+        Not intended to be touched by the end user, instead use user_engine_process()
         """
         for entity in Entity.all_entities:
             entity.engine_process(delta)
@@ -133,7 +143,9 @@ class Game:
     
     def on_draw(self):
         """
-        Called every time pyglet attempts to render a frame
+        Called every time pyglet attempts to render a frame.
+
+        You probably shouldn't be calling this manually.
         """
         self.window.clear()
 

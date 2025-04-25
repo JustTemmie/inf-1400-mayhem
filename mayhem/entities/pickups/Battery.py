@@ -1,5 +1,5 @@
 """
-The minimum required to create a 3D object.
+Contains the battery class
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -14,6 +14,10 @@ import pyglet
 import math
 
 class Battery(Pickup):
+    """
+    3D pickup entity to allow the player to recharge.
+    """
+    
     current_battery = None
     
     def user_init(self):

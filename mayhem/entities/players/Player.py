@@ -20,6 +20,7 @@ class Player(Entity3D):
     """
     Generic Player class. 
     """
+    
     def user_init(self):
         logging.info("new ship!")
         self.player_id = 0

@@ -15,6 +15,9 @@ import logging
 controller_data = namedtuple("ControllerData", ["x", "y"])
 
 class ControllerHandler:
+    """
+    Passed to pyglet as a controller handler.
+    """
     def on_stick_motion(self, controller, stick, vector):
         print(f"stick: {stick} = {vector}")
     
@@ -29,6 +32,10 @@ class ControllerHandler:
     
 
 class Input:
+    """
+    Makes it easier to fetch keyboard, mouse, and controller inputs from a centralized class.
+    """
+
     keyboard_keys = pyglet.window.key.KeyStateHandler()
 
     mouse: Vec2 = Vec2(0, 0)

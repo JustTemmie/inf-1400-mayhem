@@ -15,6 +15,3 @@ class ExampleObject(Entity3D):
         model_scene = pyglet.resource.scene(Utils.get_model_path("test"))
 
         self.model = model_scene.create_models(batch=Entity3D.game_object.main_batch)[0]
-
-    def handle_collision(self, entity: Entity3D, delta):
-        pass

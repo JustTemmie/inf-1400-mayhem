@@ -1,5 +1,5 @@
 """
-The minimum required to create a 3D object.
+Contains the planet class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -13,6 +13,10 @@ import pyglet
 
 
 class Planet(Obstacle):
+    """
+    Class for the massive planet you see in the game world.
+    """
+    
     def user_init(self):
         self.mass = 6*10**13  # kg
         self.area = 1  # m^2, affects the objects interaction with air

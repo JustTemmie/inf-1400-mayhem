@@ -1,5 +1,5 @@
 """
-entity. ( write more later )
+Contains the 3D entity class.
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -13,6 +13,10 @@ import math
 import logging
 
 class Entity3D(Entity):
+    """
+    3D entities are just entities, but specialized for a 3D environment 
+    """
+
     all_3D_entities: list["Entity3D"] = []
 
     def __init__(self):
@@ -43,7 +47,7 @@ class Entity3D(Entity):
             logging.warning(f"{self} does not have a set model, ignoring")
             return
 
-        # note that Z is up
+        # note that Z is up, i'm pretty sure at least
         rot_x = Mat4.from_rotation(self.rotation.x, Vec3(1, 0, 0))
         rot_y = Mat4.from_rotation(self.rotation.y, Vec3(0, 0, 1))
         rot_z = Mat4.from_rotation(self.rotation.z, Vec3(0, 1, 0))
@@ -84,7 +88,7 @@ class Entity3D(Entity):
         # clamp all values between 0 and 2pi
         self.rotation = self.rotation % (math.pi * 2)
 
-    def check_for_collision(self, delta):
+    def check_for_collision(self, delta: float):
         """
         Checks for collision, and calles "handle_collision" on every collision
         """
@@ -97,7 +101,7 @@ class Entity3D(Entity):
                     if entity_hitbox.colliding_with(hitbox):
                         self.handle_collision(entity, delta)
 
-    def handle_collision(self, entity: "Entity3D", delta):
+    def handle_collision(self, entity: "Entity3D", delta: float):
         """
         Handles a collision
 
@@ -113,7 +117,6 @@ class Entity3D(Entity):
         """
         Computes the upwards pointing vector from the entity.
         """
-        # Compute the up vector using pitch (rotation.x), yaw (rotation.y), and roll (rotation.z)
         up_x = -math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
         up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
         up_z = math.cos(self.rotation.z) * math.cos(self.rotation.x)

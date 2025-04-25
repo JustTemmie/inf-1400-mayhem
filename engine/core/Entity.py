@@ -1,5 +1,5 @@
 """
-Blueprint for information shared between 2d and 3d entities ( write more later )
+Blueprint for information shared between 2d and 3d entities
 Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
@@ -9,13 +9,20 @@ import abc
 if typing.TYPE_CHECKING:
     from engine.core.Game import Game
 
-
 class Component:
+    """
+    Different way of storing data for entities, currently unused
+    """
     def __init__(self):
         pass
 
 
 class Entity:
+    """
+    "Entities", sometimes refered to as "actors", is the parent of any object in the game, everything is an entity.
+
+    Entities are only loaded into the world after their instantiate() function has been called, you may setup other information about them ahead of time.
+    """
     # these two really shouldn't be stored in here, but i can't think of a better place to store them
     game_object: "Game"
     time_elapsed: float = 0
@@ -59,6 +66,9 @@ class Entity:
         """
 
     def instantiate(self):
+        """
+        Instantiates the entity, this adds it to the world, sets their internal entity_ID, and may also load a custom model if the entity has one
+        """
         self.entity_ID = Entity.game_object.entity_ID
         Entity.game_object.entity_ID += 1
 
@@ -81,24 +91,26 @@ class Entity:
 
         Entity.all_entities.remove(self)
 
-    @abc.abstractmethod
-    def get_gravity(self):
-        """
-        Implement by extending class.
-        """
-        raise NotImplemented
-
-    @abc.abstractmethod
-    def prepare_draw(self, delta):
-        """
-        Implement by extending class.
-        This function is called by the engine right before the entity is to be rendered.
-        """
-        raise NotImplemented
-
     @classmethod
     def call_deferred(self, call: callable) -> None:
         """
         Deferred calls are called at the end of the frame.
         """
         self.deferred_calls.append(call)
+    
+    @abc.abstractmethod
+    def get_gravity(self):
+        """
+        Implement by extending class.
+
+        This function is used to get the entity's gravity, it's left as a function so it can easily be overwritten to do anything.
+        """
+        raise NotImplemented
+
+    @abc.abstractmethod
+    def prepare_draw(self, delta):
+        """
+        This function is called by the engine right before the entity is to be rendered.
+        """
+        raise NotImplemented
+

@@ -6,6 +6,10 @@ Authors: JustTemmie (i'll replace names at handin)
 import pyglet
 
 class Utils:
+    """
+    Not intended to be turned into an object.
+    """
+
     @staticmethod
     def print_system_info() -> None:
         """
@@ -22,6 +26,9 @@ class Utils:
 
     @staticmethod
     def get_model_path(model: str) -> str:
+        """
+        Shorthand for fetching model pathes
+        """
         return f"assets/models/{model}/{model}.obj"
 
 

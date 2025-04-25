@@ -12,7 +12,7 @@ from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 from mayhem.entities.players.Player import Player
 from mayhem.entities.pickups.Battery import Battery
 from mayhem.entities.obstacles.Planet import Planet
-from mayhem.entities.obstacles.ExampleObject import ExampleObject
+from mayhem.entities.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
 

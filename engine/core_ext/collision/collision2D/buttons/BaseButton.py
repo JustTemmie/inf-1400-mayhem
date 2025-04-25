@@ -27,6 +27,7 @@ class BaseButton(Entity2D):
     """
     An abstract base class for other buttons, not intended for use by the end user
     """
+
     def __init__(self, hit_area_type: Hitarea2D):
         super().__init__()
         

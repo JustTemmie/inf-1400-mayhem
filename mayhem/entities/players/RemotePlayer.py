@@ -23,6 +23,7 @@ class RemotePlayer(Player):
     """
     Simple child class of the generic Player class.
     """
+    
     def engine_process(self, delta):
         pass
 
