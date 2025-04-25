@@ -87,7 +87,7 @@ class Entity:
         Implement by extending class.
         """
         raise NotImplemented
-    
+
     @abc.abstractmethod
     def prepare_draw(self, delta):
         """

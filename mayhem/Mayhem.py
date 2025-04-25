@@ -25,6 +25,7 @@ from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 from mayhem.entities2D.HUD.ScoreCounter import ScoreCounter
 from mayhem.entities2D.HUD.HealthCounter import HealthCounter
 from mayhem.entities2D.HUD.FuelCounter import FuelCounter
+from mayhem.entities2D.HUD.PopupManager import PopupManager
 
 
 from pyglet.math import Vec3
@@ -67,7 +68,7 @@ class Mayhem(Game):
         if self.time_elapsed > 20 and not self.faded:
             self.faded = True
             self.music_manager.fade_to("assets/music/gravity_turn_action.ogg")
-        
+
         self._handle_network_input()
         self._send_update()
 
@@ -91,6 +92,9 @@ class Mayhem(Game):
         ScoreCounter().instantiate()
         HealthCounter().instantiate()
         FuelCounter().instantiate()
+
+        self.popupmanager = PopupManager()
+        self.popupmanager.instantiate()
 
     def spawn_local_player(self):
         """
@@ -157,6 +161,7 @@ class Mayhem(Game):
                 self.player.player_id = packet.packet.to_id
             if packet.packet.from_id not in self.other_players:
                 logging.info(f"Player with ID {packet.packet.from_id} joined")
+                self.popupmanager.create_popup(f"Player with ID {packet.packet.from_id} joined")
                 self.other_players[packet.packet.from_id] = RemotePlayer()
                 self.other_players[packet.packet.from_id].instantiate()
             else:
@@ -186,5 +191,6 @@ class Mayhem(Game):
                 elif packet.packet.killed_by == 0:
                     self.other_players.pop(packet.packet.from_id)
                     logging.info(f"Player with ID {packet.packet.from_id} disconnected")
+                    self.popupmanager.create_popup(f"Player with ID {packet.packet.from_id} disconnected")
 
         self.networking.lock.release()
