@@ -163,6 +163,10 @@ class Game:
         """
         Start the game!
         """
+
+        if config.target_physics_rate > config.target_refresh_rate:
+            logging.critical(f"the target physics rate of {config.target_physics_rate} is higher than the target refresh rate {config.target_refresh_rate}, this is NOT recommended and may lead to unexpected behaviour")
+        
         pyglet.clock.schedule_interval(self.engine_process, 1 / config.target_physics_rate)
         pyglet.clock.schedule_interval(self.process, 1 / config.target_refresh_rate)
         pyglet.app.run()

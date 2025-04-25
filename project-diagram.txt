@@ -1,0 +1,473 @@
+@startuml
+class Obstacle {
+    engine_process()
+    handle_collision()
+        __init__()
+}
+Entity3D <|-- Obstacle
+
+class Planet {
+    user_init()
+    user_instantiate()
+        mass
+    area
+    ignore_friction : bool 
+    rotation_velocity
+    rotation
+    model
+    __init__(ignore_friction: bool )
+}
+Obstacle <|-- Planet
+
+class Pickup {
+    picked_up()
+    spawn()
+        __init__()
+}
+Entity3D <|-- Pickup
+
+class Battery {
+    user_init()
+    user_instantiate()
+    picked_up()
+    spawn()
+        mass
+    area
+    ignore_friction : bool 
+    rotation_velocity
+    rotation
+    model
+    pos
+    __init__(ignore_friction: bool )
+}
+Pickup <|-- Battery
+
+class Player {
+    user_init()
+    user_instantiate()
+        player_id
+    mass
+    area
+    drag_coeficient
+    ignore_friction : bool 
+    audio_player
+    model
+    __init__(ignore_friction: bool )
+}
+Entity3D <|-- Player
+
+class LocalPlayer {
+    user_init()
+    engine_process()
+    handle_input()
+    _shoot()
+    _respawn()
+    _spawn()
+    handle_collision()
+    update_camera_position()
+    get_gravity()
+        visible
+    last_shoot_time
+    new_bullet
+    score
+    health
+    fuel
+    last_bullet_shot_from_right : bool 
+    pos
+    rotation_acceleration
+    last_shoot_time
+    last_bullet_shot_from_right
+    new_bullet
+    health
+    pos
+    velocity
+    rotation
+    killed_by
+    killed_by
+    __init__(last_bullet_shot_from_right: bool )
+}
+Player <|-- LocalPlayer
+
+class RemotePlayer {
+    engine_process()
+    user_init()
+    shoot()
+    update_pos()
+        pos
+    velocity
+    acceleration
+    rotation
+    rotation_velocity
+    rotation_acceleration
+    __init__()
+}
+Player <|-- RemotePlayer
+
+class Bullet {
+    user_init()
+    user_instantiate()
+    engine_process()
+        mass
+    ignore_friction
+    owner : int 
+    age
+    log_spawn
+    model
+    __init__(owner: int )
+}
+Entity3D <|-- Bullet
+
+class Mayhem {
+    init()
+    user_engine_process()
+    on_text()
+    _send_message()
+    spawn_hud()
+    spawn_local_player()
+    spawn_remote_players()
+    spawn_obstacles()
+    _send_update()
+    _handle_network_input()
+        player : LocalPlayer
+    other_players : typing.Dict[int, RemotePlayer] 
+    last_spawned_battery_time : float 
+    message
+    popupmanager
+    player
+    networking
+    __init__(player: LocalPlayer, other_players: typing.Dict[int, RemotePlayer] , last_spawned_battery_time: float )
+}
+Game <|-- Mayhem
+Mayhem --> LocalPlayer
+Mayhem --> RemotePlayer
+
+class Packet {
+    encode()
+    decode()
+    player_to_packet()
+        packet
+    __init__()
+}
+
+class Server {
+    encode()
+    start()
+    broadcast()
+        serverSocket
+    __init__()
+}
+
+class Player {
+        player_id
+    addr
+    time_last_message
+    __init__()
+}
+
+class Camera {
+    ProjectWorld()
+    ProjectHud()
+        window : Window 
+    visible
+    target : Vec3 
+    pos
+    UI_size
+    FOV : float 
+    __init__(window: Window , target: Vec3 , FOV: float )
+}
+Entity3D <|-- Camera
+Camera --> Window
+
+
+class Component {
+        __init__()
+}
+class Entity {
+    on_resize()
+    user_init()
+    process()
+    engine_process()
+    instantiate()
+    user_instantiate()
+    free()
+    call_deferred()
+    get_gravity()
+    prepare_draw()
+        entity_ID : int
+    components
+    visible
+    mass
+    area
+    drag_coeficient
+    ignore_friction : bool 
+    log_spawn : bool 
+    child_entities : list[Entity] 
+    entity_ID
+    __init__(entity_ID: int, ignore_friction: bool , log_spawn: bool , child_entities: list[Entity] )
+}
+Entity --> Entity
+
+class Entity2D {
+    instantiate()
+    prepare_draw()
+    handle_physics()
+    free()
+    get_gravity()
+        pos : Vec2 
+    velocity : Vec2 
+    acceleration : Vec2 
+    rotation : Vec2 
+    rotation_velocity : Vec2 
+    rotation_acceleration : Vec2 
+    render_batch
+    size : Vec2 
+    render_batch
+    acceleration
+    rotation_acceleration
+    __init__(pos: Vec2 , velocity: Vec2 , acceleration: Vec2 , rotation: Vec2 , rotation_velocity: Vec2 , rotation_acceleration: Vec2 , size: Vec2 )
+}
+Entity <|-- Entity2D
+
+class Entity3D {
+    instantiate()
+    prepare_draw()
+    handle_physics()
+    check_for_collision()
+    handle_collision()
+    get_up_vector()
+    get_right_vector()
+    get_forward_vector()
+    is_rightside_up()
+    free()
+    get_gravity()
+        pos : Vec3 
+    velocity : Vec3 
+    acceleration : Vec3 
+    rotation : Vec3 
+    rotation_velocity : Vec3 
+    rotation_acceleration : Vec3 
+    collidable
+    model : pyglet.model.Scene
+    acceleration
+    rotation_acceleration
+    rotation
+    model
+    __init__(pos: Vec3 , velocity: Vec3 , acceleration: Vec3 , rotation: Vec3 , rotation_velocity: Vec3 , rotation_acceleration: Vec3 , model: pyglet.model.Scene)
+}
+Entity <|-- Entity3D
+Entity3D --> Scene
+
+class Game {
+    init()
+    user_process()
+    user_engine_process()
+    process()
+    engine_process()
+    on_draw()
+    run()
+        main_batch
+    UI_batch
+    music_manager
+    window
+    frames_elapsed : int 
+    time_elapsed : float 
+    frame_times : list[float] 
+    entity_ID
+    frame_start_time
+    __init__(frames_elapsed: int , time_elapsed: float , frame_times: list[float] )
+}
+
+class ControllerHandler {
+    on_stick_motion()
+    on_button_press()
+    on_button_release()
+    on_trigger_motion()
+        __init__()
+}
+class Input {
+    on_mouse_motion()
+    on_mouse_press()
+    on_mouse_release()
+    on_controller_connect()
+    on_controller_disconnect()
+        __init__()
+}
+
+class MusicManager {
+    _fade_to_with_player()
+    fade_to()
+    process_fading()
+        player_1
+    player_2
+    main_player
+    currently_playing : str 
+    fading : bool 
+    currently_playing
+    fading
+    main_player
+    fading
+    main_player
+    fading
+    __init__(currently_playing: str , fading: bool )
+}
+
+class Window {
+    _init_gl()
+    update_views()
+    _on_resize()
+        model_view : Mat4
+    ui_view : Mat4
+    model_view
+    ui_view
+    projection
+    __init__(model_view: Mat4, ui_view: Mat4)
+}
+
+
+class BaseButton {
+    user_instantiate()
+    on_button_down()
+    on_pressed()
+    on_released()
+    on_toggled()
+    disable()
+    process()
+        hit_area_type
+    hit_area : Hitarea2D 
+    draw_mode : int 
+    pressed : bool 
+    disabled : bool 
+    toggled : bool 
+    toggle_mode : bool 
+    disabled
+    draw_mode
+    draw_mode
+    draw_mode
+    draw_mode
+    pressed
+    toggle_mode
+    pressed
+    __init__(hit_area: Hitarea2D , draw_mode: int , pressed: bool , disabled: bool , toggled: bool , toggle_mode: bool )
+}
+Entity2D <|-- BaseButton
+BaseButton --> Hitarea2D
+
+class Button {
+        __init__()
+}
+BaseButton <|-- Button
+class CheckBox {
+        __init__()
+}
+Button <|-- CheckBox
+class CheckButton {
+        __init__()
+}
+Button <|-- CheckButton
+class LinkButton {
+        __init__()
+}
+BaseButton <|-- LinkButton
+class TextureButton {
+        __init__()
+}
+BaseButton <|-- TextureButton
+
+class Hitarea2D {
+        __init__()
+}
+Hitarea <|-- Hitarea2D
+
+class Hitbox2D {
+    furthestPoint()
+    update()
+    center()
+        object_pos
+    box_pos
+    box_size
+    box_rotation
+    object_pos
+    box_rotation
+    __init__()
+}
+Hitarea2D <|-- Hitbox2D
+class Hitsphere2D {
+    furthestPoint()
+    update()
+    center()
+        object_pos
+    sphere_pos
+    sphere_radius
+    object_pos
+    __init__()
+}
+Hitarea2D <|-- Hitsphere2D
+
+class Hitarea3D {
+        __init__()
+}
+Hitarea <|-- Hitarea3D
+
+class Hitbox3D {
+    furthestPoint()
+    update()
+    center()
+        object_pos
+    object_rot
+    box_size
+    box_pos
+    object_pos
+    object_rot
+    __init__()
+}
+Hitarea3D <|-- Hitbox3D
+
+class Hitsphere3D {
+    furthestPoint()
+    update()
+    center()
+        object_pos
+    sphere_pos
+    sphere_radius
+    object_pos
+    __init__()
+}
+Hitarea3D <|-- Hitsphere3D
+class Hitarea {
+    colliding_with()
+    _support()
+    _handleSimplex()
+    update()
+    furthestPoint()
+    center()
+        __init__()
+}
+
+class Networking {
+    send()
+    _listen()
+    start_listen()
+        port
+    addr
+    s
+    connected
+    q
+    lock
+    connected
+    connected
+    __init__()
+}
+
+class Scene {
+    add_entity()
+    set_scene()
+        __init__()
+}
+
+class Utils {
+    print_system_info()
+    get_model_path()
+    get_random_normalized_3D_vector()
+        __init__()
+}
+@enduml

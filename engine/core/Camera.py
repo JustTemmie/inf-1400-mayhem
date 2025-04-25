@@ -1,5 +1,5 @@
 """
-The Camera module contains functions to aid in rendering
+Contains the Camera class.
 Authors: JustTemmie (i'll replace names at handin)
 """
 
@@ -20,6 +20,9 @@ if typing.TYPE_CHECKING:
 
 
 class Camera(Entity3D):
+    """
+    The Camera module contains functions to aid in rendering
+    """
     active_camera = None
 
     def __init__(self, window: pyglet.window):
@@ -35,9 +38,6 @@ class Camera(Entity3D):
 
         self.UI_size = 20
         self.FOV: float = config.FOV
-
-    def engine_process(self, delta):
-        logging.debug(f"camera pos: {self.pos}, camera rotation: {self.rotation}")
 
     def ProjectWorld(self):
         """

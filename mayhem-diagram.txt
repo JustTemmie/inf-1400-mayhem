@@ -1,0 +1,151 @@
+@startuml
+class Obstacle {
+    engine_process()
+    handle_collision()
+        __init__()
+}
+Entity3D <|-- Obstacle
+
+class Planet {
+    user_init()
+    user_instantiate()
+        mass
+    area
+    ignore_friction : bool 
+    rotation_velocity
+    rotation
+    model
+    __init__(ignore_friction: bool )
+}
+Obstacle <|-- Planet
+
+class Pickup {
+    picked_up()
+    spawn()
+        __init__()
+}
+Entity3D <|-- Pickup
+
+class Battery {
+    user_init()
+    user_instantiate()
+    picked_up()
+    spawn()
+        mass
+    area
+    ignore_friction : bool 
+    rotation_velocity
+    rotation
+    model
+    pos
+    __init__(ignore_friction: bool )
+}
+Pickup <|-- Battery
+
+class Player {
+    user_init()
+    user_instantiate()
+        player_id
+    mass
+    area
+    drag_coeficient
+    ignore_friction : bool 
+    audio_player
+    model
+    __init__(ignore_friction: bool )
+}
+Entity3D <|-- Player
+
+class LocalPlayer {
+    user_init()
+    engine_process()
+    handle_input()
+    _shoot()
+    _respawn()
+    _spawn()
+    handle_collision()
+    update_camera_position()
+    get_gravity()
+        visible
+    last_shoot_time
+    new_bullet
+    score
+    health
+    fuel
+    last_bullet_shot_from_right : bool 
+    pos
+    rotation_acceleration
+    last_shoot_time
+    last_bullet_shot_from_right
+    new_bullet
+    health
+    pos
+    velocity
+    rotation
+    killed_by
+    killed_by
+    __init__(last_bullet_shot_from_right: bool )
+}
+Player <|-- LocalPlayer
+
+class RemotePlayer {
+    engine_process()
+    user_init()
+    shoot()
+    update_pos()
+        pos
+    velocity
+    acceleration
+    rotation
+    rotation_velocity
+    rotation_acceleration
+    __init__()
+}
+Player <|-- RemotePlayer
+
+class Bullet {
+    user_init()
+    user_instantiate()
+    engine_process()
+        mass
+    ignore_friction
+    owner : int 
+    age
+    log_spawn
+    model
+    __init__(owner: int )
+}
+Entity3D <|-- Bullet
+
+class Mayhem {
+    init()
+    user_engine_process()
+    on_text()
+    _send_message()
+    spawn_hud()
+    spawn_local_player()
+    spawn_remote_players()
+    spawn_obstacles()
+    _send_update()
+    _handle_network_input()
+        player : LocalPlayer
+    other_players : typing.Dict[int, RemotePlayer] 
+    last_spawned_battery_time : float 
+    message
+    popupmanager
+    player
+    networking
+    __init__(player: LocalPlayer, other_players: typing.Dict[int, RemotePlayer] , last_spawned_battery_time: float )
+}
+Game <|-- Mayhem
+Mayhem --> LocalPlayer
+Mayhem --> RemotePlayer
+
+class Packet {
+    encode()
+    decode()
+    player_to_packet()
+        packet
+    __init__()
+}
+@enduml
