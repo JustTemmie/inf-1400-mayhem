@@ -5,6 +5,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 
 from engine.core.Game import Game
 from engine.core_ext.Netwoking import Networking
+from engine.core.Input import Input
 import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
 from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
@@ -62,6 +63,8 @@ class Mayhem(Game):
 
         self.last_spawned_battery_time: float = -50
 
+        self.window.push_handlers(self.on_text)
+
     def user_engine_process(self, delta):
         # this music check should probably just run when the player goes from the main menu to the game
         # or, we could fade to the action music whenever another player is nearby, though i'm not sure that would work well
@@ -82,6 +85,30 @@ class Mayhem(Game):
             battery = Battery()
             battery.pos = Vec3()
             battery.instantiate()
+
+    def on_text(self, text):
+        if text == "\r" and not Input.is_typing:
+            Input.is_typing = True
+            self.message = self.popupmanager.create_popup(text="", duration=-1, position=0)
+            return
+
+        if Input.is_typing:
+            if text == "\r":
+                Input.is_typing = False
+                message = self.popupmanager.get_popup_text(self.message)
+                self._send_message(message)
+                self.popupmanager.delte_popup(self.message)
+                self.message = None
+                self.popupmanager.create_popup(f"ID {self.player.player_id}: {message}")
+            else:
+                message = self.popupmanager.get_popup_text(self.message)
+                message += text
+                self.popupmanager.edit_popup(self.message, message)
+
+    def _send_message(self, message):
+        if self.networking.connected and self.player.player_id:
+            self.networking.send(Packet(from_id=self.player.player_id, message=message))
+
 
     def spawn_hud(self):
         """
@@ -144,7 +171,7 @@ class Mayhem(Game):
         """
         Sends all the relevent info about the player to the server
         """
-        if self.networking.connected:
+        if self.networking.connected and self.player.player_id != 0:
             self.networking.send(Packet.player_to_packet(self.player))
             self.player.new_bullet = 0
             self.player.killed_by = -1
@@ -157,6 +184,10 @@ class Mayhem(Game):
         while not self.networking.q.empty():
             data = self.networking.q.get()
             packet = Packet.decode(data)
+            if packet.packet.message:
+                self.popupmanager.create_popup(f"ID {packet.packet.from_id}: {packet.packet.message}")
+                continue
+
             if self.player.player_id == 0:
                 self.player.player_id = packet.packet.to_id
             if packet.packet.from_id not in self.other_players:

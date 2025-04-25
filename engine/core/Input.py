@@ -29,6 +29,7 @@ class ControllerHandler:
     
 
 class Input:
+    is_typing = False
     keyboard_keys = pyglet.window.key.KeyStateHandler()
 
     mouse: Vec2 = Vec2(0, 0)
