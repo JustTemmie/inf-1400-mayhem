@@ -8,7 +8,6 @@ from engine.core.Entity import Entity
 from pyglet.math import Mat4, Vec3
 
 import pyglet
-import typing
 import math
 import logging
 

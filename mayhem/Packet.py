@@ -3,16 +3,11 @@ Contains the Packet class
 Authors: BAaboe (i'll replace names at handin)
 """
 
-from engine.core_ext.Netwoking import Networking
-
 from mayhem.entities.players.Player import Player
-from mayhem.entities.Bullet import Bullet
 
 import logging
 
 from pyglet.math import Vec3
-
-import typing
 
 from collections import namedtuple
 

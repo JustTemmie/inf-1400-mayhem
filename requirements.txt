@@ -1,7 +1,1 @@
 pyglet # replacement for pygame
-
-# PyOpenGL # openGL support
-# PyOpenGL_accelerate # C bindings for openGL, improves performance
-
-# PyGLM # matrix math, used to improve performance
-numpy # numpy, used to improve performance

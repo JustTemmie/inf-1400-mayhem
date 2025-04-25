@@ -8,10 +8,7 @@ from engine.core.Entity2D import Entity2D
 from engine.core_ext.Colour import Colour
 from mayhem.entities.players.LocalPlayer import LocalPlayer
 
-from pyglet.math import Vec3
-
 import pyglet
-import math
 import config
 
 class FuelCounter(Entity2D):

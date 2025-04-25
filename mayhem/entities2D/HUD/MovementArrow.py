@@ -9,10 +9,6 @@ from engine.core.Input import Input
 from engine.core_ext.Colour import Colour
 from mayhem.entities2D.HUD.MovementReticle import MovementReticle
 
-import config
-
-from pyglet.math import Vec2
-
 import pyglet
 import math
 

@@ -3,21 +3,13 @@ Contains the RemotePlayer class
 Authors: BAaboe (i'll replace names at handin)
 """
 
-from engine.core.Game import Game
-from engine.extras.Utils import Utils
-from engine.core.Entity3D import Entity3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 from mayhem.entities.players.Player import Player
 
 from pyglet.math import Vec3
 
-import pyglet
-
 import typing
-
-import config
-
 
 class RemotePlayer(Player):
     """

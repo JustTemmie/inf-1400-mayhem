@@ -7,13 +7,8 @@ from engine.core.Game import Game
 from engine.core_ext.Netwoking import Networking
 import engine.extras.logger # this is just to init the module, do not remove even though it's unused
 
-from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
-from engine.extras.Utils import Utils
-
-from mayhem.entities.players.Player import Player
 from mayhem.entities.pickups.Battery import Battery
 from mayhem.entities.obstacles.Planet import Planet
-from mayhem.entities.ExampleObject import ExampleObject
 
 from mayhem.Packet import Packet
 

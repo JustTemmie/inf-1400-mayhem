@@ -10,6 +10,7 @@ class Obstacle(Entity3D):
     """
     Generic obstacle class for interactions with the player
     """
+    
     def engine_process(self, delta):
         self.check_for_collision(delta)
     

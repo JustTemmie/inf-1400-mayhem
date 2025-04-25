@@ -4,12 +4,7 @@ Authors: BAaboe, JustTemmie (i'll replace names at handin)
 """
 
 from engine.core.Entity3D import Entity3D
-from engine.core.Game import Game
-from engine.extras.Utils import Utils
-from engine.core_ext.collision.collision3D.Hitbox3D import Hitbox3D
 from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
-
-from enum import Enum
 
 import pyglet
 from pyglet.math import Vec3
@@ -32,6 +27,7 @@ class Bullet(Entity3D):
         self.log_spawn = False
 
     def user_instantiate(self):
+        # decide colour based on owner ID such that colours are synced between players
         colour = Bullet.bullet_colours[self.owner % len(Bullet.bullet_colours)]
 
         model_scene = pyglet.resource.scene(f"assets/models/bullets/{colour}/bullet.obj")

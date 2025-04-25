@@ -6,7 +6,7 @@ Authors: JustTemmie (i'll replace names at handin)
 from engine.core_ext.collision.collision2D.Hitbox2D import Hitbox2D
 
 from collections import namedtuple
-from pyglet.math import Vec2, Vec3
+from pyglet.math import Vec2
 
 import pyglet
 import typing

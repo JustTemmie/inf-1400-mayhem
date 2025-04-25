@@ -16,8 +16,6 @@ from engine.core.Music import MusicManager
 
 import config
 
-from collections import namedtuple
-
 import pyglet
 import time
 import logging
