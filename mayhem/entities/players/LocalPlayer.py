@@ -49,6 +49,8 @@ class LocalPlayer(Player):
         self.health = 100
         self.fuel = config.STARTING_FUEL
 
+        self.last_bullet_shot_from_right: bool = True
+
         self.killed_by = -1
 
         self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 3.5)]
@@ -129,10 +131,16 @@ class LocalPlayer(Player):
         Creates a bullet.
         """
         bullet = Bullet()
+        
+        self.last_bullet_shot_from_right = not self.last_bullet_shot_from_right
+        if self.last_bullet_shot_from_right:
+            bullet.pos = self.pos + self.get_right_vector() * 1.5
+        else:
+            bullet.pos = self.pos - self.get_right_vector() * 1.5
+
         bullet.owner = self.player_id
-        bullet.pos = self.pos
         bullet.rotation = self.rotation
-        bullet.velocity = self.get_forward_vector() * 30
+        bullet.velocity = self.get_forward_vector() * config.BULLET_SPEED
         bullet.instantiate()
 
         self.new_bullet = 1  # Informs the game loop that a new bullet was created and it should be reported to the server
@@ -143,6 +151,7 @@ class LocalPlayer(Player):
         """
         self.score -= 1
         self.health = 100
+        self._spawn()
         self._spawn()
 
     def _spawn(self):

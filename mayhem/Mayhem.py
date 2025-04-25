@@ -74,7 +74,7 @@ class Mayhem(Game):
             self.last_spawned_battery_time = self.time_elapsed
 
             battery = Battery()
-            battery.spawn(220)
+            battery.spawn(230)
             battery.instantiate()
 
     def spawn_hud(self):
