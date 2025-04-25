@@ -116,9 +116,9 @@ class Entity3D(Entity):
         """
         Computes the upwards pointing vector from the entity.
         """
-        up_x = -math.sin(self.rotation.z) * math.cos(self.rotation.y) - math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.sin(self.rotation.y)
-        up_y = -math.sin(self.rotation.z) * math.sin(self.rotation.y) + math.cos(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
-        up_z = math.cos(self.rotation.z) * math.cos(self.rotation.x)
+        up_x = math.sin(self.rotation.x) * math.sin(self.rotation.z) + math.cos(self.rotation.x) * math.cos(self.rotation.z) * math.sin(self.rotation.y)
+        up_y = -math.cos(self.rotation.z) * math.sin(self.rotation.x) + math.sin(self.rotation.z) * math.sin(self.rotation.x) * math.cos(self.rotation.y)
+        up_z = math.cos(self.rotation.x) * math.cos(self.rotation.y)
 
         return Vec3(up_x, up_y, up_z).normalize()
 

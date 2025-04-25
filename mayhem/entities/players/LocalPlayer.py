@@ -9,7 +9,6 @@ from engine.extras.Utils import Utils
 from engine.core.Window import Window
 from engine.core.Input import Input
 from engine.core.Entity3D import Entity3D
-from engine.core_ext.collision.collision3D.Hitsphere3D import Hitsphere3D
 
 from engine.core.Entity3D import Entity3D
 
@@ -25,6 +24,8 @@ from pyglet.math import Vec2, Vec3
 
 import logging
 import time
+import random
+import pyglet
 
 
 class LocalPlayer(Player):
@@ -51,8 +52,6 @@ class LocalPlayer(Player):
 
         self.killed_by = -1
 
-        self.hitboxes = [Hitsphere3D(self.pos, Vec3(0, 0, 0), 3.5)]
-
     def engine_process(self, delta):
         if self.killed_by != -1:
             return
@@ -72,13 +71,22 @@ class LocalPlayer(Player):
         self.check_for_collision(delta)
 
         # make sure the player doesn't go too far away from the battlefield
+        pre_capped_pos = self.pos
         self.pos = Vec3(
-            max(-500, min(500, self.pos.x)),
-            max(-500, min(500, self.pos.y)),
-            max(-500, min(500, self.pos.z))
+            max(-400, min(400, self.pos.x)),
+            max(-400, min(400, self.pos.y)),
+            max(-400, min(400, self.pos.z))
         )
+        if pre_capped_pos != self.pos:
+            self.velocity = -self.velocity
+            self.rotation = -self.rotation
+            Player.game_object.popupmanager.create_popup("A mysterious force is stopping you from going any farther.")
         
-        logging.debug(f"player pos: {self.pos}, player rotation: {self.rotation}")
+        if config.PLAY_SFX:
+            listener = pyglet.media.get_audio_driver().get_listener()
+            listener._set_position(self.pos)
+            listener.forward_orientation = tuple(self.get_forward_vector())
+            listener.up_orientation = tuple(-self.get_up_vector())
 
     def handle_input(self, delta):
         """
@@ -90,7 +98,6 @@ class LocalPlayer(Player):
 
         # generates a value between -1 and 1 for both axes
         standardized_mouse_position: Vec2 = (Input.mouse - Window.size / 2) / (Window.size / 2)
-        logging.debug(f"mouse pos: {standardized_mouse_position}")
 
         # caps the length to one
         magnitude = max(1, standardized_mouse_position.length()) # don't divide by values under 1
@@ -140,8 +147,14 @@ class LocalPlayer(Player):
 
         bullet.owner = self.player_id
         bullet.rotation = self.rotation
-        bullet.velocity = self.get_forward_vector() * config.BULLET_SPEED
+        bullet.velocity = self.velocity + self.get_forward_vector() * config.BULLET_SPEED
         bullet.instantiate()
+        
+        if config.PLAY_SFX:
+            source = pyglet.media.load(random.choice(self.laser_sfx), streaming=True)
+            self.audio_player.position = self.pos
+            self.audio_player.queue(source)
+            self.audio_player.play()
 
         self.new_bullet = 1  # Informs the game loop that a new bullet was created and it should be reported to the server
 

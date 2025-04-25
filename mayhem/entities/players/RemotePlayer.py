@@ -12,6 +12,8 @@ import config
 from pyglet.math import Vec3
 
 import typing
+import random
+import pyglet
 
 class RemotePlayer(Player):
     """
@@ -40,10 +42,15 @@ class RemotePlayer(Player):
         bullet.owner = packet.packet.from_id
         bullet.pos = packet.packet.player_pos
         bullet.rotation = packet.packet.player_rotation
-        bullet.velocity = self.get_forward_vector() * config.BULLET_SPEED
+        bullet.velocity = packet.packet.player_velocity + self.get_forward_vector() * config.BULLET_SPEED
         bullet.instantiate()
 
-        # self.audio_player.play("")
+        if config.PLAY_SFX:
+            source = pyglet.media.load(random.choice(self.laser_sfx), streaming=True)
+            self.audio_player.position = self.pos
+            self.audio_player.queue(source)
+            self.audio_player.play()
+
 
     def update_pos(self, packet: typing.NamedTuple):
         """

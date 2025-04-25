@@ -47,9 +47,9 @@ class Mayhem(Game):
 
         print("LOADING...")
         self.spawn_local_player()
-        self.spawn_remote_players()
         self.spawn_obstacles()
         self.spawn_hud()
+        self.spawn_remote_players()
 
         self.last_spawned_battery_time: float = -50
 
@@ -57,10 +57,11 @@ class Mayhem(Game):
 
     def user_engine_process(self, delta):
         # play calm or action music, depending on if you're alone or not
-        if len(self.other_players) == 0 and self.music_manager.currently_playing != "assets/music/gravity_turn_calm.ogg":
-            self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
-        elif len(self.other_players) >= 1 and self.music_manager.currently_playing != "assets/music/gravity_turn_action.ogg":
-            self.music_manager.fade_to("assets/music/gravity_turn_action.ogg")
+        if config.PLAY_MUSIC:
+            if len(self.other_players) == 0 and self.music_manager.currently_playing != "assets/music/gravity_turn_calm.ogg":
+                self.music_manager.fade_to("assets/music/gravity_turn_calm.ogg")
+            elif len(self.other_players) >= 1 and self.music_manager.currently_playing != "assets/music/gravity_turn_action.ogg":
+                self.music_manager.fade_to("assets/music/gravity_turn_action.ogg")
         
         self._handle_network_input()
         self._send_update()
@@ -121,13 +122,18 @@ class Mayhem(Game):
         """
         Starts listening to server.
         """
+
+        print("Connecting to server...")
         self.networking = Networking(
             config.SERVER_PORT, config.SERVER_ADDRESS
         )  # FIXME: Should be changed later. Port and address should be a user input
         if self.networking.connected:
+            print("Connected to server!")
             self.networking.start_listen()  # Creates a thread that listens to the server.
             self.networking.send(Packet.player_to_packet(self.player))
-
+        else:
+            print("Failed connecting to server, single player session started...")
+        
     def spawn_obstacles(self):
         """
         Spawns the planet
@@ -170,7 +176,7 @@ class Mayhem(Game):
                     self.other_players[packet.packet.from_id].instantiate()
 
             self.other_players[packet.packet.from_id].update_pos(packet)
-
+            
             if packet.packet.new_bullet:
                 self.other_players[packet.packet.from_id].shoot(packet)
 

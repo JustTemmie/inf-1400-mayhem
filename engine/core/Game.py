@@ -29,12 +29,16 @@ class Game:
 
     def __init__(self):
         Utils.print_system_info()
+        if config.PLAY_SFX:
+            pyglet.options["audio"] = ("directsound")
 
         # rendering "batches"
         self.main_batch = pyglet.graphics.Batch()
         self.UI_batch = pyglet.graphics.Batch()
 
-        self.music_manager = MusicManager()
+        if config.PLAY_MUSIC:
+            self.music_manager = MusicManager()
+        
         self.window = Window()
         self.window.event("on_draw")(self.on_draw)
         self.window.event("on_mouse_motion")(Input.on_mouse_motion)
@@ -138,7 +142,8 @@ class Game:
             entity.handle_physics(delta, air_friction=config.air_friction)
 
         # using deltas here could crash the game due to audio players potentially having negative volume
-        self.music_manager.process_fading()
+        if config.PLAY_MUSIC:
+            self.music_manager.process_fading()
     
     def on_draw(self):
         """

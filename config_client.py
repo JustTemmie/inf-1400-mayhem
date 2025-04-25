@@ -8,19 +8,21 @@ from collections import namedtuple
 
 import logging
 
-mouse_movement: bool = True
-mouse_virtual_joystick_deadzone: float = 0.075 # percentage from 0 to 1
+LOG_LEVEL = logging.INFO
 
 target_refresh_rate: int = 60
 display_resolution = Vec2(1920, 1080)
 FOV: float = 80
 VSYNC: bool = False
 
-LOG_LEVEL = logging.INFO
+PLAY_MUSIC = True
+PLAY_SFX = True
+
+mouse_movement: bool = True
+mouse_virtual_joystick_deadzone: float = 0.075 # percentage from 0 to 1
 
 MAX_UI_BAR_WIDTH = 0.2 # Compared to the screen width
 UI_BAR_HEIGHT = 0.1 # Compared to the bar width
-
 UI_BAR_MARGIN = 0.15 # Compared to the bar height
 
 key_binds = namedtuple("keybinds", ["vertical", "horizontal", "thrust", "shoot"])

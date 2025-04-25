@@ -44,13 +44,16 @@ class Battery(Pickup):
         player.fuel += config.BATTERY_RECHARGING_AMOUNT
         player.fuel = min(player.fuel, config.MAX_FUEL)
 
+        self.call_deferred(lambda: self.free())
+        
         if self in Battery.batteries:
             Battery.batteries.remove(self)
         
-        self.free()
-
-        #TODO
-        # play sound
+        if config.PLAY_SFX:
+            source = pyglet.media.load("assets/sfx/power_up/power_up.ogg", streaming=True)
+            player.audio_player.position = self.pos
+            player.audio_player.queue(source)
+            player.audio_player.play()
 
     def spawn(self, radius: float):
         if len(Battery.batteries) >= config.MAX_BATTERY_COUNT:
