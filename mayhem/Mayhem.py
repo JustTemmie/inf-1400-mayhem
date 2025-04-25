@@ -172,7 +172,7 @@ class Mayhem(Game):
             self.other_players[packet.packet.from_id].update_pos(packet)
 
             if packet.packet.new_bullet:
-                self.other_players[packet.packet.from_id].shoot()
+                self.other_players[packet.packet.from_id].shoot(packet)
 
             if packet.packet.killed_by >= 0:
                 killed_player = self.other_players[packet.packet.from_id]
