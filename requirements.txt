@@ -1,1 +1,1 @@
-pyglet # replacement for pygame
+pyglet==2.1.3
